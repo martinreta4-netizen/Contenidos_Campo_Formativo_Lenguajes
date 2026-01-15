@@ -1,1 +1,1381 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ODA Lenguajes – Contenido 4 · Textos argumentativos</title>
+
+  <style>
+    :root{
+      --red:#b91c1c;
+      --red-2:#991b1b;
+      --gold:#d7b56d;
+      --gold-2:#f2dfb1;
+
+      --bg:#0b0b10;
+      --card:#ffffff;
+      --text:#111827;
+      --muted:#4b5563;
+      --line:rgba(0,0,0,.12);
+
+      --ok:#16a34a;
+      --warn:#f59e0b;
+      --bad:#dc2626;
+
+      --shadow:0 18px 42px rgba(0,0,0,.35);
+      --radius-xl:26px;
+      --radius-lg:18px;
+    }
+
+    *{box-sizing:border-box;}
+    html,body{height:100%;}
+    body{
+      margin:0;
+      font-family:system-ui,-apple-system,"Segoe UI",sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(circle at 12% 0%, rgba(239,68,68,.24) 0, transparent 38%),
+        radial-gradient(circle at 90% 10%, rgba(249,115,22,.18) 0, transparent 42%),
+        radial-gradient(circle at 30% 110%, rgba(215,181,109,.12) 0, transparent 40%),
+        linear-gradient(180deg, #07070c 0%, #0b0b10 45%, #0b0b10 100%);
+      overflow-x:hidden;
+    }
+
+    body::before{
+      content:"";
+      position:fixed;
+      inset:10% 16%;
+      background:url("escudo_escuela.png") center/contain no-repeat;
+      opacity:.035;
+      pointer-events:none;
+      z-index:0;
+      filter:saturate(0.7);
+    }
+
+    .app{
+      position:relative;
+      z-index:1;
+      width:100%;
+      max-width:1200px;
+      margin:0 auto;
+      padding:16px;
+    }
+
+    /* ---------- Topbar ---------- */
+    .topbar{
+      display:grid;
+      grid-template-columns:auto 1fr auto;
+      gap:12px;
+      align-items:center;
+      padding:12px 14px;
+      border-radius:var(--radius-xl);
+      background:linear-gradient(90deg, rgba(15,15,22,.92), rgba(30,30,40,.88));
+      border:1px solid rgba(255,255,255,.10);
+      box-shadow:var(--shadow);
+      position:sticky;
+      top:10px;
+      z-index:5;
+      backdrop-filter: blur(10px);
+    }
+    .logos{display:flex;gap:10px;align-items:center;}
+    .logos img{
+      height:44px;width:auto;border-radius:10px;background:#fff;padding:4px 6px;
+      box-shadow:0 10px 24px rgba(0,0,0,.25);
+    }
+    .head{min-width:0;}
+    .head h1{
+      margin:0;font-size:1.05rem;color:#fff;display:flex;align-items:center;gap:8px;flex-wrap:wrap;letter-spacing:.2px;
+    }
+    .chip-top{
+      display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:999px;
+      background:linear-gradient(135deg, rgba(239,68,68,.22), rgba(249,115,22,.16));
+      border:1px solid rgba(255,255,255,.14);font-size:.78rem;color:#fff;font-weight:800;white-space:nowrap;
+    }
+    .meta{margin-top:2px;color:#e5e7eb;font-size:.82rem;line-height:1.2;}
+    .meta strong{color:#fde68a;}
+
+    .author{
+      display:flex;align-items:center;gap:10px;color:#e5e7eb;font-size:.78rem;text-align:right;min-width:0;
+    }
+    .avatar{
+      width:58px;height:58px;border-radius:999px;
+      background:radial-gradient(circle at 30% 15%, #fde68a 0, #f59e0b 35%, #111827 80%);
+      border:2px solid rgba(253,230,138,.55);
+      overflow:hidden;
+      box-shadow:0 14px 28px rgba(0,0,0,.35);
+      flex-shrink:0;
+    }
+    .avatar img{width:100%;height:100%;object-fit:contain;}
+    .author strong{color:#fff; display:block; font-size:.82rem;}
+
+    @media(max-width:980px){
+      .topbar{grid-template-columns:1fr; text-align:center;}
+      .logos{justify-content:center;}
+      .author{justify-content:center; text-align:center;}
+    }
+
+    /* ---------- Layout ---------- */
+    .grid{
+      display:grid;
+      grid-template-columns:minmax(0,1.35fr) minmax(0,0.85fr);
+      gap:14px;
+      margin-top:14px;
+    }
+    @media(max-width:980px){ .grid{grid-template-columns:1fr;} }
+
+    .card{
+      background:rgba(255,255,255,.98);
+      border:1px solid rgba(255,255,255,.55);
+      border-radius:var(--radius-xl);
+      box-shadow:0 16px 34px rgba(0,0,0,.18);
+      overflow:hidden;
+      position:relative;
+    }
+    .card::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:
+        radial-gradient(circle at 0 0, rgba(239,68,68,.15) 0, transparent 55%),
+        radial-gradient(circle at 100% 100%, rgba(249,115,22,.10) 0, transparent 55%);
+      opacity:.7;
+      pointer-events:none;
+    }
+    .card > *{position:relative; z-index:1;}
+
+    .card-h{
+      padding:12px 14px;
+      border-bottom:1px solid rgba(0,0,0,.06);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+    }
+    .card-title{
+      display:flex;align-items:center;gap:8px;font-weight:900;color:var(--text);letter-spacing:.2px;
+    }
+    .badge{
+      display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border-radius:999px;
+      background:#fff7ed;border:1px solid rgba(249,115,22,.35);color:#7c2d12;
+      font-weight:900;font-size:.74rem;white-space:nowrap;
+    }
+    .card-b{padding:12px 14px 14px;font-size:.9rem;color:var(--text);}
+    .muted{color:var(--muted); font-size:.84rem;}
+
+    .divider{height:1px;background:rgba(0,0,0,.10);margin:12px 0;}
+
+    .btn-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px;}
+    .btn{
+      border:none;border-radius:999px;padding:10px 14px;font-weight:900;cursor:pointer;
+      display:inline-flex;align-items:center;gap:8px;
+      transition:transform .12s ease, box-shadow .12s ease, filter .12s ease;
+      user-select:none;
+    }
+    .btn:active{transform:translateY(0) scale(.99);}
+    .btn-primary{
+      background:linear-gradient(135deg, var(--red), #ef4444);
+      color:#fff;
+      box-shadow:0 14px 26px rgba(185,28,28,.26);
+    }
+    .btn-primary:hover{transform:translateY(-1px); filter:saturate(1.1);}
+    .btn-soft{
+      background:linear-gradient(135deg, #fff1f2, #ffe4e6);
+      color:#7f1d1d;
+      border:1px solid rgba(185,28,28,.22);
+      box-shadow:0 12px 22px rgba(0,0,0,.08);
+    }
+    .btn-ghost{
+      background:#fff;color:var(--text);
+      border:1px solid rgba(0,0,0,.16);
+      box-shadow:0 12px 22px rgba(0,0,0,.06);
+    }
+    .btn-mini{padding:8px 12px; font-size:.82rem;}
+
+    /* ---------- Inputs alumno ---------- */
+    .field{display:grid;gap:6px;margin-top:8px;}
+    .field label{font-weight:900;color:var(--text);font-size:.82rem;}
+    .field input, .field select{
+      width:100%;border-radius:999px;border:1px solid rgba(0,0,0,.18);
+      padding:10px 12px;font-size:.9rem;outline:none;background:#fff;color:var(--text);
+      transition:box-shadow .12s ease, border-color .12s ease;
+    }
+    .field input:focus, .field select:focus{
+      border-color:rgba(185,28,28,.65);
+      box-shadow:0 0 0 3px rgba(239,68,68,.14);
+    }
+
+    /* ---------- Tabs PDA ---------- */
+    .tabs{
+      display:flex;flex-wrap:wrap;gap:10px;padding:12px 14px;border-bottom:1px solid rgba(0,0,0,.06);
+      background:linear-gradient(180deg, rgba(255,255,255,.55), rgba(255,255,255,0));
+    }
+    .tab{
+      border:none;cursor:pointer;font-weight:900;border-radius:999px;padding:10px 12px;font-size:.84rem;
+      background:linear-gradient(180deg,#fff,#fff5f5);
+      color:var(--text);
+      border:1px solid rgba(0,0,0,.14);
+      box-shadow:0 12px 22px rgba(0,0,0,.08);
+      display:inline-flex;align-items:center;gap:8px;
+      transition:transform .12s ease, box-shadow .12s ease, border-color .12s ease;
+    }
+    .tab:hover{transform:translateY(-1px); box-shadow:0 16px 28px rgba(0,0,0,.12);}
+    .tab.active{
+      border-color:rgba(185,28,28,.75);
+      background:linear-gradient(135deg,#fff1f2,#ffe4e6);
+      box-shadow:0 18px 34px rgba(185,28,28,.14);
+    }
+    .tab .dot{width:10px;height:10px;border-radius:999px;background:rgba(156,163,175,.9);box-shadow:0 0 0 4px rgba(0,0,0,.05);}
+    .tab.active .dot{background:#ef4444;box-shadow:0 0 0 4px rgba(239,68,68,.18);}
+
+    /* ---------- Actividad ---------- */
+    .activity{
+      padding:14px;border-radius:var(--radius-xl);
+      background:linear-gradient(180deg,#fff,#fff7ed);
+      border:1px solid rgba(249,115,22,.22);
+      box-shadow:0 16px 30px rgba(0,0,0,.10);
+      margin:14px;
+    }
+    .activity h3{margin:0 0 6px;color:var(--text);font-size:1rem;display:flex;align-items:center;gap:8px;}
+    .q{margin:8px 0 8px; font-size:.92rem; color:var(--text);}
+    .help{font-size:.82rem;color:var(--muted);margin-top:-2px;}
+
+    .foot{
+      margin-top:10px;padding:10px 12px;border-radius:18px;border:1px dashed rgba(0,0,0,.18);
+      background:linear-gradient(135deg,#fff, #fff5f5);
+      display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;
+    }
+
+    /* Status */
+    .status{
+      padding:8px 12px;border-radius:999px;font-weight:900;font-size:.82rem;display:inline-flex;align-items:center;gap:8px;
+      border:1px solid rgba(0,0,0,.14);
+      background:#fff;box-shadow:0 10px 20px rgba(0,0,0,.08);color:var(--text);
+    }
+    .status.ok{border-color:rgba(22,163,74,.40); background:#ecfdf5; color:#14532d;}
+    .status.warn{border-color:rgba(245,158,11,.45); background:#fffbeb; color:#78350f;}
+    .status.bad{border-color:rgba(220,38,38,.45); background:#fff1f2; color:#7f1d1d;}
+
+    /* Intentos */
+    .pill-attempt{
+      display:inline-flex;align-items:center;gap:6px;padding:8px 12px;border-radius:999px;background:#0b0b10;color:#fff;
+      border:1px solid rgba(255,255,255,.16);font-weight:900;font-size:.82rem;box-shadow:0 12px 24px rgba(0,0,0,.25);white-space:nowrap;
+    }
+    .pill-attempt .n{
+      width:22px;height:22px;border-radius:999px;display:inline-flex;align-items:center;justify-content:center;
+      background:linear-gradient(135deg,#ef4444,#f97316);
+      box-shadow:0 10px 20px rgba(239,68,68,.18);
+      font-weight:900;
+    }
+
+    /* ===== BLOQUE TEXTO BASE (FIX CLAVE) ===== */
+    .prompt-card{
+      background:#fff;
+      border:1px solid rgba(0,0,0,.14);
+      border-radius:18px;
+      padding:12px;
+      box-shadow:0 14px 26px rgba(0,0,0,.08);
+      color:var(--text);
+      font-weight:900;
+      line-height:1.35;
+      margin-top:10px;
+    }
+    .prompt-card .label{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      font-weight:900;
+      font-size:.82rem;
+      color:#7f1d1d;
+      background:linear-gradient(135deg,#fff1f2,#ffe4e6);
+      border:1px solid rgba(185,28,28,.22);
+      padding:6px 10px;
+      border-radius:999px;
+      margin-bottom:10px;
+    }
+
+    /* Opciones */
+    .options{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+      gap:10px;
+      margin-top:10px;
+    }
+    .opt{
+      position:relative;
+      display:flex;
+      align-items:stretch;
+      border-radius:18px;
+      border:1px solid rgba(0,0,0,.14);
+      background:linear-gradient(180deg,#ffffff 0,#fff5f5 100%);
+      box-shadow:0 10px 22px rgba(0,0,0,.08);
+      cursor:pointer;
+      overflow:hidden;
+      transition:transform .12s ease, box-shadow .12s ease, border-color .12s ease, background .12s ease;
+      user-select:none;
+      min-height:56px;
+    }
+    .opt:hover{
+      transform:translateY(-1px);
+      box-shadow:0 14px 26px rgba(0,0,0,.12);
+      border-color:rgba(185,28,28,.55);
+    }
+    .opt:active{transform:translateY(0px) scale(.995);}
+    .opt input{position:absolute;opacity:0;pointer-events:none;}
+    .opt > .choice-body{
+      flex:1 1 auto;
+      display:flex;
+      align-items:center;
+      gap:10px;
+      padding:10px 12px;
+      font-weight:900;
+      color:var(--text);
+    }
+    .choice-letter{
+      width:34px;height:34px;border-radius:12px;
+      display:inline-flex;align-items:center;justify-content:center;
+      font-size:.92rem;
+      background:linear-gradient(135deg,var(--red),#ef4444);
+      color:#fff;
+      box-shadow:0 8px 18px rgba(185,28,28,.28);
+      flex-shrink:0;
+    }
+    .choice-text{font-size:.92rem;line-height:1.25;color:var(--text);}
+
+    .opt.is-selected{
+      border-color:rgba(185,28,28,.95);
+      box-shadow:0 18px 34px rgba(185,28,28,.18);
+      background:linear-gradient(180deg,#ffffff 0,#ffe4e6 100%);
+    }
+    .opt.is-correct{border-color:rgba(22,163,74,.95);background:linear-gradient(180deg,#ffffff 0,#ecfdf5 100%);}
+    .opt.is-wrong{border-color:rgba(220,38,38,.95);background:linear-gradient(180deg,#ffffff 0,#fff1f2 100%);}
+    .opt.is-correct::after,
+    .opt.is-wrong::after{
+      position:absolute;top:10px;right:10px;width:26px;height:26px;border-radius:999px;
+      display:flex;align-items:center;justify-content:center;font-size:.95rem;font-weight:900;color:#fff;box-shadow:0 10px 22px rgba(0,0,0,.18);
+    }
+    .opt.is-correct::after{content:"✓"; background:#16a34a;}
+    .opt.is-wrong::after{content:"✕"; background:#dc2626;}
+
+    /* V/F y Semáforo */
+    .vf-grid, .traffic-grid{display:grid;gap:10px;margin-top:10px;}
+    .row-card{
+      display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 12px;border-radius:18px;
+      border:1px solid rgba(0,0,0,.14);
+      background:linear-gradient(180deg,#ffffff 0,#fff5f5 100%);
+      box-shadow:0 10px 22px rgba(0,0,0,.08);
+    }
+    .row-text{flex:1 1 auto;font-weight:900;color:var(--text);line-height:1.25;font-size:.92rem;}
+    .pill-group{display:flex;gap:8px;flex-shrink:0;}
+    .pill{
+      position:relative;border-radius:999px;border:1px solid rgba(0,0,0,.16);background:#fff;
+      padding:8px 12px;font-weight:900;cursor:pointer;display:inline-flex;align-items:center;gap:8px;
+      transition:transform .12s ease, box-shadow .12s ease, border-color .12s ease, background .12s ease;
+      user-select:none;min-width:64px;justify-content:center;color:var(--text);
+    }
+    .pill:hover{transform:translateY(-1px);box-shadow:0 12px 22px rgba(0,0,0,.12);border-color:rgba(185,28,28,.45);}
+    .pill input{position:absolute;opacity:0;pointer-events:none;}
+    .pill.is-selected{
+      border-color:rgba(185,28,28,.95);
+      background:linear-gradient(90deg,#fff1f2,#ffe4e6);
+      box-shadow:0 16px 28px rgba(185,28,28,.14);
+    }
+    .badge-dot{width:10px;height:10px;border-radius:999px;box-shadow:0 0 0 4px rgba(0,0,0,.04);}
+    .pill.pill-true .badge-dot{background:#16a34a;}
+    .pill.pill-false .badge-dot{background:#dc2626;}
+    .pill.pill-green .badge-dot{background:#16a34a;}
+    .pill.pill-red .badge-dot{background:#dc2626;}
+
+    .pill.is-correct{border-color:rgba(22,163,74,.95);background:linear-gradient(90deg,#ecfdf5,#dcfce7);}
+    .pill.is-wrong{border-color:rgba(220,38,38,.95);background:linear-gradient(90deg,#fff1f2,#ffe4e6);}
+
+    /* Matching */
+    .match-wrap{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px;}
+    @media(max-width:760px){ .match-wrap{grid-template-columns:1fr;} }
+    .match-col{display:flex;flex-direction:column;gap:10px;}
+    .match-chip{
+      border-radius:14px;border:1px solid rgba(0,0,0,.14);background:#fff;padding:10px 12px;cursor:pointer;
+      font-weight:900;color:var(--text);
+      transition:transform .12s ease, box-shadow .12s ease, border-color .12s ease;
+      box-shadow:0 10px 18px rgba(0,0,0,.08);user-select:none;
+    }
+    .match-chip:hover{transform:translateY(-1px);box-shadow:0 14px 24px rgba(0,0,0,.12);border-color:rgba(185,28,28,.55);}
+    .match-chip.active{
+      border-color:rgba(185,28,28,.95);
+      background:linear-gradient(135deg,#fff1f2,#ffe4e6);
+      box-shadow:0 18px 34px rgba(185,28,28,.14);
+    }
+    .match-pairs{
+      margin-top:10px;padding:10px 12px;border-radius:18px;border:1px solid rgba(0,0,0,.14);background:#fff;
+      box-shadow:0 14px 26px rgba(0,0,0,.08);font-size:.86rem;color:var(--text);
+    }
+    .pair{display:flex;align-items:flex-start;gap:8px;padding:8px 0;border-top:1px dashed rgba(0,0,0,.14);}
+    .pair:first-child{border-top:none;}
+    .pair .tag{
+      flex-shrink:0;width:22px;height:22px;border-radius:999px;display:inline-flex;align-items:center;justify-content:center;
+      background:linear-gradient(135deg,var(--red),#ef4444);color:#fff;font-weight:900;box-shadow:0 10px 20px rgba(185,28,28,.18);
+    }
+
+    /* Footer */
+    .footer{margin:18px 0 6px;text-align:center;color:#cbd5e1;font-size:.78rem;opacity:.95;}
+    .footer strong{color:#fff;}
+    .footer .copy{
+      display:inline-flex;align-items:center;gap:8px;margin-top:6px;padding:7px 12px;border-radius:999px;
+      border:1px solid rgba(255,255,255,.14);background:rgba(15,15,22,.70);box-shadow:0 14px 28px rgba(0,0,0,.22);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="app">
+    <div class="topbar">
+      <div class="logos">
+        <img src="../../img/sep_logo.png" alt="SEP">
+        <img src="../../img/escudo_escuela.png" alt="Escuela">
+      </div>
+
+      <div class="head">
+        <h1>🟥 ODA Lenguajes – Contenido 4 <span class="chip-top">Textos argumentativos · Fase 5</span></h1>
+        <div class="meta">
+          Practicarás cómo <strong>identificar y construir argumentos</strong> con respeto y pensamiento crítico.
+        </div>
+      </div>
+
+      <div class="author">
+        <div class="avatar"><img src="../../img/avatar_guia.png" alt="Guía"></div>
+        <div>
+          <strong>Mtro. Martín Reta</strong>
+          Escuela Primaria “Gral. Lázaro Cárdenas”
+        </div>
+      </div>
+    </div>
+
+    <div class="grid">
+      <section class="card">
+        <div class="card-h">
+          <div class="card-title">🧑‍🎓 Datos del alumno</div>
+          <div class="badge">2 intentos por actividad</div>
+        </div>
+
+        <div class="card-b">
+          <div class="field">
+            <label for="studentName">Nombre del alumno(a)</label>
+            <input id="studentName" type="text" placeholder="Escribe tu nombre">
+          </div>
+
+          <div class="field">
+            <label for="grade">Grado</label>
+            <select id="grade">
+              <option value="5">5.º</option>
+              <option value="6">6.º</option>
+            </select>
+          </div>
+
+          <div class="divider"></div>
+          <div class="muted">
+            👇 Selecciona un PDA y realiza sus actividades. Al revisar, verás retroalimentación visual (✔/✖) y tu avance.
+          </div>
+        </div>
+
+        <div class="tabs" id="tabs"></div>
+        <div id="panel"></div>
+      </section>
+
+      <aside class="card">
+        <div class="card-h">
+          <div class="card-title">🏅 Progreso y resultados</div>
+          <div class="badge">Autoevaluación</div>
+        </div>
+
+        <div class="card-b" id="side">
+          <div class="muted">Completa actividades para desbloquear logros e imprimir tu hoja de resultados.</div>
+
+          <div class="divider"></div>
+          <div id="progress"></div>
+
+          <div class="btn-row">
+            <button class="btn btn-soft" id="btnPrintResults">🖨️ Imprimir resultados</button>
+            <button class="btn btn-ghost" id="btnReset">♻️ Reiniciar</button>
+          </div>
+
+          <div class="divider"></div>
+          <div class="muted">
+            Tip: Si no aparece tu calificación, revisa que hayas respondido todo antes de presionar <strong>✅ Revisar</strong>.
+          </div>
+        </div>
+      </aside>
+    </div>
+
+    <div class="footer">
+      <div class="copy">© <strong>ODA creada por el Maestro Martín Reta</strong> · Uso educativo</div>
+    </div>
+  </div>
+
+  <script>
+/* ============================================================
+   ODA Lenguajes – Contenido 4 · Textos argumentativos
+   FIX CRÍTICO: Actividad 1 del PDA 1 (5º y 6º) ahora muestra
+   SIEMPRE el enunciado/mini-texto (prompt-card) antes de opciones.
+   ============================================================ */
+
+const $ = (sel, el=document)=> el.querySelector(sel);
+const $$ = (sel, el=document)=> [...el.querySelectorAll(sel)];
+const clamp = (n,a,b)=> Math.max(a, Math.min(b, n));
+
+function safeText(s){
+  return (""+s).replace(/[<>&]/g, m=>({ "<":"&lt;", ">":"&gt;", "&":"&amp;" }[m]));
+}
+function statusHTML(type, msg){
+  const t = type==="ok" ? "ok" : type==="bad" ? "bad" : "warn";
+  const icon = t==="ok" ? "✅" : t==="bad" ? "❌" : "⚠️";
+  return `<span class="status ${t}">${icon} ${msg}</span>`;
+}
+function shuffle(arr){
+  const a = [...arr];
+  for(let i=a.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [a[i],a[j]]=[a[j],a[i]];
+  }
+  return a;
+}
+
+/* ---------- Storage ---------- */
+const STORE_KEY = "ODA_LEN_CONT4_ROJO_FULLFIX";
+function loadStore(){
+  try{ return JSON.parse(localStorage.getItem(STORE_KEY) || "{}"); }
+  catch(e){ return {}; }
+}
+function saveStore(obj){ localStorage.setItem(STORE_KEY, JSON.stringify(obj)); }
+function getState(){
+  const st = loadStore();
+  if(!st.attempts) st.attempts = {};
+  if(!st.scores) st.scores = {};
+  if(!st.badges) st.badges = {};
+  return st;
+}
+function setAttempts(actId, n){ const st=getState(); st.attempts[actId]=n; saveStore(st); }
+function getAttempts(actId){ const st=getState(); return st.attempts[actId] || 0; }
+function setScore(actId, score){ const st=getState(); st.scores[actId]=Math.round(score); saveStore(st); }
+function getScore(actId){ const st=getState(); return st.scores[actId]; }
+function setBadge(key, val=true){ const st=getState(); st.badges[key]=val; saveStore(st); }
+function hasBadge(key){ const st=getState(); return !!st.badges[key]; }
+function resetAll(){ localStorage.removeItem(STORE_KEY); }
+
+/* ---------- DATA ---------- */
+const DATA = {
+  5: [
+    {
+      id:"5_pda1",
+      name:"PDA 1",
+      title:"Identifico opiniones y hechos",
+      activities:[
+        {
+          id:"5_pda1_a1",
+          type:"mc",
+          title:"Actividad 1 · ¿Opinión o hecho?",
+          help:"Lee el enunciado y elige la opción correcta.",
+          promptLabel:"Lee con atención",
+          question:"“Los videojuegos son mejores que los deportes.”",
+          options:["Es un hecho verificable","Es una opinión","Es un dato científico","Es una regla"],
+          answer:1
+        },
+        {
+          id:"5_pda1_a2",
+          type:"traffic",
+          title:"Actividad 2 · Semáforo de argumentos",
+          help:"🟢 = argumento/evidencia fuerte. 🔴 = argumento débil o sin sustento.",
+          items:[
+            {text:"‘Porque a mí me gusta’", good:false},
+            {text:"‘Según una encuesta escolar, 7 de cada 10 prefieren…’", good:true},
+            {text:"‘Todos lo dicen’", good:false},
+            {text:"‘El reglamento escolar indica…’", good:true}
+          ]
+        }
+      ]
+    },
+    {
+      id:"5_pda2",
+      name:"PDA 2",
+      title:"Comparo argumentos con respeto",
+      activities:[
+        {
+          id:"5_pda2_a1",
+          type:"matching",
+          title:"Actividad 1 · Relaciona postura y argumento",
+          help:"Da clic en una postura y luego en su argumento.",
+          left:[
+            "Postura A: Sí debe haber tarea",
+            "Postura B: No debe haber tarea",
+            "Postura C: Tarea solo los viernes"
+          ],
+          right:[
+            "Permite practicar lo visto en clase",
+            "Reduce el tiempo de descanso y juego",
+            "Ayuda a repasar sin saturar"
+          ],
+          pairs:{0:0,1:1,2:2}
+        },
+        {
+          id:"5_pda2_a2",
+          type:"tf",
+          title:"Actividad 2 · Verdadero o falso",
+          help:"Marca V o F.",
+          statements:[
+            {t:"Un argumento debe tener razones.", a:true},
+            {t:"Insultar fortalece un debate.", a:false},
+            {t:"Los hechos se pueden comprobar.", a:true}
+          ]
+        }
+      ]
+    },
+    {
+      id:"5_pda3",
+      name:"PDA 3",
+      title:"Uso conectores para argumentar",
+      activities:[
+        {
+          id:"5_pda3_a1",
+          type:"fillConnector",
+          title:"Actividad 1 · Completa con conector",
+          help:"Elige el conector que mejor complete la oración.",
+          text:"Creo que debemos cuidar el agua, ____ es un recurso limitado.",
+          options:["porque","aunque","sin embargo","mientras"],
+          answer:"porque"
+        },
+        {
+          id:"5_pda3_a2",
+          type:"mc",
+          title:"Actividad 2 · Conector de conclusión",
+          help:"Elige el conector que introduce una conclusión.",
+          promptLabel:"Pregunta",
+          question:"Selecciona el conector que introduce una conclusión.",
+          options:["por lo tanto","cuando","antes","siempre"],
+          answer:0
+        }
+      ]
+    }
+  ],
+  6: [
+    {
+      id:"6_pda1",
+      name:"PDA 1",
+      title:"Identifico argumentos en textos",
+      activities:[
+        {
+          id:"6_pda1_a1",
+          type:"mc",
+          title:"Actividad 1 · ¿Qué sostiene la postura?",
+          help:"Lee el mini-texto y elige el argumento principal.",
+          promptLabel:"Lee con atención (mini-texto)",
+          question:
+            "En la escuela se propuso usar más bicicletas para llegar a clases. " +
+            "La directora dijo que esto puede ayudar a reducir el tráfico en la entrada y mejorar la salud. " +
+            "Algunos alumnos no están de acuerdo.\n\n" +
+            "Pregunta: ¿Cuál argumento apoya mejor la postura a favor de usar bicicleta?",
+          options:[
+            "Son de color bonito",
+            "Ayudan a reducir contaminación y tráfico",
+            "A algunas personas no les gustan",
+            "No todas tienen canastilla"
+          ],
+          answer:1
+        },
+        {
+          id:"6_pda1_a2",
+          type:"traffic",
+          title:"Actividad 2 · Semáforo de evidencias",
+          help:"🟢 = evidencia verificable. 🔴 = opinión sin prueba.",
+          items:[
+            {text:"‘Leí un reporte del INEGI sobre movilidad’", good:true},
+            {text:"‘Pienso que es mejor porque sí’", good:false},
+            {text:"‘La OMS recomienda actividad física’", good:true},
+            {text:"‘Mi primo dice que no sirve’", good:false}
+          ]
+        }
+      ]
+    },
+    {
+      id:"6_pda2",
+      name:"PDA 2",
+      title:"Conectivos lógicos y causales",
+      activities:[
+        {
+          id:"6_pda2_a1",
+          type:"matching",
+          title:"Actividad 1 · Relaciona conectivo y función",
+          help:"Da clic en el conectivo y luego en su función.",
+          left:["porque","sin embargo","por lo tanto","si bien"],
+          right:["Conclusión","Contraste","Causa","Concesión"],
+          pairs:{0:2,1:1,2:0,3:3}
+        },
+        {
+          id:"6_pda2_a2",
+          type:"mc",
+          title:"Actividad 2 · Conectivo de contraste",
+          help:"Selecciona el conectivo que indica contraste.",
+          promptLabel:"Pregunta",
+          question:"Selecciona el conectivo que indica contraste.",
+          options:["sin embargo","por eso","primero","debido a"],
+          answer:0
+        }
+      ]
+    },
+    {
+      id:"6_pda3",
+      name:"PDA 3",
+      title:"Conclusiones y contraargumentos",
+      activities:[
+        {
+          id:"6_pda3_a1",
+          type:"mc",
+          title:"Actividad 1 · Identifica la conclusión",
+          help:"Elige la opción que funciona como conclusión.",
+          promptLabel:"Enunciado",
+          question:"‘Muchos alumnos llegan tarde. Por eso, necesitamos organizar mejor la entrada.’ ¿Cuál es la conclusión?",
+          options:[
+            "Muchos alumnos llegan tarde",
+            "Necesitamos organizar mejor la entrada",
+            "Llegar tarde es normal",
+            "La entrada no importa"
+          ],
+          answer:1
+        },
+        {
+          id:"6_pda3_a2",
+          type:"tf",
+          title:"Actividad 2 · V/F sobre contraargumentos",
+          help:"Marca V o F.",
+          statements:[
+            {t:"Un contraargumento reconoce otra postura y responde con respeto.", a:true},
+            {t:"Un contraargumento es insultar a quien piensa distinto.", a:false},
+            {t:"Las conclusiones se apoyan en argumentos.", a:true}
+          ]
+        }
+      ]
+    },
+    {
+      id:"6_pda4",
+      name:"PDA 4",
+      title:"Estructura del texto argumentativo",
+      activities:[
+        {
+          id:"6_pda4_a1",
+          type:"matching",
+          title:"Actividad 1 · Partes del texto",
+          help:"Relaciona cada parte con su definición.",
+          left:["Tesis","Argumento","Evidencia","Conclusión"],
+          right:[
+            "Razón que apoya una postura",
+            "Prueba o dato verificable",
+            "Idea principal que se defiende",
+            "Cierre que resume la postura"
+          ],
+          pairs:{0:2,1:0,2:1,3:3}
+        },
+        {
+          id:"6_pda4_a2",
+          type:"fillConnector",
+          title:"Actividad 2 · Conector de concesión",
+          help:"Elige el conector que indique concesión (reconocer algo, pero mantener la postura).",
+          text:"____ algunos prefieren jugar en casa, es importante convivir también al aire libre.",
+          options:["Si bien","Porque","Por lo tanto","Después"],
+          answer:"Si bien"
+        }
+      ]
+    }
+  ]
+};
+
+/* ---------- UI State ---------- */
+const tabsEl = $("#tabs");
+const panelEl = $("#panel");
+const progressEl = $("#progress");
+const gradeEl = $("#grade");
+
+let currentGrade = "5";
+let currentPdaIndex = 0;
+
+function getPdas(){ return DATA[currentGrade] || []; }
+
+function renderTabs(){
+  const pdas = getPdas();
+  tabsEl.innerHTML = pdas.map((p,idx)=>`
+    <button class="tab ${idx===currentPdaIndex?"active":""}" data-idx="${idx}">
+      <span class="dot"></span>
+      <span>${safeText(p.name)} · ${safeText(p.title)}</span>
+    </button>
+  `).join("");
+
+  $$(".tab", tabsEl).forEach(btn=>{
+    btn.addEventListener("click", ()=>{
+      currentPdaIndex = Number(btn.dataset.idx);
+      renderTabs();
+      renderPanel();
+      updateProgressUI();
+    });
+  });
+}
+
+function activityLocked(actId){ return getAttempts(actId) >= 2; }
+function attemptPill(actId){
+  const used = getAttempts(actId);
+  const left = clamp(2-used, 0, 2);
+  return `<span class="pill-attempt"><span class="n">${left}</span> intento(s) disponibles</span>`;
+}
+
+function renderPanel(){
+  const pdas = getPdas();
+  const pda = pdas[currentPdaIndex];
+  if(!pda){ panelEl.innerHTML=""; return; }
+
+  panelEl.innerHTML = `
+    <div class="activity">
+      <h3>📌 ${safeText(pda.title)}</h3>
+      <div class="help">Realiza las 2 actividades. Tienes máximo 2 intentos por actividad.</div>
+      <div class="divider"></div>
+      <div id="acts"></div>
+    </div>
+  `;
+
+  const acts = $("#acts", panelEl);
+
+  pda.activities.forEach(act=>{
+    const used = getAttempts(act.id);
+    const score = getScore(act.id);
+
+    const wrap = document.createElement("div");
+    wrap.className = "activity";
+    wrap.style.margin = "14px 0 0";
+    wrap.innerHTML = `
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap;">
+        <div style="min-width:0">
+          <h3 style="margin:0 0 4px; font-size:1rem;">🧩 ${safeText(act.title)}</h3>
+          <div class="help">${safeText(act.help || "")}</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+          ${attemptPill(act.id)}
+          ${typeof score==="number" ? `<span class="badge">Última calificación: ${score}%</span>` : ""}
+        </div>
+      </div>
+
+      <div class="divider"></div>
+      <div data-body></div>
+
+      <div class="foot" data-foot>
+        <div class="muted">Responde y presiona <strong>✅ Revisar</strong>.</div>
+        <div data-right>
+          <button class="btn btn-primary btn-mini" data-check>✅ Revisar</button>
+        </div>
+      </div>
+    `;
+
+    acts.appendChild(wrap);
+
+    const body = wrap.querySelector("[data-body]");
+    const foot = wrap.querySelector("[data-foot]");
+    const right = wrap.querySelector("[data-right]");
+    const btnCheck = wrap.querySelector('[data-check]');
+
+    const ui = {};
+    if(act.type==="mc") Object.assign(ui, renderMultiChoice(body, act));
+    if(act.type==="tf") Object.assign(ui, renderTrueFalse(body, act));
+    if(act.type==="traffic") Object.assign(ui, renderTraffic(body, act));
+    if(act.type==="fillConnector") Object.assign(ui, renderFillConnector(body, act));
+    if(act.type==="matching") Object.assign(ui, renderMatching(body, act));
+
+    if(used>=2){
+      btnCheck.disabled = true;
+      btnCheck.style.opacity = ".6";
+      btnCheck.style.cursor = "not-allowed";
+      foot.innerHTML = statusHTML("warn", "Actividad bloqueada (sin intentos).");
+      ui.lock?.();
+    }
+
+    btnCheck.addEventListener("click", ()=>{
+      if(activityLocked(act.id)) return;
+
+      const usedNow = getAttempts(act.id);
+      const result = ui.grade?.();
+
+      if(!result || typeof result.score !== "number"){
+        foot.innerHTML = statusHTML("warn","Selecciona una respuesta antes de revisar.");
+        return;
+      }
+
+      const newAttempts = usedNow + 1;
+      setAttempts(act.id, newAttempts);
+      setScore(act.id, result.score);
+
+      if(newAttempts >= 2){
+        btnCheck.disabled = true;
+        btnCheck.style.opacity = ".6";
+        btnCheck.style.cursor = "not-allowed";
+      }
+
+      right.innerHTML = `
+        ${attemptPill(act.id)}
+        <button class="btn btn-primary btn-mini" disabled style="opacity:.6;cursor:not-allowed">✅ Revisar</button>
+      `;
+
+      updateProgressUI();
+      renderBadges();
+
+      foot.innerHTML = statusHTML(
+        result.score>=80 ? "ok" : "warn",
+        `${result.score>=80 ? "¡Muy bien!" : "Vas bien, sigue practicando."} Calificación: ${Math.round(result.score)}%.`
+      );
+
+      ui.showFeedback?.(result);
+      ui.lock?.();
+    });
+  });
+}
+
+/* ---------- Actividades ---------- */
+function renderMultiChoice(container, act){
+  const name = `mc_${act.id}`;
+  const label = safeText(act.promptLabel || "Lee con atención");
+  const qRaw = (act.question ?? "").toString();
+  const qHtml = safeText(qRaw).replace(/\n/g, "<br>");
+
+  container.innerHTML = `
+    <div class="q"><strong>Elige 1 opción:</strong></div>
+
+    <div class="prompt-card">
+      <div class="label">📌 ${label}</div>
+      <div>${qHtml || "—"}</div>
+    </div>
+
+    <div class="options" data-choice-group>
+      ${act.options.map((o,i)=>{
+        const letter = String.fromCharCode(65+i);
+        return `
+          <label class="opt" data-choice-card>
+            <input type="radio" name="${name}" value="${i}">
+            <div class="choice-body">
+              <span class="choice-letter">${letter}</span>
+              <span class="choice-text">${safeText(o)}</span>
+            </div>
+          </label>
+        `;
+      }).join("")}
+    </div>
+  `;
+
+  container.querySelectorAll('input[type="radio"]').forEach(inp=>{
+    inp.addEventListener("change", ()=>{
+      container.querySelectorAll("[data-choice-card]").forEach(card=> card.classList.remove("is-selected"));
+      inp.closest("[data-choice-card]")?.classList.add("is-selected");
+    });
+  });
+
+  const grade = ()=>{
+    const picked = container.querySelector(`input[name="${name}"]:checked`);
+    if(!picked) return null;
+    const idx = Number(picked.value);
+    return {score: (idx === act.answer) ? 100 : 0};
+  };
+
+  const showFeedback = ()=>{
+    container.querySelectorAll("[data-choice-card]").forEach(c=> c.classList.remove("is-correct","is-wrong"));
+    const correctCard = container.querySelector(`input[name="${name}"][value="${act.answer}"]`)?.closest("[data-choice-card]");
+    if(correctCard) correctCard.classList.add("is-correct");
+
+    const picked = container.querySelector(`input[name="${name}"]:checked`);
+    if(picked){
+      const pickedCard = picked.closest("[data-choice-card]");
+      if(pickedCard && Number(picked.value) !== act.answer) pickedCard.classList.add("is-wrong");
+    }
+  };
+
+  const lock = ()=>{
+    container.querySelectorAll("input").forEach(i=> i.disabled = true);
+    container.querySelectorAll("label").forEach(l=> l.style.cursor="default");
+  };
+
+  return {grade, lock, showFeedback};
+}
+
+function renderTrueFalse(container, act){
+  container.innerHTML = `
+    <div class="q"><strong>Marca V o F:</strong></div>
+    <div class="vf-grid">
+      ${act.statements.map((s,i)=>`
+        <div class="row-card" data-vf-row="${i}">
+          <div class="row-text">${safeText(s.t)}</div>
+          <div class="pill-group">
+            <label class="pill pill-true" data-pill>
+              <input type="radio" name="tf_${act.id}_${i}" value="V">
+              <span class="badge-dot"></span> V
+            </label>
+            <label class="pill pill-false" data-pill>
+              <input type="radio" name="tf_${act.id}_${i}" value="F">
+              <span class="badge-dot"></span> F
+            </label>
+          </div>
+        </div>
+      `).join("")}
+    </div>
+  `;
+
+  container.querySelectorAll(".row-card").forEach(row=>{
+    row.querySelectorAll('input[type="radio"]').forEach(inp=>{
+      inp.addEventListener("change", ()=>{
+        row.querySelectorAll("[data-pill]").forEach(p=> p.classList.remove("is-selected"));
+        inp.closest("[data-pill]")?.classList.add("is-selected");
+      });
+    });
+  });
+
+  const grade = ()=>{
+    let correct=0;
+    for(let i=0;i<act.statements.length;i++){
+      const picked = container.querySelector(`input[name="tf_${act.id}_${i}"]:checked`);
+      if(!picked) return null;
+      const val = picked.value === "V";
+      if(val === !!act.statements[i].a) correct++;
+    }
+    return {score:(correct/act.statements.length)*100};
+  };
+
+  const showFeedback = ()=>{
+    container.querySelectorAll(".row-card").forEach((row,i)=>{
+      row.querySelectorAll("[data-pill]").forEach(p=> p.classList.remove("is-correct","is-wrong"));
+      const correctVal = (!!act.statements[i].a) ? "V" : "F";
+      row.querySelector(`input[value="${correctVal}"]`)?.closest("[data-pill]")?.classList.add("is-correct");
+
+      const picked = row.querySelector('input[type="radio"]:checked');
+      if(picked && picked.value !== correctVal){
+        picked.closest("[data-pill]")?.classList.add("is-wrong");
+      }
+    });
+  };
+
+  const lock = ()=> container.querySelectorAll("input").forEach(i=> i.disabled = true);
+  return {grade, lock, showFeedback};
+}
+
+function renderTraffic(container, act){
+  container.innerHTML = `
+    <div class="q"><strong>Elige:</strong> 🟢 (bueno) o 🔴 (malo)</div>
+    <div class="traffic-grid">
+      ${act.items.map((it,idx)=>`
+        <div class="row-card" data-tr-row="${idx}">
+          <div class="row-text">${safeText(it.text)}</div>
+          <div class="pill-group">
+            <label class="pill pill-green" data-pill>
+              <input type="radio" name="tr_${act.id}_${idx}" value="G">
+              <span class="badge-dot"></span> 🟢
+            </label>
+            <label class="pill pill-red" data-pill>
+              <input type="radio" name="tr_${act.id}_${idx}" value="R">
+              <span class="badge-dot"></span> 🔴
+            </label>
+          </div>
+        </div>
+      `).join("")}
+    </div>
+  `;
+
+  container.querySelectorAll(".row-card").forEach(row=>{
+    row.querySelectorAll('input[type="radio"]').forEach(inp=>{
+      inp.addEventListener("change", ()=>{
+        row.querySelectorAll("[data-pill]").forEach(p=> p.classList.remove("is-selected"));
+        inp.closest("[data-pill]")?.classList.add("is-selected");
+      });
+    });
+  });
+
+  const grade = ()=>{
+    let correct=0;
+    for(let i=0;i<act.items.length;i++){
+      const picked = container.querySelector(`input[name="tr_${act.id}_${i}"]:checked`);
+      if(!picked) return null;
+      const isGreen = picked.value==="G";
+      const shouldBeGood = !!act.items[i].good;
+      if(isGreen === shouldBeGood) correct++;
+    }
+    return {score:(correct/act.items.length)*100};
+  };
+
+  const showFeedback = ()=>{
+    container.querySelectorAll(".row-card").forEach((row,i)=>{
+      row.querySelectorAll("[data-pill]").forEach(p=> p.classList.remove("is-correct","is-wrong"));
+      const correctVal = act.items[i].good ? "G" : "R";
+      row.querySelector(`input[value="${correctVal}"]`)?.closest("[data-pill]")?.classList.add("is-correct");
+
+      const picked = row.querySelector('input[type="radio"]:checked');
+      if(picked && picked.value !== correctVal){
+        picked.closest("[data-pill]")?.classList.add("is-wrong");
+      }
+    });
+  };
+
+  const lock = ()=> container.querySelectorAll("input").forEach(i=> i.disabled = true);
+  return {grade, lock, showFeedback};
+}
+
+function renderFillConnector(container, act){
+  const name = `fc_${act.id}`;
+  container.innerHTML = `
+    <div class="q"><strong>Completa:</strong></div>
+    <div class="prompt-card" style="font-weight:900;">
+      <div class="label">🧩 Completa la oración</div>
+      ${safeText(act.text).replace("____",
+        `<select id="${name}" style="margin:0 6px;border:1px solid rgba(0,0,0,.18);border-radius:999px;padding:8px 10px;font-weight:900;color:#111827;background:#fff;">
+          ${act.options.map(o=>`<option value="${safeText(o)}">${safeText(o)}</option>`).join("")}
+        </select>`
+      ).replace(/\n/g,"<br>")}
+    </div>
+  `;
+  const grade = ()=>{
+    const sel = $(`#${name}`, container);
+    if(!sel) return null;
+    return {score: (sel.value === act.answer) ? 100 : 0};
+  };
+  const lock = ()=> container.querySelectorAll("select").forEach(s=> s.disabled = true);
+  return {grade, lock};
+}
+
+function renderMatching(container, act){
+  const left = act.left.map((t,i)=>({id:i, t}));
+  const right = shuffle(act.right.map((t,i)=>({id:i, t})));
+  let activeLeft = null;
+  const pairs = [];
+
+  container.innerHTML = `
+    <div class="q"><strong>Relaciona:</strong></div>
+    <div class="match-wrap">
+      <div class="match-col" data-left></div>
+      <div class="match-col" data-right></div>
+    </div>
+    <div class="match-pairs" data-pairs>
+      <div style="font-weight:900;color:#111827;">✅ Pares creados</div>
+      <div class="muted">Tip: primero elige una tarjeta de la izquierda, luego una de la derecha.</div>
+    </div>
+  `;
+
+  const leftEl = $("[data-left]", container);
+  const rightEl = $("[data-right]", container);
+  const pairsEl = $("[data-pairs]", container);
+
+  leftEl.innerHTML = left.map(x=> `<div class="match-chip" data-l="${x.id}">${safeText(x.t)}</div>`).join("");
+  rightEl.innerHTML = right.map(x=> `<div class="match-chip" data-r="${x.id}">${safeText(x.t)}</div>`).join("");
+
+  function renderPairs(){
+    const list = pairs.map((p,idx)=>`
+      <div class="pair">
+        <span class="tag">${idx+1}</span>
+        <div><strong>${safeText(act.left[p.l])}</strong><br><span class="muted">→ ${safeText(act.right[p.r])}</span></div>
+      </div>
+    `).join("");
+    pairsEl.innerHTML = `
+      <div style="font-weight:900;color:#111827;">✅ Pares creados</div>
+      ${pairs.length ? list : `<div class="muted">Aún no hay pares.</div>`}
+    `;
+  }
+
+  function clearActive(){
+    activeLeft = null;
+    $$(".match-chip", leftEl).forEach(c=>c.classList.remove("active"));
+  }
+
+  $$(".match-chip", leftEl).forEach(ch=>{
+    ch.addEventListener("click", ()=>{
+      $$(".match-chip", leftEl).forEach(c=>c.classList.remove("active"));
+      ch.classList.add("active");
+      activeLeft = Number(ch.dataset.l);
+    });
+  });
+
+  $$(".match-chip", rightEl).forEach(ch=>{
+    ch.addEventListener("click", ()=>{
+      if(activeLeft===null) return;
+      const r = Number(ch.dataset.r);
+      if(pairs.some(p=>p.l===activeLeft) || pairs.some(p=>p.r===r)) return;
+      pairs.push({l:activeLeft, r});
+      clearActive();
+      renderPairs();
+    });
+  });
+
+  const grade = ()=>{
+    if(pairs.length !== Object.keys(act.pairs).length) return null;
+    let correct=0;
+    pairs.forEach(p=>{ if(act.pairs[p.l]===p.r) correct++; });
+    return {score:(correct/pairs.length)*100};
+  };
+
+  const lock = ()=>{
+    $$(".match-chip", container).forEach(c=>{
+      c.style.cursor="default";
+      c.replaceWith(c.cloneNode(true));
+    });
+  };
+
+  return {grade, lock};
+}
+
+/* ---------- Progreso / badges / imprimir ---------- */
+function calcProgress(){
+  const pdas = getPdas();
+  const acts = pdas.flatMap(p=>p.activities);
+  const done = acts.filter(a=> typeof getScore(a.id)==="number").length;
+  const total = acts.length;
+  const avg = total ? Math.round(acts.reduce((acc,a)=> acc + (getScore(a.id) ?? 0), 0) / total) : 0;
+  return {done,total,avg};
+}
+
+function updateProgressUI(){
+  const pdas = getPdas();
+  const acts = pdas.flatMap(p=>p.activities);
+
+  const rows = acts.map(a=>{
+    const sc = getScore(a.id);
+    const used = getAttempts(a.id);
+    const status = typeof sc==="number" ? (sc>=80?"ok":"warn") : "bad";
+    const label = typeof sc==="number" ? `${sc}%` : "—";
+    return `
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 12px;border-radius:18px;border:1px solid rgba(0,0,0,.12);background:#fff;box-shadow:0 12px 22px rgba(0,0,0,.06);margin-bottom:10px;">
+        <div style="min-width:0">
+          <div style="font-weight:900;color:#111827;">${safeText(a.title)}</div>
+          <div class="muted">${used}/2 intentos usados</div>
+        </div>
+        ${statusHTML(status, label)}
+      </div>
+    `;
+  }).join("");
+
+  const prog = calcProgress();
+  progressEl.innerHTML = `
+    <div style="display:grid;gap:10px;">
+      <div style="padding:12px 12px;border-radius:18px;background:linear-gradient(135deg,#fff1f2,#ffe4e6);border:1px solid rgba(185,28,28,.22);box-shadow:0 14px 26px rgba(185,28,28,.12);">
+        <div style="font-weight:900;color:#111827;">📊 Resumen</div>
+        <div class="muted" style="margin-top:4px;">
+          Actividades con calificación: <strong>${prog.done}/${prog.total}</strong><br>
+          Promedio general: <strong>${prog.avg}%</strong>
+        </div>
+      </div>
+      <div>
+        <div style="font-weight:900;color:#111827;margin-bottom:8px;">📌 Detalle por actividad</div>
+        ${rows || `<div class="muted">Aún no hay resultados.</div>`}
+      </div>
+    </div>
+  `;
+}
+
+function renderBadges(){
+  const prog = calcProgress();
+  if(prog.done>=2) setBadge("badge_first2");
+  if(prog.avg>=80 && prog.done===prog.total) setBadge("badge_master");
+
+  const side = $("#side");
+  const badges = [
+    {k:"badge_first2", t:"🥉 Primeros 2", d:"Completaste 2 actividades."},
+    {k:"badge_master", t:"🥇 Maestro/a del argumento", d:"Terminaste todo con 80% o más."}
+  ];
+
+  const html = badges.map(b=>{
+    const on = hasBadge(b.k);
+    return `
+      <div style="padding:10px 12px;border-radius:18px;border:1px solid rgba(0,0,0,.12);background:${on?"linear-gradient(135deg,#ecfdf5,#dcfce7)":"#fff"};box-shadow:0 12px 22px rgba(0,0,0,.06);margin-bottom:10px;">
+        <div style="font-weight:900;color:#111827;">${b.t} ${on?`<span class="badge" style="margin-left:6px;border-color:rgba(22,163,74,.35);background:#ecfdf5;color:#14532d;">DESBLOQUEADO</span>`:""}</div>
+        <div class="muted">${b.d}</div>
+      </div>
+    `;
+  }).join("");
+
+  const badgesBoxId = "badgesBox";
+  let box = $("#"+badgesBoxId);
+  if(!box){
+    box = document.createElement("div");
+    box.id = badgesBoxId;
+    box.style.marginTop = "10px";
+    side.insertBefore(box, side.firstChild.nextSibling);
+  }
+  box.innerHTML = `
+    <div style="font-weight:900;color:#111827;margin:10px 0 8px;">🏅 Logros</div>
+    ${html}
+  `;
+}
+
+function printResults(){
+  const name = $("#studentName").value.trim() || "Sin nombre";
+  const grade = $("#grade").value==="6" ? "6.º" : "5.º";
+  const prog = calcProgress();
+  const pdas = getPdas();
+  const acts = pdas.flatMap(p=>p.activities);
+
+  const rows = acts.map(a=>{
+    const sc = getScore(a.id);
+    return `<tr><td>${safeText(a.title)}</td><td style="text-align:center;font-weight:900;">${typeof sc==="number"? sc+"%":"—"}</td></tr>`;
+  }).join("");
+
+  const win = window.open("", "_blank");
+  win.document.write(`
+    <html><head><meta charset="UTF-8"><title>Resultados ODA</title>
+    <style>
+      body{font-family:system-ui,-apple-system,"Segoe UI",sans-serif; padding:18px; color:#111827;}
+      h1{margin:0 0 6px;}
+      .meta{color:#374151;margin-bottom:12px;}
+      table{width:100%;border-collapse:collapse;font-size:14px;}
+      th,td{border:1px solid #e5e7eb;padding:8px;}
+      th{background:#fee2e2;text-align:left;}
+      .box{border:1px solid #e5e7eb;border-radius:14px;padding:12px;margin:12px 0;}
+      .logos{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
+      .logos img{height:44px;background:#fff;padding:4px 6px;border-radius:10px;border:1px solid #e5e7eb;}
+      .foot{margin-top:16px;color:#6b7280;font-size:12px;}
+    </style>
+    </head><body>
+      <div class="logos">
+        <img src="../../img/sep_logo.png" alt="SEP">
+        <img src="../../img/escudo_escuela.png" alt="Escuela">
+      </div>
+      <h1>Resultados – ODA Lenguajes (Contenido 4)</h1>
+      <div class="meta"><strong>Alumno(a):</strong> ${safeText(name)} · <strong>Grado:</strong> ${grade}</div>
+      <div class="box">
+        <strong>Resumen:</strong><br>
+        Actividades calificadas: ${prog.done}/${prog.total}<br>
+        Promedio general: ${prog.avg}%
+      </div>
+      <table>
+        <thead><tr><th>Actividad</th><th style="text-align:center;">Calificación</th></tr></thead>
+        <tbody>${rows}</tbody>
+      </table>
+      <div class="foot">© ODA creada por el Maestro Martín Reta</div>
+      <script>window.print();<\/script>
+    </body></html>
+  `);
+  win.document.close();
+}
+
+$("#btnPrintResults").addEventListener("click", printResults);
+$("#btnReset").addEventListener("click", ()=>{
+  if(confirm("¿Seguro que quieres reiniciar intentos y resultados?")){
+    resetAll();
+    updateProgressUI();
+    renderBadges();
+    renderTabs();
+    renderPanel();
+  }
+});
+
+gradeEl.addEventListener("change", ()=>{
+  currentGrade = gradeEl.value;
+  currentPdaIndex = 0;
+  renderTabs();
+  renderPanel();
+  updateProgressUI();
+  renderBadges();
+});
+
+/* ---------- Inicio ---------- */
+currentGrade = gradeEl.value;
+renderTabs();
+renderPanel();
+updateProgressUI();
+renderBadges();
+ 
+ </script>
+</body>
+</html>
 
