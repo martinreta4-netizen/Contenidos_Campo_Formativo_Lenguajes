@@ -1,0 +1,1740 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ODA Lenguajes (Fase 5) – Contenido 9: Exposición sobre el cuidado de la salud</title>
+
+  <style>
+    :root{
+      --vino:#6b1027;
+      --vino2:#8b1534;
+      --dorado:#d7b56d;
+      --dorado2:#f2d59b;
+      --bg1:#fff7ed;
+      --bg2:#fef2f2;
+      --text:#111827;
+      --muted:#6b7280;
+      --card:#ffffff;
+      --border:#e5e7eb;
+      --shadow:0 18px 45px rgba(107,16,39,.22);
+    }
+    *{box-sizing:border-box;}
+    html,body{height:100%;}
+    body{
+      margin:0;
+      font-family:system-ui,-apple-system,"Segoe UI",sans-serif;
+      background:linear-gradient(180deg,var(--bg1) 0,var(--bg2) 45%,#f9fafb 100%);
+      color:var(--text);
+      overflow-x:hidden;
+    }
+    body::before{
+      content:"";
+      position:fixed;
+      inset:10% 14%;
+      background:url("escudo_escuela.png") center/contain no-repeat;
+      opacity:.04;
+      pointer-events:none;
+      z-index:0;
+    }
+    .school-logo-fixed{
+      position:fixed;
+      right:14px;
+      bottom:12px;
+      height:78px;
+      opacity:.95;
+      z-index:20;
+      pointer-events:none;
+      filter:drop-shadow(0 10px 18px rgba(17,24,39,.25));
+    }
+    .app{
+      position:relative;
+      z-index:1;
+      max-width:1220px;
+      margin:0 auto;
+      padding:14px 12px 20px;
+    }
+    .topbar{
+      display:grid;
+      grid-template-columns:auto minmax(0,1fr) auto;
+      gap:12px;
+      align-items:center;
+      background:radial-gradient(circle at top left,#fff1f2 0,#ffffff 50%,#fff7ed 120%);
+      border:1px solid #fed7d7;
+      border-radius:22px;
+      padding:12px 14px;
+      box-shadow:var(--shadow);
+    }
+    @media(max-width:900px){
+      .topbar{grid-template-columns:1fr; text-align:center;}
+      .brand-left{justify-content:center;}
+      .brand-right{text-align:center;}
+    }
+    .brand-left{display:flex; align-items:center; gap:10px;}
+    .brand-left img{
+      height:58px;
+      width:auto;
+      background:#fff;
+      border-radius:14px;
+      padding:6px 8px;
+      border:1px solid #fee2e2;
+    }
+    .title h1{
+      margin:0;
+      font-size:1.15rem;
+      display:flex;
+      align-items:center;
+      gap:10px;
+      justify-content:flex-start;
+      flex-wrap:wrap;
+    }
+    @media(max-width:900px){ .title h1{justify-content:center;} }
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      border-radius:999px;
+      padding:3px 10px;
+      border:1px solid #fed7d7;
+      background:#fff1f2;
+      color:var(--vino);
+      font-weight:800;
+      font-size:.78rem;
+      white-space:nowrap;
+    }
+    .meta{
+      margin-top:4px;
+      font-size:.86rem;
+      color:var(--muted);
+      line-height:1.35;
+    }
+    .meta strong{color:var(--vino2);}
+    .brand-right{
+      font-size:.8rem;
+      color:#4b5563;
+      text-align:right;
+    }
+    .brand-right strong{display:block; color:#111827; font-size:.88rem;}
+
+    .grid{
+      margin-top:12px;
+      display:grid;
+      grid-template-columns:300px minmax(0,1fr);
+      gap:12px;
+    }
+    @media(max-width:980px){ .grid{grid-template-columns:1fr;} }
+
+    .card{
+      background:rgba(255,255,255,.98);
+      border:1px solid var(--border);
+      border-radius:20px;
+      box-shadow:0 14px 30px rgba(17,24,39,.08);
+      padding:12px 12px;
+    }
+    .card-title{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      margin-bottom:8px;
+    }
+    .card-title h2{
+      margin:0;
+      font-size:.95rem;
+      color:#111827;
+      display:flex;
+      align-items:center;
+      gap:8px;
+    }
+    .badge{
+      border-radius:999px;
+      padding:2px 9px;
+      font-size:.74rem;
+      border:1px solid #fed7d7;
+      background:#fff1f2;
+      color:var(--vino);
+      font-weight:900;
+    }
+    .card-body{font-size:.86rem; color:#374151;}
+    .muted{color:var(--muted);}
+
+    .btn-row{display:flex; flex-wrap:wrap; gap:8px; margin-top:10px;}
+    .btn{
+      border:none;
+      border-radius:999px;
+      padding:8px 12px;
+      font-size:.84rem;
+      font-weight:900;
+      cursor:pointer;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      transition:transform .12s ease, box-shadow .12s ease, opacity .12s ease;
+      user-select:none;
+      white-space:nowrap;
+    }
+    .btn:active{transform:translateY(1px);}
+    .btn-primary{
+      color:#fff;
+      background:linear-gradient(135deg,var(--vino),#ef4444);
+      box-shadow:0 12px 22px rgba(107,16,39,.25);
+    }
+    .btn-secondary{background:#f3f4f6; color:#111827; border:1px solid #e5e7eb;}
+    .btn-outline{background:#fff; color:var(--vino2); border:1px solid #fecaca;}
+    .btn-gold{
+      color:#3b2a10;
+      background:linear-gradient(135deg,var(--dorado),var(--dorado2));
+      border:1px solid #f1d8a5;
+      box-shadow:0 12px 22px rgba(215,181,109,.22);
+    }
+    .btn[disabled]{opacity:.55; cursor:not-allowed;}
+
+    .field{display:flex; flex-direction:column; gap:6px; margin-top:6px;}
+    .field label{font-size:.8rem; font-weight:900; color:#374151;}
+    .field input{
+      padding:8px 10px;
+      border-radius:999px;
+      border:1px solid #fecaca;
+      outline:none;
+      font-size:.88rem;
+      background:#fff;
+    }
+    .field input:focus{
+      border-color:#fb7185;
+      box-shadow:0 0 0 3px rgba(251,113,133,.18);
+    }
+
+    .menu{display:flex; flex-direction:column; gap:8px; margin-top:10px;}
+    .menu-btn{
+      width:100%;
+      border-radius:18px;
+      border:1px solid #fee2e2;
+      padding:10px 10px;
+      background:#fff;
+      cursor:pointer;
+      text-align:left;
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:10px;
+      color:#7f1d1d;
+    }
+    .menu-btn .left{display:flex; gap:10px; align-items:flex-start;}
+    .bubble{
+      width:28px;height:28px;
+      border-radius:999px;
+      background:#fff1f2;
+      border:2px solid #fecaca;
+      display:flex;align-items:center;justify-content:center;
+      font-weight:900;
+      color:var(--vino2);
+      flex-shrink:0;
+      margin-top:1px;
+    }
+    .menu-btn .txt .t1{font-weight:900; font-size:.9rem; color:var(--vino2);}
+    .menu-btn .txt .t2{font-size:.78rem; color:#9f1239; margin-top:2px;}
+    .menu-btn .arrow{font-size:1.05rem; margin-top:3px;}
+    .menu-btn.active{
+      background:linear-gradient(90deg,var(--vino2),#fb7185);
+      border-color:var(--vino2);
+      color:#fff;
+      box-shadow:0 14px 26px rgba(107,16,39,.28);
+    }
+    .menu-btn.active .bubble{
+      background:#fff;
+      border-color:#ffe4e6;
+      color:var(--vino2);
+    }
+    .menu-btn.active .txt .t1,
+    .menu-btn.active .txt .t2{color:#fff;}
+
+    .avatar{
+      display:grid;
+      grid-template-columns:90px minmax(0,1fr);
+      gap:10px;
+      align-items:center;
+      margin-top:10px;
+      padding-top:10px;
+      border-top:1px dashed #fecaca;
+    }
+    .avatar img{width:90px;height:auto; object-fit:contain;}
+    .avatar .talk{font-size:.84rem; color:#374151;}
+    .avatar .talk strong{color:var(--vino2);}
+
+    .panel{display:none;}
+    .panel.active{display:block;}
+
+    .status{
+      margin-top:10px;
+      border-radius:14px;
+      padding:10px 10px;
+      border:1px solid #e5e7eb;
+      background:#f9fafb;
+      font-size:.86rem;
+      color:#111827;
+      display:flex;
+      align-items:flex-start;
+      gap:10px;
+    }
+    .status .ic{
+      width:26px;height:26px;border-radius:999px;
+      display:flex;align-items:center;justify-content:center;
+      flex-shrink:0;font-weight:900;color:#fff;margin-top:1px;
+      background:#2563eb;
+    }
+    .status.info{border-color:#bfdbfe; background:#eff6ff;}
+    .status.ok{border-color:#bbf7d0; background:#ecfdf3;}
+    .status.ok .ic{background:#16a34a;}
+    .status.bad{border-color:#fecaca; background:#fef2f2;}
+    .status.bad .ic{background:#ef4444;}
+
+    .game-wrap{
+      margin-top:10px;
+      display:grid;
+      grid-template-columns:minmax(0,1fr) 340px;
+      gap:10px;
+    }
+    @media(max-width:980px){ .game-wrap{grid-template-columns:1fr;} }
+
+    .bank,.board{
+      border-radius:18px;
+      border:1px solid #e5e7eb;
+      background:#fff;
+      padding:10px;
+      min-height:200px;
+      box-shadow:0 10px 22px rgba(17,24,39,.06);
+    }
+    .bank h3,.board h3{
+      margin:0 0 6px;
+      font-size:.9rem;
+      color:#111827;
+      display:flex;
+      align-items:center;
+      gap:8px;
+    }
+    .bank small,.board small{color:var(--muted);}
+    .cards{display:flex; flex-wrap:wrap; gap:8px; margin-top:8px;}
+    .carditem{
+      border-radius:14px;
+      border:1px solid #fecaca;
+      background:#fff1f2;
+      color:#7f1d1d;
+      padding:8px 10px;
+      font-size:.83rem;
+      font-weight:900;
+      cursor:grab;
+      user-select:none;
+      max-width:100%;
+    }
+    .carditem:active{cursor:grabbing;}
+    .carditem[data-kind="bad"]{
+      border-color:#e5e7eb;
+      background:#f3f4f6;
+      color:#374151;
+      font-weight:800;
+    }
+    .dropgrid{display:grid; grid-template-columns:1fr; gap:8px; margin-top:8px;}
+    .dropzone{
+      border-radius:16px;
+      border:2px dashed #fecaca;
+      background:#fff;
+      padding:10px;
+      min-height:58px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+    }
+    .dropzone .label{font-weight:900; color:var(--vino2); font-size:.84rem;}
+    .dropzone .hint{color:var(--muted); font-size:.78rem; text-align:right; flex:1;}
+    .dropzone.filled{border-style:solid; border-color:#fed7d7; background:#fff7ed;}
+    .dropzone.correct{border-color:#86efac; background:#ecfdf3;}
+    .dropzone.wrong{border-color:#fecaca; background:#fef2f2;}
+    .mini{font-size:.78rem; color:var(--muted); margin-top:6px;}
+
+    .results{
+      margin-top:10px;
+      padding:10px;
+      border-radius:18px;
+      background:#0b1120;
+      color:#e5e7eb;
+      border:1px solid #111827;
+      box-shadow:0 12px 22px rgba(17,24,39,.22);
+    }
+    .results h3{margin:0 0 8px; font-size:.95rem; color:#fde68a;}
+    .rgrid{display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:8px;}
+    .rpill{
+      border-radius:999px;
+      border:1px solid rgba(148,163,184,.55);
+      padding:6px 10px;
+      background:rgba(2,6,23,.8);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      font-size:.82rem;
+    }
+    .rpill .v{font-weight:900; color:#bbf7d0;}
+    .footer{
+      margin-top:12px;
+      font-size:.78rem;
+      color:#6b7280;
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      justify-content:space-between;
+      align-items:center;
+      padding:8px 2px 0;
+    }
+    .footer .credit{font-style:italic; color:#4b5563;}
+
+    /* Cover */
+    .cover{
+      position:fixed;
+      inset:0;
+      z-index:60;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:16px;
+      background:radial-gradient(circle at top,#7f1d1d 0,#3b0a15 55%,#12030a 100%);
+      color:#fff;
+    }
+    .cover-inner{
+      width:100%;
+      max-width:1100px;
+      background:rgba(17,24,39,.92);
+      border:1px solid rgba(255,255,255,.14);
+      border-radius:26px;
+      box-shadow:0 24px 60px rgba(0,0,0,.5);
+      padding:18px 18px;
+      display:grid;
+      grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);
+      gap:18px;
+    }
+    @media(max-width:900px){ .cover-inner{grid-template-columns:1fr;} }
+    .cover-left .tag{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      border-radius:999px;
+      padding:4px 10px;
+      border:1px solid rgba(255,255,255,.16);
+      background:rgba(251,113,133,.12);
+      font-size:.8rem;
+      font-weight:900;
+      letter-spacing:.03em;
+    }
+    .cover-title{margin:10px 0 6px; font-size:1.7rem; line-height:1.1;}
+    .cover-sub{color:#e5e7eb; margin:0 0 10px; font-size:.95rem; line-height:1.35;}
+    .cover-grid{display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:10px;}
+    @media(max-width:700px){ .cover-grid{grid-template-columns:1fr;} }
+    .cover-box{
+      background:rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.12);
+      border-radius:18px;
+      padding:12px;
+    }
+    .cover-box h3{margin:0 0 6px; font-size:1rem; color:#fde68a;}
+    .cover-box p{margin:0; color:#e5e7eb; font-size:.9rem; line-height:1.35;}
+    .cover-logos{display:flex; gap:10px; align-items:center; flex-wrap:wrap; margin-top:10px;}
+    .cover-logos img{
+      height:46px;
+      width:auto;
+      background:#fff;
+      border-radius:14px;
+      padding:6px 8px;
+    }
+    .cover-right{
+      background:rgba(255,255,255,.05);
+      border:1px solid rgba(255,255,255,.12);
+      border-radius:18px;
+      padding:12px;
+    }
+    .cover-right h3{margin:0 0 8px; color:#fff; font-size:1.05rem;}
+    .cover-right ul{margin:0; padding-left:18px; color:#e5e7eb; font-size:.9rem; line-height:1.35;}
+    .cover-right li{margin-bottom:6px;}
+    .cover-meta{margin-top:10px; color:#cbd5f5; font-size:.82rem;}
+    .cover-meta .small{color:#9ca3af; font-size:.78rem;}
+    .copyright{
+      margin-top:8px;
+      padding-top:8px;
+      border-top:1px solid rgba(255,255,255,.12);
+      font-size:.78rem;
+      color:#d1d5db;
+    }
+
+    @media print{
+      body{background:#fff;}
+      body::before,.school-logo-fixed,.cover{display:none!important;}
+      .topbar,.card,.results{box-shadow:none!important;}
+    }
+  </style>
+</head>
+
+<body>
+  <img src="../../img/escudo_escuela.png" alt="Escudo escuela" class="school-logo-fixed">
+
+  <!-- PORTADA -->
+  <section class="cover" id="cover">
+    <div class="cover-inner">
+      <div class="cover-left">
+        <div class="tag">📌 ODA de Lenguajes · Fase 5 · Contenido 9</div>
+        <h1 class="cover-title">Exposición sobre temas relacionados con el cuidado de la salud</h1>
+        <p class="cover-sub">
+          En esta ODA aprenderás a <strong>organizar una exposición</strong>, usar <strong>lenguaje formal</strong>
+          y participar como <strong>audiencia</strong> mediante <strong>juegos manipulables</strong>.
+        </p>
+
+        <div class="cover-grid">
+          <div class="cover-box">
+            <h3>🎯 Propósito</h3>
+            <p>Desarrollar habilidades para <strong>presentar y escuchar</strong> exposiciones sobre salud,
+              usando información confiable, orden, recursos visuales y diálogo respetuoso.</p>
+          </div>
+          <div class="cover-box">
+            <h3>🧩 ¿Cómo se trabaja?</h3>
+            <p>Elige tu grado, lee una hoja informativa y resuelve 3 juegos (uno por PDA).
+              Cada juego tiene <strong>2 intentos</strong>.</p>
+          </div>
+        </div>
+
+        <div class="cover-logos">
+          <img src="../../img/sep_logo.png" alt="SEP">
+          <img src="../../img/escudo_escuela.png" alt="Escuela">
+        </div>
+
+        <div class="btn-row" style="margin-top:12px;">
+          <button class="btn btn-gold" id="btnStart5">⭐ Entrar a 5.º</button>
+          <button class="btn btn-primary" id="btnStart6">🚀 Entrar a 6.º</button>
+        </div>
+
+        <div class="copyright">
+          <div><strong>Créditos:</strong> ODA creada por el Maestro Martín Reta.</div>
+          <div class="small">© Uso educativo. Distribución gratuita. Prohibida su venta.</div>
+        </div>
+      </div>
+
+      <div class="cover-right">
+        <h3>🧑‍🏫 Tu guía</h3>
+        <div style="display:flex;gap:12px;align-items:center;">
+          <img src="../../img/avatar_guia.png" alt="Avatar guía" style="width:110px;height:auto;object-fit:contain;">
+          <div style="min-width:0;">
+            <div style="font-weight:900;color:#fde68a;">Hola, soy el maestro Martín.</div>
+            <div style="color:#e5e7eb;font-size:.9rem;line-height:1.35;">
+              Te acompañaré para que aprendas a <strong>exponer</strong> y a <strong>escuchar</strong> con respeto.
+            </div>
+          </div>
+        </div>
+
+        <div class="cover-meta">
+          <div><strong>Escuela Primaria “Gral. Lázaro Cárdenas”</strong></div>
+          <div>Ejido Santa María, Pesquería, N.L.</div>
+          <div class="small">Selecciona tu grado para comenzar.</div>
+        </div>
+
+        <ul style="margin-top:12px;">
+          <li>📌 Hoja informativa por grado.</li>
+          <li>🧩 Juego 1: Construye tu exposición.</li>
+          <li>🎭 Juego 2: Escenario del expositor.</li>
+          <li>👂 Juego 3: Soy parte del público.</li>
+          <li>🏅 Insignias + diploma imprimible.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- APP -->
+  <div class="app" id="app" style="display:none;">
+    <header class="topbar">
+      <div class="brand-left">
+        <img src="../../img/sep_logo.png" alt="SEP">
+      </div>
+
+      <div class="title">
+        <h1>🗣️ Exposición y cuidado de la salud <span class="pill" id="pillGrade">Grado: —</span></h1>
+        <div class="meta">
+          <div>Contenido: <strong>Exposición sobre temas relacionados con el cuidado de la salud.</strong></div>
+          <div class="muted">ODA de Lenguajes estándar · Actividades por PDA en formato de juegos manipulables.</div>
+        </div>
+      </div>
+
+      <div class="brand-right">
+        <strong>Autor: Mtro. Martín Reta</strong>
+        Escuela Primaria “Gral. Lázaro Cárdenas”<br>
+        Ejido Santa María, Pesquería, N.L.
+      </div>
+    </header>
+
+    <section class="grid">
+      <!-- SIDEBAR -->
+      <aside class="card">
+        <div class="card-title">
+          <h2>🧑‍🎓 Datos</h2>
+          <span class="badge">2 intentos por juego</span>
+        </div>
+
+        <div class="card-body">
+          <div class="field">
+            <label for="studentName">Nombre del alumno(a)</label>
+            <input id="studentName" type="text" placeholder="Escribe tu nombre aquí">
+          </div>
+
+          <div class="menu" id="menu">
+            <button class="menu-btn active" data-panel="info">
+              <div class="left">
+                <div class="bubble">i</div>
+                <div class="txt">
+                  <div class="t1">Hoja informativa</div>
+                  <div class="t2">Antes de jugar</div>
+                </div>
+              </div>
+              <div class="arrow">➜</div>
+            </button>
+
+            <button class="menu-btn" data-panel="pda1">
+              <div class="left">
+                <div class="bubble">1</div>
+                <div class="txt">
+                  <div class="t1">PDA 1</div>
+                  <div class="t2">Organizo mi exposición</div>
+                </div>
+              </div>
+              <div class="arrow">➜</div>
+            </button>
+
+            <button class="menu-btn" data-panel="pda2">
+              <div class="left">
+                <div class="bubble">2</div>
+                <div class="txt">
+                  <div class="t1">PDA 2</div>
+                  <div class="t2">Mantengo la atención</div>
+                </div>
+              </div>
+              <div class="arrow">➜</div>
+            </button>
+
+            <button class="menu-btn" data-panel="pda3">
+              <div class="left">
+                <div class="bubble">3</div>
+                <div class="txt">
+                  <div class="t1">PDA 3</div>
+                  <div class="t2">Participo como audiencia</div>
+                </div>
+              </div>
+              <div class="arrow">➜</div>
+            </button>
+
+            <button class="menu-btn" data-panel="results">
+              <div class="left">
+                <div class="bubble">★</div>
+                <div class="txt">
+                  <div class="t1">Resultados</div>
+                  <div class="t2">Insignias y diploma</div>
+                </div>
+              </div>
+              <div class="arrow">✓</div>
+            </button>
+          </div>
+
+          <div class="avatar">
+            <img src="../../img/avatar_guia.png" alt="Avatar guía">
+            <div class="talk">
+              <strong>Tip rápido:</strong><br>
+              Arrastra las tarjetas a su lugar. Luego pulsa <strong>Comprobar</strong>.
+              Recuerda: tienes <strong>2 intentos</strong> por juego.
+            </div>
+          </div>
+
+          <div class="btn-row">
+            <button class="btn btn-outline" id="btnResetAll">🧹 Reiniciar todo</button>
+            <button class="btn btn-secondary" id="btnGoResults">📄 Ir a resultados</button>
+          </div>
+        </div>
+      </aside>
+
+      <!-- MAIN -->
+      <main>
+
+        <!-- INFO -->
+        <section class="card panel active" id="panel-info">
+          <div class="card-title">
+            <h2>📘 Hoja informativa</h2>
+            <span class="badge" id="infoGradeBadge">—</span>
+          </div>
+          <div class="card-body" id="infoContent"></div>
+
+          <div class="status info" style="margin-top:12px;">
+            <div class="ic">i</div>
+            <div>Lee esta información y luego entra a los PDAs. Los juegos evalúan lo que aprendiste aquí.</div>
+          </div>
+
+          <div class="btn-row">
+            <button class="btn btn-primary" id="btnStartPDA1">🚀 Empezar PDA 1</button>
+          </div>
+        </section>
+
+        <!-- PDA 1 -->
+        <section class="card panel" id="panel-pda1">
+          <div class="card-title">
+            <h2>🧩 PDA 1 – “Construye tu exposición”</h2>
+            <span class="badge" id="pda1Badge">Insignia: pendiente</span>
+          </div>
+
+          <div class="card-body">
+            <div class="muted">Arrastra tarjetas para completar el esquema de una exposición sobre salud.</div>
+
+            <div class="game-wrap">
+              <div class="board">
+                <h3>🧠 Tablero <small>(arrastra al lugar correcto)</small></h3>
+                <div class="dropgrid" id="pda1Board"></div>
+                <div class="mini">Si te equivocas, regresa una tarjeta al banco.</div>
+
+                <div class="btn-row">
+                  <button class="btn btn-primary" id="pda1CheckBtn">✅ Comprobar</button>
+                  <button class="btn btn-outline" id="pda1ResetBtn">↩️ Reiniciar juego</button>
+                  <button class="btn btn-secondary" id="pda1PrintBtn">🖨️ Imprimir actividad</button>
+                </div>
+
+                <div class="status info" id="pda1Status">
+                  <div class="ic">i</div>
+                  <div>Intentos disponibles: <strong><span id="pda1AttemptsLeft">2</span></strong>.</div>
+                </div>
+              </div>
+
+              <div class="bank">
+                <h3>🧺 Banco de tarjetas <small>(arrastra)</small></h3>
+                <div class="cards" id="pda1Bank"></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- PDA 2 -->
+        <section class="card panel" id="panel-pda2">
+          <div class="card-title">
+            <h2>🎭 PDA 2 – “Escenario del expositor”</h2>
+            <span class="badge" id="pda2Badge">Insignia: pendiente</span>
+          </div>
+
+          <div class="card-body">
+            <div class="muted">En cada estación, arrastra la acción correcta para mantener la atención.</div>
+
+            <div class="game-wrap">
+              <div class="board">
+                <h3>🎬 Estaciones <small>(1 tarjeta por estación)</small></h3>
+                <div class="dropgrid" id="pda2Board"></div>
+
+                <div class="btn-row">
+                  <button class="btn btn-primary" id="pda2CheckBtn">✅ Comprobar</button>
+                  <button class="btn btn-outline" id="pda2ResetBtn">↩️ Reiniciar juego</button>
+                  <button class="btn btn-secondary" id="pda2PrintBtn">🖨️ Imprimir actividad</button>
+                </div>
+
+                <div class="status info" id="pda2Status">
+                  <div class="ic">i</div>
+                  <div>Intentos disponibles: <strong><span id="pda2AttemptsLeft">2</span></strong>.</div>
+                </div>
+              </div>
+
+              <div class="bank">
+                <h3>🎴 Acciones disponibles <small>(arrastra)</small></h3>
+                <div class="cards" id="pda2Bank"></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- PDA 3 -->
+        <section class="card panel" id="panel-pda3">
+          <div class="card-title">
+            <h2>👂 PDA 3 – “Soy parte del público”</h2>
+            <span class="badge" id="pda3Badge">Insignia: pendiente</span>
+          </div>
+
+          <div class="card-body">
+            <div class="muted">Clasifica tarjetas como audiencia. (Arrastra a la categoría correcta)</div>
+
+            <div class="game-wrap">
+              <div class="board">
+                <h3>🧩 Categorías <small>(arrastra a la columna correcta)</small></h3>
+                <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:8px;" id="pda3Cols"></div>
+
+                <div class="btn-row">
+                  <button class="btn btn-primary" id="pda3CheckBtn">✅ Comprobar</button>
+                  <button class="btn btn-outline" id="pda3ResetBtn">↩️ Reiniciar juego</button>
+                  <button class="btn btn-secondary" id="pda3PrintBtn">🖨️ Imprimir actividad</button>
+                </div>
+
+                <div class="status info" id="pda3Status">
+                  <div class="ic">i</div>
+                  <div>Intentos disponibles: <strong><span id="pda3AttemptsLeft">2</span></strong>.</div>
+                </div>
+              </div>
+
+              <div class="bank">
+                <h3>🧺 Tarjetas del público <small>(arrastra)</small></h3>
+                <div class="cards" id="pda3Bank"></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- RESULTS -->
+        <section class="card panel" id="panel-results">
+          <div class="card-title">
+            <h2>📄 Resultados, insignias y diploma</h2>
+            <span class="badge" id="overallBadge">Progreso</span>
+          </div>
+
+          <div class="card-body">
+            <p class="muted" style="margin-top:0;">
+              Se guardan tus puntajes por PDA. El diploma se habilita con los 3 PDAs y promedio recomendado de 70%+.
+            </p>
+
+            <div class="results">
+              <h3>📊 Hoja de resultados automática</h3>
+              <div class="rgrid" id="resultsGrid"></div>
+
+              <div class="btn-row" style="margin-top:10px;">
+                <button class="btn btn-gold" id="btnPrintResults">🖨️ Imprimir hoja de resultados</button>
+                <button class="btn btn-primary" id="btnDiploma">🏅 Abrir diploma</button>
+              </div>
+              <div class="mini" id="diplomaHint"></div>
+            </div>
+          </div>
+        </section>
+
+      </main>
+    </section>
+
+    <div class="footer">
+      <div>© ODA de Lenguajes estándar · Contenido 9</div>
+      <div class="credit">“ODA creada por el Maestro Martín Reta” · Copyright</div>
+    </div>
+  </div>
+
+<script>
+/* =========================================================
+   ODA Lenguajes estándar – Contenido 9 (CORREGIDA)
+   - Sin impresión automática
+   - Botones de portada por event listeners
+   - 3 juegos drag&drop
+   - 2 intentos por juego
+========================================================= */
+
+let CURRENT_GRADE = null;
+const MAX_ATTEMPTS = 2;
+
+const state = {
+  studentName: "",
+  attempts: { pda1:0, pda2:0, pda3:0 },
+  scores: {
+    pda1: {a1:null, a2:null, best:null},
+    pda2: {a1:null, a2:null, best:null},
+    pda3: {a1:null, a2:null, best:null},
+  },
+  badges: { pda1:false, pda2:false, pda3:false }
+};
+
+const DATA = {
+  5: {
+    infoHTML: `
+      <h3 style="margin:0 0 6px;color:var(--vino2);">¿Qué es una exposición sobre el cuidado de la salud?</h3>
+      <p style="margin:0 0 8px;">
+        Una <strong>exposición</strong> es explicar un tema con orden para que otras personas lo entiendan.
+        En salud hablamos de hábitos como <strong>higiene</strong>, <strong>alimentación</strong>, <strong>actividad física</strong> y
+        <strong>prevención</strong>.
+      </p>
+      <div class="card" style="box-shadow:none;border-radius:16px;background:#fff7ed;border:1px solid #fed7aa;">
+        <div style="font-weight:900;color:#7c2d12;margin-bottom:6px;">🎤 Como expositor(a) debo:</div>
+        <ul style="margin:0;padding-left:18px;line-height:1.35;">
+          <li>Investigar en fuentes confiables (libro, infografía, video educativo).</li>
+          <li>Ordenar: <strong>introducción</strong> → <strong>desarrollo</strong> → <strong>cierre</strong>.</li>
+          <li>Usar palabras clave y apoyos (cuadro, esquema, tabla o imagen).</li>
+          <li>Hablar claro y mirar al público.</li>
+        </ul>
+      </div>
+      <div class="card" style="margin-top:10px;box-shadow:none;border-radius:16px;background:#fff1f2;border:1px solid #fecaca;">
+        <div style="font-weight:900;color:var(--vino2);margin-bottom:6px;">👂 Como audiencia debo:</div>
+        <ul style="margin:0;padding-left:18px;line-height:1.35;">
+          <li>Escuchar con atención.</li>
+          <li>Tomar notas de lo importante.</li>
+          <li>Preguntar con respeto si algo no se entiende.</li>
+          <li>Comentar sin burlas y con buenas maneras.</li>
+        </ul>
+      </div>
+    `,
+    pda1: {
+      board: [
+        {id:"tema", label:"Tema", hint:"Elige el tema"},
+        {id:"intro", label:"Introducción", hint:"¿De qué hablaré?"},
+        {id:"d1", label:"Desarrollo 1", hint:"Idea principal 1"},
+        {id:"d2", label:"Desarrollo 2", hint:"Idea principal 2"},
+        {id:"d3", label:"Desarrollo 3", hint:"Idea principal 3"},
+        {id:"apoyo", label:"Material de apoyo", hint:"¿Qué usaré?"},
+        {id:"cierre", label:"Cierre", hint:"Mensaje final"}
+      ],
+      cards: [
+        {id:"t_hig", text:"Tema: Higiene personal", target:"tema"},
+        {id:"t_ali", text:"Tema: Alimentación saludable", target:"tema"},
+        {id:"t_act", text:"Tema: Actividad física", target:"tema"},
+        {id:"t_prev", text:"Tema: Prevención de enfermedades", target:"tema"},
+
+        {id:"i1", text:"Introducción: Hoy hablaré sobre cuidar mi salud cada día.", target:"intro"},
+        {id:"i2", text:"Introducción: Este tema es importante para evitar enfermarnos.", target:"intro"},
+
+        {id:"d1a", text:"Idea 1: Lavarse las manos reduce microbios.", target:"d1"},
+        {id:"d2a", text:"Idea 2: Comer frutas y verduras ayuda al cuerpo.", target:"d2"},
+        {id:"d3a", text:"Idea 3: Hacer ejercicio fortalece corazón y músculos.", target:"d3"},
+
+        {id:"ap1", text:"Apoyo: Infografía sencilla", target:"apoyo"},
+        {id:"ap2", text:"Apoyo: Esquema o cuadro sinóptico", target:"apoyo"},
+        {id:"ap3", text:"Apoyo: Tabla con hábitos saludables", target:"apoyo"},
+
+        {id:"c1", text:"Cierre: Cuidar mi salud es una responsabilidad diaria.", target:"cierre"},
+        {id:"c2", text:"Cierre: Si me cuido, aprendo mejor y soy más fuerte.", target:"cierre"},
+      ],
+      totalZones: 7
+    },
+    pda2: {
+      stations: [
+        {id:"voz", label:"Voz", hint:"¿Cómo debo hablar?", correct:"voz_ok"},
+        {id:"postura", label:"Postura", hint:"¿Cómo debo colocarme?", correct:"pos_ok"},
+        {id:"mirada", label:"Contacto visual", hint:"¿Qué hago con la mirada?", correct:"mir_ok"},
+        {id:"gestos", label:"Gestos", hint:"¿Qué gesto ayuda?", correct:"ges_ok"},
+        {id:"leng", label:"Lenguaje", hint:"¿Qué frase es mejor?", correct:"len_ok"},
+        {id:"preg", label:"Interacción", hint:"¿Cómo mantengo atención?", correct:"pre_ok"},
+      ],
+      actions: [
+        {id:"voz_ok", text:"Hablo claro y con buen volumen", targetStation:"voz"},
+        {id:"voz_bad", text:"Hablo muy bajito y rápido", targetStation:"voz", kind:"bad"},
+
+        {id:"pos_ok", text:"Me mantengo de frente, con calma", targetStation:"postura"},
+        {id:"pos_bad", text:"Doy la espalda al público", targetStation:"postura", kind:"bad"},
+
+        {id:"mir_ok", text:"Miro al público por momentos", targetStation:"mirada"},
+        {id:"mir_bad", text:"Solo miro al piso", targetStation:"mirada", kind:"bad"},
+
+        {id:"ges_ok", text:"Uso manos para señalar una imagen", targetStation:"gestos"},
+        {id:"ges_bad", text:"Juego con cosas y me distraigo", targetStation:"gestos", kind:"bad"},
+
+        {id:"len_ok", text:"El exceso de azúcar puede afectar la salud.", targetStation:"leng"},
+        {id:"len_bad", text:"La chatarra está bien mala, pues…", targetStation:"leng", kind:"bad"},
+
+        {id:"pre_ok", text:"Hago una pregunta al público", targetStation:"preg"},
+        {id:"pre_bad", text:"Sigo hablando aunque nadie entienda", targetStation:"preg", kind:"bad"},
+      ],
+      totalStations: 6
+    },
+    pda3: {
+      categories: [
+        {id:"escucha", title:"✅ Acciones de escucha"},
+        {id:"pregunta", title:"✅ Preguntas adecuadas"},
+        {id:"comenta", title:"✅ Comentarios respetuosos"}
+      ],
+      cards: [
+        {id:"a1", text:"Tomo notas de lo más importante", cat:"escucha"},
+        {id:"a2", text:"Pongo atención sin interrumpir", cat:"escucha"},
+        {id:"a3", text:"Escucho para aprender algo nuevo", cat:"escucha"},
+
+        {id:"p1", text:"¿Puedes repetir esa idea con otro ejemplo?", cat:"pregunta"},
+        {id:"p2", text:"¿Qué puedo hacer en casa para cuidarme mejor?", cat:"pregunta"},
+        {id:"p3", text:"¿De dónde salió esa información?", cat:"pregunta"},
+
+        {id:"c1", text:"Me gustó tu explicación porque fue clara.", cat:"comenta"},
+        {id:"c2", text:"Yo opino que este hábito es importante en mi escuela.", cat:"comenta"},
+        {id:"c3", text:"Gracias, ahora entiendo mejor el tema.", cat:"comenta"}
+      ],
+      totalCards: 9
+    }
+  },
+
+  6: {
+    infoHTML: `
+      <h3 style="margin:0 0 6px;color:var(--vino2);">Exposición sobre salud (nivel 6.º)</h3>
+      <p style="margin:0 0 8px;">
+        Una exposición requiere <strong>planear un guion</strong>, seleccionar información de fuentes confiables y
+        usar <strong>léxico formal</strong> para explicar con claridad. También implica atender preguntas y opiniones.
+      </p>
+      <div class="card" style="box-shadow:none;border-radius:16px;background:#fff7ed;border:1px solid #fed7aa;">
+        <div style="font-weight:900;color:#7c2d12;margin-bottom:6px;">🎤 Como expositor(a) debo:</div>
+        <ul style="margin:0;padding-left:18px;line-height:1.35;">
+          <li>Elaborar un <strong>guion</strong> con introducción, desarrollo y cierre.</li>
+          <li>Preparar <strong>materiales</strong> (infografías, cuadros, tablas, esquemas) para enriquecer.</li>
+          <li>Usar <strong>inflexiones de voz</strong>, gestos y preguntas para recuperar la atención.</li>
+          <li>Aclarar dudas y atender comentarios con respeto.</li>
+        </ul>
+      </div>
+      <div class="card" style="margin-top:10px;box-shadow:none;border-radius:16px;background:#fff1f2;border:1px solid #fecaca;">
+        <div style="font-weight:900;color:var(--vino2);margin-bottom:6px;">👂 Como audiencia debo:</div>
+        <ul style="margin:0;padding-left:18px;line-height:1.35;">
+          <li>Comprender, tomar notas y preguntar de forma pertinente.</li>
+          <li>Comentar y <strong>argumentar</strong> acuerdos o divergencias con respeto.</li>
+        </ul>
+      </div>
+    `,
+    pda1: {
+      board: [
+        {id:"tema", label:"Tema", hint:"Selecciona el tema"},
+        {id:"guion", label:"Guion", hint:"Orden de la exposición"},
+        {id:"intro", label:"Introducción formal", hint:"Plantea el propósito"},
+        {id:"d1", label:"Desarrollo: evidencia 1", hint:"Dato/idea con sentido"},
+        {id:"d2", label:"Desarrollo: evidencia 2", hint:"Dato/idea con sentido"},
+        {id:"apoyo", label:"Material de apoyo", hint:"Recurso visual"},
+        {id:"cierre", label:"Cierre con llamado", hint:"Conclusión + recomendación"}
+      ],
+      cards: [
+        {id:"t_ali", text:"Tema: Alimentación saludable", target:"tema"},
+        {id:"t_hig", text:"Tema: Higiene y prevención", target:"tema"},
+        {id:"t_act", text:"Tema: Actividad física", target:"tema"},
+        {id:"t_prev", text:"Tema: Prevención de contagios", target:"tema"},
+
+        {id:"g1", text:"Guion: Introducción → Evidencias → Recomendaciones → Cierre", target:"guion"},
+        {id:"g2", text:"Guion: Presento el tema con orden y ejemplos", target:"guion"},
+
+        {id:"i1", text:"Introducción: Presentaré información basada en fuentes confiables.", target:"intro"},
+        {id:"i2", text:"Introducción: El objetivo es promover hábitos para prevenir enfermedades.", target:"intro"},
+
+        {id:"d1a", text:"Evidencia 1: El lavado de manos disminuye riesgos de infección.", target:"d1"},
+        {id:"d2a", text:"Evidencia 2: Una dieta equilibrada favorece el sistema inmunológico.", target:"d2"},
+
+        {id:"ap1", text:"Apoyo: Cuadro sinóptico con ideas principales", target:"apoyo"},
+        {id:"ap2", text:"Apoyo: Tabla comparativa (hábito / beneficio)", target:"apoyo"},
+        {id:"ap3", text:"Apoyo: Infografía con datos clave", target:"apoyo"},
+
+        {id:"c1", text:"Cierre: Invito a practicar estos hábitos en casa y escuela.", target:"cierre"},
+        {id:"c2", text:"Cierre: Concluyo y respondo dudas con respeto.", target:"cierre"},
+      ],
+      totalZones: 7
+    },
+    pda2: {
+      stations: [
+        {id:"voz", label:"Voz", hint:"Inflexión para atención", correct:"voz_ok"},
+        {id:"gestos", label:"Gestos", hint:"Apoyo con ademanes", correct:"ges_ok"},
+        {id:"lexico", label:"Léxico formal", hint:"Frase adecuada", correct:"lex_ok"},
+        {id:"preg", label:"Pregunta guía", hint:"Recupero atención", correct:"pre_ok"},
+        {id:"dudas", label:"Atiendo dudas", hint:"Respuesta respetuosa", correct:"dud_ok"},
+        {id:"apoyos", label:"Material", hint:"Recurso que enriquece", correct:"apo_ok"},
+      ],
+      actions: [
+        {id:"voz_ok", text:"Cambio el ritmo para enfatizar ideas clave", targetStation:"voz"},
+        {id:"voz_bad", text:"Hablo igual todo el tiempo (monótono)", targetStation:"voz", kind:"bad"},
+
+        {id:"ges_ok", text:"Señalo en una infografía el dato importante", targetStation:"gestos"},
+        {id:"ges_bad", text:"Me quedo inmóvil y no explico con apoyo", targetStation:"gestos", kind:"bad"},
+
+        {id:"lex_ok", text:"El consumo excesivo de ultraprocesados afecta la salud.", targetStation:"lexico"},
+        {id:"lex_bad", text:"Pues comer chatarra te friega bien gacho.", targetStation:"lexico", kind:"bad"},
+
+        {id:"pre_ok", text:"¿Qué hábito creen que podemos mejorar desde hoy?", targetStation:"preg"},
+        {id:"pre_bad", text:"¿Ya acabamos o qué?", targetStation:"preg", kind:"bad"},
+
+        {id:"dud_ok", text:"Gracias por preguntar; lo explico con un ejemplo.", targetStation:"dudas"},
+        {id:"dud_bad", text:"Eso ya lo dije, pongan atención.", targetStation:"dudas", kind:"bad"},
+
+        {id:"apo_ok", text:"Tabla (hábito / beneficio) para comparar rápidamente", targetStation:"apoyos"},
+        {id:"apo_bad", text:"Nada, solo hablo sin apoyos", targetStation:"apoyos", kind:"bad"},
+      ],
+      totalStations: 6
+    },
+    pda3: {
+      categories: [
+        {id:"escucha", title:"✅ Escucha y notas"},
+        {id:"pregunta", title:"✅ Pregunta pertinente"},
+        {id:"argumenta", title:"✅ Opina y argumenta"}
+      ],
+      cards: [
+        {id:"e1", text:"Registro ideas principales y un dato importante", cat:"escucha"},
+        {id:"e2", text:"Identifico el propósito de la exposición", cat:"escucha"},
+        {id:"e3", text:"Escucho para comparar información con lo que sé", cat:"escucha"},
+
+        {id:"p1", text:"¿Qué fuente respalda ese dato?", cat:"pregunta"},
+        {id:"p2", text:"¿Podrías explicar la consecuencia con un ejemplo?", cat:"pregunta"},
+        {id:"p3", text:"¿Cómo se relaciona esto con mi comunidad?", cat:"pregunta"},
+
+        {id:"a1", text:"Estoy de acuerdo porque el argumento se apoya en evidencias.", cat:"argumenta"},
+        {id:"a2", text:"No coincido del todo; propongo otra acción con respeto.", cat:"argumenta"},
+        {id:"a3", text:"Mi opinión se basa en lo escuchado y en un ejemplo.", cat:"argumenta"}
+      ],
+      totalCards: 9
+    }
+  }
+};
+
+// Drag state
+let dragId = null;
+function onDragStart(ev){
+  dragId = ev.target.dataset.id;
+  ev.dataTransfer.setData("text/plain", dragId);
+}
+function allowDrop(ev){ ev.preventDefault(); }
+
+function shuffle(arr){
+  for(let i=arr.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [arr[i],arr[j]]=[arr[j],arr[i]];
+  }
+  return arr;
+}
+function createCardEl(id, text, scope, kind){
+  const el = document.createElement('div');
+  el.className = "carditem";
+  if(kind==="bad") el.dataset.kind = "bad";
+  el.draggable = true;
+  el.dataset.id = id;
+  el.dataset.scope = scope;
+  el.textContent = text;
+  el.ondragstart = onDragStart;
+  return el;
+}
+function moveCardTo(targetEl, scope){
+  const id = dragId;
+  if(!id) return;
+
+  const card = document.querySelector(`[data-scope="${scope}"][data-id="${id}"]`);
+  if(!card) return;
+
+  // Dropzones/catboxes aceptan 1 tarjeta
+  const oneOnly = targetEl.classList.contains('dropzone') || targetEl.classList.contains('catbox');
+  if(oneOnly){
+    const already = targetEl.querySelector('.carditem');
+    if(already) return;
+  }
+
+  targetEl.appendChild(card);
+  if(targetEl.classList.contains('dropzone')) targetEl.classList.add('filled');
+  dragId = null;
+}
+
+function openPanel(panelKey){
+  document.querySelectorAll('.menu-btn').forEach(b=>b.classList.remove('active'));
+  const activeBtn = Array.from(document.querySelectorAll('.menu-btn')).find(b=>b.dataset.panel===panelKey);
+  if(activeBtn) activeBtn.classList.add('active');
+
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  const panel = document.getElementById(`panel-${panelKey}`);
+  if(panel) panel.classList.add('active');
+
+  if(panelKey === 'results') renderResults();
+}
+
+function resetMarks(pdaKey){
+  if(pdaKey==='pda1'){
+    document.querySelectorAll('#pda1Board .dropzone').forEach(z=>z.classList.remove('correct','wrong'));
+  }
+  if(pdaKey==='pda2'){
+    document.querySelectorAll('#pda2Board .dropzone').forEach(z=>z.classList.remove('correct','wrong'));
+  }
+  if(pdaKey==='pda3'){
+    document.querySelectorAll('#pda3Cols .carditem').forEach(c=>c.removeAttribute('style'));
+    document.querySelectorAll('#pda3Cols .catbox').forEach(b=>{
+      b.style.borderColor = "#fecaca";
+      b.style.borderStyle = "dashed";
+    });
+  }
+}
+
+function toScore(correct,total){
+  const percent = Math.round((correct/total)*100);
+  return {correct,total,percent};
+}
+
+function updateBadgeLabel(pdaKey){
+  const el = document.getElementById(`${pdaKey}Badge`);
+  if(!el) return;
+  el.textContent = state.badges[pdaKey] ? "Insignia: lograda 🏅" : "Insignia: pendiente";
+}
+
+function lockPDA(pdaKey, msg){
+  const btn = document.getElementById(`${pdaKey}CheckBtn`);
+  if(btn) btn.disabled = true;
+  const st = document.getElementById(`${pdaKey}Status`);
+  if(st){
+    st.className = "status info";
+    st.innerHTML = `<div class="ic">i</div><div>${msg}</div>`;
+  }
+}
+
+function buildPDA1(){
+  const d = DATA[CURRENT_GRADE].pda1;
+  const board = document.getElementById('pda1Board');
+  const bank = document.getElementById('pda1Bank');
+  board.innerHTML = "";
+  bank.innerHTML = "";
+
+  d.board.forEach(z=>{
+    const dz = document.createElement('div');
+    dz.className = "dropzone";
+    dz.dataset.zone = z.id;
+    dz.ondragover = allowDrop;
+    dz.ondrop = (ev)=>{ ev.preventDefault(); moveCardTo(dz,'pda1'); };
+    dz.innerHTML = `<div class="label">${z.label}</div><div class="hint">${z.hint}</div>`;
+    board.appendChild(dz);
+  });
+
+  shuffle([...d.cards]).forEach(c=>{
+    const el = createCardEl(c.id, c.text, 'pda1', c.kind);
+    el.dataset.target = c.target;
+    bank.appendChild(el);
+  });
+
+  bank.ondragover = allowDrop;
+  bank.ondrop = (ev)=>{ ev.preventDefault(); moveCardTo(bank,'pda1'); };
+
+  resetMarks('pda1');
+}
+
+function buildPDA2(){
+  const d = DATA[CURRENT_GRADE].pda2;
+  const board = document.getElementById('pda2Board');
+  const bank = document.getElementById('pda2Bank');
+  board.innerHTML = "";
+  bank.innerHTML = "";
+
+  d.stations.forEach(s=>{
+    const dz = document.createElement('div');
+    dz.className = "dropzone";
+    dz.dataset.station = s.id;
+    dz.dataset.correct = s.correct;
+    dz.ondragover = allowDrop;
+    dz.ondrop = (ev)=>{ ev.preventDefault(); moveCardTo(dz,'pda2'); };
+    dz.innerHTML = `<div class="label">${s.label}</div><div class="hint">${s.hint}</div>`;
+    board.appendChild(dz);
+  });
+
+  shuffle([...d.actions]).forEach(a=>{
+    const el = createCardEl(a.id, a.text, 'pda2', a.kind);
+    el.dataset.station = a.targetStation;
+    bank.appendChild(el);
+  });
+
+  bank.ondragover = allowDrop;
+  bank.ondrop = (ev)=>{ ev.preventDefault(); moveCardTo(bank,'pda2'); };
+
+  resetMarks('pda2');
+}
+
+function buildPDA3(){
+  const d = DATA[CURRENT_GRADE].pda3;
+  const cols = document.getElementById('pda3Cols');
+  const bank = document.getElementById('pda3Bank');
+  cols.innerHTML = "";
+  bank.innerHTML = "";
+
+  d.categories.forEach(cat=>{
+    const box = document.createElement('div');
+    box.className = "catbox";
+    box.dataset.cat = cat.id;
+    box.ondragover = allowDrop;
+    box.ondrop = (ev)=>{ ev.preventDefault(); moveCardTo(box,'pda3'); };
+    box.style.borderRadius = "18px";
+    box.style.border = "2px dashed #fecaca";
+    box.style.background = "#fff";
+    box.style.padding = "10px";
+    box.style.minHeight = "180px";
+    box.innerHTML = `<div style="font-weight:900;color:var(--vino2);margin-bottom:8px;">${cat.title}</div>`;
+    cols.appendChild(box);
+  });
+
+  shuffle([...d.cards]).forEach(c=>{
+    const el = createCardEl(c.id, c.text, 'pda3');
+    el.dataset.cat = c.cat;
+    bank.appendChild(el);
+  });
+
+  bank.ondragover = allowDrop;
+  bank.ondrop = (ev)=>{ ev.preventDefault(); moveCardTo(bank,'pda3'); };
+
+  resetMarks('pda3');
+}
+
+function buildAllGames(){
+  buildPDA1();
+  buildPDA2();
+  buildPDA3();
+}
+
+function evaluatePDA(pdaKey){
+  resetMarks(pdaKey);
+
+  if(pdaKey==='pda1'){
+    const zones = document.querySelectorAll('#pda1Board .dropzone');
+    let correct = 0;
+    const total = zones.length;
+    zones.forEach(z=>{
+      const card = z.querySelector('.carditem');
+      if(!card){ z.classList.add('wrong'); return; }
+      if(card.dataset.target === z.dataset.zone){ correct++; z.classList.add('correct'); }
+      else z.classList.add('wrong');
+    });
+    return toScore(correct,total);
+  }
+
+  if(pdaKey==='pda2'){
+    const zones = document.querySelectorAll('#pda2Board .dropzone');
+    let correct = 0;
+    const total = zones.length;
+    zones.forEach(z=>{
+      const card = z.querySelector('.carditem');
+      if(!card){ z.classList.add('wrong'); return; }
+      if(card.dataset.id === z.dataset.correct){ correct++; z.classList.add('correct'); }
+      else z.classList.add('wrong');
+    });
+    return toScore(correct,total);
+  }
+
+  if(pdaKey==='pda3'){
+    const d = DATA[CURRENT_GRADE].pda3;
+    const boxes = document.querySelectorAll('#pda3Cols .catbox');
+    let correct = 0;
+    const total = d.totalCards;
+
+    boxes.forEach(box=>{
+      const cat = box.dataset.cat;
+      const cards = box.querySelectorAll('.carditem');
+      cards.forEach(c=>{
+        if(c.dataset.cat === cat){
+          correct++;
+          c.style.borderColor="#86efac";
+          c.style.background="#ecfdf3";
+          c.style.color="#166534";
+        }else{
+          c.style.borderColor="#fecaca";
+          c.style.background="#fef2f2";
+          c.style.color="#991b1b";
+        }
+      });
+      box.style.borderColor="#fed7d7";
+      box.style.borderStyle="solid";
+    });
+
+    return toScore(correct,total);
+  }
+
+  return toScore(0,1);
+}
+
+function checkPDA(pdaKey){
+  if(state.attempts[pdaKey] >= MAX_ATTEMPTS){
+    lockPDA(pdaKey, "Se alcanzaron los 2 intentos. Ve a Resultados.");
+    return;
+  }
+
+  const score = evaluatePDA(pdaKey);
+  state.attempts[pdaKey]++;
+
+  const attempt = state.attempts[pdaKey];
+  if(attempt===1) state.scores[pdaKey].a1 = score.percent;
+  if(attempt===2) state.scores[pdaKey].a2 = score.percent;
+  state.scores[pdaKey].best = Math.max(state.scores[pdaKey].a1 ?? 0, state.scores[pdaKey].a2 ?? 0);
+
+  state.badges[pdaKey] = (state.scores[pdaKey].best >= 70);
+  updateBadgeLabel(pdaKey);
+
+  const left = Math.max(0, MAX_ATTEMPTS - state.attempts[pdaKey]);
+  document.getElementById(`${pdaKey}AttemptsLeft`).textContent = left;
+
+  const st = document.getElementById(`${pdaKey}Status`);
+  const ok = (score.percent >= 70);
+  st.className = `status ${ok ? 'ok' : 'bad'}`;
+  st.innerHTML = `
+    <div class="ic">${ok ? '✓' : '!'}</div>
+    <div>
+      <strong>Puntaje:</strong> ${score.correct}/${score.total} = <strong>${score.percent}%</strong>.<br>
+      Intento ${attempt} de 2. Te quedan <strong>${left}</strong> intento(s).
+      ${left===0 ? "<br><strong>Juego bloqueado.</strong>" : ""}
+    </div>
+  `;
+
+  if(left===0) lockPDA(pdaKey, "Juego bloqueado: ya usaste tus 2 intentos.");
+
+  renderResultsMetaOnly();
+}
+
+function resetPDA(pdaKey){
+  if(pdaKey==='pda1') buildPDA1();
+  if(pdaKey==='pda2') buildPDA2();
+  if(pdaKey==='pda3') buildPDA3();
+
+  if(state.attempts[pdaKey] < MAX_ATTEMPTS){
+    const btn = document.getElementById(`${pdaKey}CheckBtn`);
+    if(btn) btn.disabled = false;
+    const st = document.getElementById(`${pdaKey}Status`);
+    if(st){
+      st.className = "status info";
+      st.innerHTML = `<div class="ic">i</div><div>Intentos disponibles: <strong><span id="${pdaKey}AttemptsLeft">${MAX_ATTEMPTS - state.attempts[pdaKey]}</span></strong>.</div>`;
+    }
+    // restaurar el contador real en el span original (evita spans duplicados)
+    const span = document.getElementById(`${pdaKey}AttemptsLeft`);
+    if(span) span.textContent = (MAX_ATTEMPTS - state.attempts[pdaKey]);
+  }
+}
+
+function resetAll(){
+  state.studentName = "";
+  document.getElementById('studentName').value = "";
+  state.attempts = { pda1:0, pda2:0, pda3:0 };
+  state.scores = { pda1:{a1:null,a2:null,best:null}, pda2:{a1:null,a2:null,best:null}, pda3:{a1:null,a2:null,best:null} };
+  state.badges = { pda1:false, pda2:false, pda3:false };
+
+  buildAllGames();
+
+  ['pda1','pda2','pda3'].forEach(k=>{
+    const btn = document.getElementById(`${k}CheckBtn`);
+    if(btn) btn.disabled = false;
+    const span = document.getElementById(`${k}AttemptsLeft`);
+    if(span) span.textContent = "2";
+    updateBadgeLabel(k);
+
+    const st = document.getElementById(`${k}Status`);
+    if(st){
+      st.className = "status info";
+      st.innerHTML = `<div class="ic">i</div><div>Intentos disponibles: <strong><span id="${k}AttemptsLeft">2</span></strong>.</div>`;
+      // y reponemos el span real (por si el innerHTML creó otro)
+      const realSpan = document.getElementById(`${k}AttemptsLeft`);
+      if(realSpan) realSpan.textContent = "2";
+    }
+  });
+
+  openPanel('info');
+}
+
+function fmtTri(obj){
+  const a1 = (obj.a1===null ? "—" : obj.a1+"%");
+  const a2 = (obj.a2===null ? "—" : obj.a2+"%");
+  const best = (obj.best===null ? "—" : obj.best+"%");
+  return `${a1} / ${a2} / ${best}`;
+}
+
+function canGenerateDiploma(){
+  const b1 = state.scores.pda1.best, b2 = state.scores.pda2.best, b3 = state.scores.pda3.best;
+  if(typeof b1!=='number' || typeof b2!=='number' || typeof b3!=='number') return false;
+  const avg = Math.round((b1+b2+b3)/3);
+  return avg >= 70;
+}
+
+function renderResultsMetaOnly(){
+  // solo actualiza etiqueta de progreso/diploma si ya estás en resultados o por si acaso
+  const bests = ['pda1','pda2','pda3'].map(k => state.scores[k].best).filter(v=>typeof v==='number');
+  const avg = bests.length ? Math.round(bests.reduce((a,b)=>a+b,0)/bests.length) : null;
+  const ob = document.getElementById('overallBadge');
+  if(ob) ob.textContent = (avg===null) ? "Progreso" : `Promedio (mejor): ${avg}%`;
+}
+
+function renderResults(){
+  state.studentName = (document.getElementById('studentName').value || "").trim();
+
+  const g = document.getElementById('resultsGrid');
+  g.innerHTML = "";
+
+  const name = state.studentName || "—";
+  const grade = CURRENT_GRADE ? `${CURRENT_GRADE}º` : "—";
+
+  const rows = [
+    {label:"Alumno(a)", value:name},
+    {label:"Grado", value:grade},
+    {label:"PDA 1 (A1 / A2 / Mejor)", value: fmtTri(state.scores.pda1)},
+    {label:"PDA 2 (A1 / A2 / Mejor)", value: fmtTri(state.scores.pda2)},
+    {label:"PDA 3 (A1 / A2 / Mejor)", value: fmtTri(state.scores.pda3)},
+  ];
+
+  rows.forEach(r=>{
+    const pill = document.createElement('div');
+    pill.className = "rpill";
+    pill.innerHTML = `<div>${escapeHTML(r.label)}</div><div class="v">${escapeHTML(r.value)}</div>`;
+    g.appendChild(pill);
+  });
+
+  const bests = ['pda1','pda2','pda3'].map(k => state.scores[k].best).filter(v=>typeof v==='number');
+  const avg = bests.length ? Math.round(bests.reduce((a,b)=>a+b,0)/bests.length) : null;
+
+  const overallBadge = document.getElementById('overallBadge');
+  overallBadge.textContent = (avg===null) ? "Progreso: sin puntajes" : `Promedio (mejor): ${avg}%`;
+
+  const canDiploma = canGenerateDiploma();
+  const btnDiploma = document.getElementById('btnDiploma');
+  btnDiploma.disabled = !canDiploma;
+
+  document.getElementById('diplomaHint').textContent =
+    canDiploma ? "✅ Diploma habilitado. ¡Felicidades!" :
+    "Para habilitar el diploma: completa los 3 PDAs y procura un promedio recomendado de 70%+.";
+}
+
+function escapeHTML(str){
+  return String(str).replace(/[&<>"']/g, (m)=>({
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+  }[m]));
+}
+
+function openPrintWindow(html){
+  const w = window.open("", "_blank");
+  w.document.open();
+  w.document.write(html);
+  w.document.close();
+}
+
+function printResults(){
+  renderResults();
+  const name = state.studentName || "__________________";
+  const grade = CURRENT_GRADE ? `${CURRENT_GRADE}º` : "___";
+
+  const html = `
+  <html><head><meta charset="UTF-8"><title>Hoja de resultados</title>
+  <style>
+    body{font-family:Arial, sans-serif; padding:18px;}
+    h1{margin:0 0 4px;}
+    .row{margin:6px 0;}
+    .box{border:1px solid #ddd; padding:12px; border-radius:10px;}
+    table{width:100%;border-collapse:collapse;margin-top:10px;}
+    th,td{border:1px solid #ddd;padding:8px;text-align:left;font-size:14px;}
+    th{background:#f3f4f6;}
+    .small{margin-top:10px;color:#555;font-size:12px;}
+    .btn{margin-top:12px;padding:10px 12px;border-radius:10px;border:1px solid #ddd;cursor:pointer;font-weight:700;}
+  </style></head><body>
+    <h1>ODA Lenguajes – Contenido 9</h1>
+    <div class="row"><strong>Alumno(a):</strong> ${escapeHTML(name)}</div>
+    <div class="row"><strong>Grado:</strong> ${escapeHTML(grade)}</div>
+
+    <div class="box">
+      <table>
+        <thead><tr><th>PDA</th><th>Intento 1</th><th>Intento 2</th><th>Mejor</th></tr></thead>
+        <tbody>
+          <tr><td>PDA 1</td><td>${fmtCell(state.scores.pda1.a1)}</td><td>${fmtCell(state.scores.pda1.a2)}</td><td>${fmtCell(state.scores.pda1.best)}</td></tr>
+          <tr><td>PDA 2</td><td>${fmtCell(state.scores.pda2.a1)}</td><td>${fmtCell(state.scores.pda2.a2)}</td><td>${fmtCell(state.scores.pda2.best)}</td></tr>
+          <tr><td>PDA 3</td><td>${fmtCell(state.scores.pda3.a1)}</td><td>${fmtCell(state.scores.pda3.a2)}</td><td>${fmtCell(state.scores.pda3.best)}</td></tr>
+        </tbody>
+      </table>
+
+      <button class="btn" onclick="window.print()">🖨️ Imprimir</button>
+
+      <div class="small">
+        Créditos: “ODA creada por el Maestro Martín Reta” · © Uso educativo.
+      </div>
+    </div>
+  </body></html>`;
+
+  openPrintWindow(html);
+}
+
+function fmtCell(v){
+  return (v===null || typeof v!=="number") ? "—" : (v + "%");
+}
+
+function openDiploma(){
+  renderResults();
+  if(!canGenerateDiploma()) return;
+
+  const name = state.studentName || "__________________";
+  const grade = CURRENT_GRADE ? `${CURRENT_GRADE}º` : "___";
+  const b1 = state.scores.pda1.best, b2 = state.scores.pda2.best, b3 = state.scores.pda3.best;
+  const avg = Math.round((b1+b2+b3)/3);
+
+  const html = `
+  <html><head><meta charset="UTF-8"><title>Diploma</title>
+  <style>
+    body{margin:0;font-family:Georgia, serif;}
+    .page{
+      padding:34px;height:100vh;box-sizing:border-box;
+      background:linear-gradient(135deg,#fff7ed 0,#fff 45%,#fef2f2 100%);
+      position:relative;
+    }
+    .frame{
+      border:10px solid #d7b56d;border-radius:22px;
+      padding:22px 26px;height:100%;box-sizing:border-box;
+      position:relative;
+    }
+    .top{display:flex;justify-content:space-between;align-items:center;gap:12px;}
+    .top img{height:55px;background:#fff;border-radius:12px;padding:6px 8px;border:1px solid #eee;}
+    h1{margin:14px 0 6px;text-align:center;color:#6b1027;letter-spacing:.03em;}
+    .sub{margin:0;text-align:center;color:#444;font-size:16px;}
+    .name{
+      margin:18px auto 8px;text-align:center;font-size:34px;font-weight:700;color:#111;
+      border-bottom:2px solid #d7b56d;width:90%;padding-bottom:10px;
+    }
+    .text{max-width:900px;margin:0 auto;text-align:center;color:#333;font-size:17px;line-height:1.45;}
+    .row{display:flex;justify-content:space-between;gap:12px;margin-top:18px;color:#444;font-size:14px;}
+    .seal{margin-top:18px;display:flex;justify-content:center;align-items:center;}
+    .seal .badge{
+      display:inline-flex;align-items:center;justify-content:center;
+      width:130px;height:130px;border-radius:999px;
+      border:10px solid #d7b56d;
+      background:radial-gradient(circle at 30% 20%,#f2d59b 0,#d7b56d 55%,#6b1027 110%);
+      color:#fff;font-size:20px;font-weight:800;
+      box-shadow:0 16px 30px rgba(0,0,0,.18);
+      text-align:center;
+    }
+    .credits{position:absolute;left:0;right:0;bottom:14px;text-align:center;color:#555;font-size:12px;}
+    .btn{margin-top:12px;padding:10px 12px;border-radius:10px;border:1px solid #ddd;cursor:pointer;font-weight:700;display:block;margin-inline:auto;}
+  </style></head><body>
+    <div class="page">
+      <div class="frame">
+        <div class="top">
+          <img src="../../img/sep_logo.png" alt="SEP">
+          <img src="../../img/escudo_escuela.png" alt="Escuela">
+        </div>
+        <h1>DIPLOMA DE LOGRO</h1>
+        <p class="sub">Por completar la ODA de Lenguajes – Contenido 9</p>
+
+        <div class="name">${escapeHTML(name)}</div>
+
+        <p class="text">
+          Ha demostrado habilidades para <strong>organizar una exposición</strong>, utilizar <strong>léxico formal</strong> y participar
+          como <strong>audiencia</strong> en temas relacionados con el cuidado de la salud.
+          <br><br>
+          <strong>Grado:</strong> ${escapeHTML(grade)} · <strong>Promedio:</strong> ${avg}%
+        </p>
+
+        <div class="seal"><div class="badge">🏅<br>LOGRO</div></div>
+
+        <div class="row">
+          <div>Escuela Primaria “Gral. Lázaro Cárdenas”</div>
+          <div>Firma docente: _____________________</div>
+        </div>
+
+        <button class="btn" onclick="window.print()">🖨️ Imprimir diploma</button>
+
+        <div class="credits">
+          Créditos: “ODA creada por el Maestro Martín Reta” · © Uso educativo.
+        </div>
+      </div>
+    </div>
+  </body></html>`;
+
+  openPrintWindow(html);
+}
+
+function printActivity(pdaKey){
+  const name = (state.studentName || "").trim() || "__________________";
+  const grade = CURRENT_GRADE ? `${CURRENT_GRADE}º` : "___";
+
+  let title = "";
+  let instr = "";
+  let content = "";
+
+  if(pdaKey==='pda1'){
+    title = "PDA 1 – Construye tu exposición";
+    instr = "Completa el esquema: tema, introducción, desarrollo, material de apoyo y cierre.";
+    content = `<ul>
+      <li>Tema:</li><li>Introducción:</li><li>Desarrollo 1:</li><li>Desarrollo 2:</li><li>Desarrollo 3:</li><li>Material de apoyo:</li><li>Cierre:</li>
+    </ul>`;
+  }
+  if(pdaKey==='pda2'){
+    title = "PDA 2 – Escenario del expositor";
+    instr = "Elige acciones correctas para voz, gestos, lenguaje, preguntas, atención de dudas y material.";
+    content = `<ol>
+      <li>Voz</li><li>Gestos</li><li>Léxico formal</li><li>Pregunta guía</li><li>Atender dudas</li><li>Material de apoyo</li>
+    </ol>`;
+  }
+  if(pdaKey==='pda3'){
+    title = "PDA 3 – Soy parte del público";
+    instr = "Clasifica acciones, preguntas y opiniones como audiencia.";
+    content = `<p>Categorías: Escucha y notas / Pregunta pertinente / Opinión argumentada</p>`;
+  }
+
+  const html = `
+  <html><head><meta charset="UTF-8"><title>Actividad imprimible</title>
+  <style>
+    body{font-family:Arial, sans-serif; padding:18px;}
+    h1{margin:0 0 6px;}
+    .row{margin:6px 0;}
+    .box{border:1px solid #ddd; padding:12px; border-radius:10px;}
+    .small{margin-top:10px;color:#555;font-size:12px;}
+    .btn{margin-top:12px;padding:10px 12px;border-radius:10px;border:1px solid #ddd;cursor:pointer;font-weight:700;}
+  </style></head><body>
+    <h1>ODA Lenguajes – Contenido 9</h1>
+    <div class="row"><strong>Alumno(a):</strong> ${escapeHTML(name)}</div>
+    <div class="row"><strong>Grado:</strong> ${escapeHTML(grade)}</div>
+
+    <div class="box">
+      <h2 style="margin:0 0 6px;">${escapeHTML(title)}</h2>
+      <p style="margin:0 0 10px;">${escapeHTML(instr)}</p>
+      ${content}
+      <button class="btn" onclick="window.print()">🖨️ Imprimir</button>
+      <div class="small">Créditos: “ODA creada por el Maestro Martín Reta” · © Uso educativo.</div>
+    </div>
+  </body></html>`;
+
+  openPrintWindow(html);
+}
+
+function startODA(grade){
+  CURRENT_GRADE = grade;
+  document.getElementById('cover').style.display = 'none';
+  document.getElementById('app').style.display = 'block';
+
+  document.getElementById('pillGrade').textContent = `Grado: ${grade}º`;
+  document.getElementById('infoGradeBadge').textContent = `${grade}º grado`;
+  document.getElementById('infoContent').innerHTML = DATA[grade].infoHTML;
+
+  buildAllGames();
+
+  // reiniciar contadores visuales (sin tocar intentos ya que aún no hay)
+  ['pda1','pda2','pda3'].forEach(k=>{
+    const span = document.getElementById(`${k}AttemptsLeft`);
+    if(span) span.textContent = "2";
+    const btn = document.getElementById(`${k}CheckBtn`);
+    if(btn) btn.disabled = false;
+    updateBadgeLabel(k);
+  });
+
+  openPanel('info');
+}
+
+// Exponer por seguridad
+window.startODA = startODA;
+// ========= Eventos UI =========
+document.addEventListener('DOMContentLoaded', () => {
+
+  // Portada
+  const b5 = document.getElementById('btnStart5');
+  const b6 = document.getElementById('btnStart6');
+  if(b5) b5.addEventListener('click', ()=> startODA(5));
+  if(b6) b6.addEventListener('click', ()=> startODA(6));
+
+  // Menú lateral
+  document.querySelectorAll('.menu-btn').forEach(btn=>{
+    btn.addEventListener('click', ()=> openPanel(btn.dataset.panel));
+  });
+
+  // Botones generales
+  const btnResetAll = document.getElementById('btnResetAll');
+  const btnGoResults = document.getElementById('btnGoResults');
+  const btnStartPDA1 = document.getElementById('btnStartPDA1');
+  if(btnResetAll) btnResetAll.addEventListener('click', resetAll);
+  if(btnGoResults) btnGoResults.addEventListener('click', ()=>openPanel('results'));
+  if(btnStartPDA1) btnStartPDA1.addEventListener('click', ()=>openPanel('pda1'));
+
+  // Nombre
+  const nameInput = document.getElementById('studentName');
+  if(nameInput){
+    nameInput.addEventListener('input', ()=>{
+      state.studentName = (nameInput.value || "").trim();
+      renderResultsMetaOnly();
+    });
+  }
+
+  // PDA 1
+  document.getElementById('pda1CheckBtn').addEventListener('click', ()=>checkPDA('pda1'));
+  document.getElementById('pda1ResetBtn').addEventListener('click', ()=>resetPDA('pda1'));
+  document.getElementById('pda1PrintBtn').addEventListener('click', ()=>printActivity('pda1'));
+
+  // PDA 2
+  document.getElementById('pda2CheckBtn').addEventListener('click', ()=>checkPDA('pda2'));
+  document.getElementById('pda2ResetBtn').addEventListener('click', ()=>resetPDA('pda2'));
+  document.getElementById('pda2PrintBtn').addEventListener('click', ()=>printActivity('pda2'));
+
+  // PDA 3
+  document.getElementById('pda3CheckBtn').addEventListener('click', ()=>checkPDA('pda3'));
+  document.getElementById('pda3ResetBtn').addEventListener('click', ()=>resetPDA('pda3'));
+  document.getElementById('pda3PrintBtn').addEventListener('click', ()=>printActivity('pda3'));
+
+  // Resultados / diploma
+  document.getElementById('btnPrintResults').addEventListener('click', printResults);
+  document.getElementById('btnDiploma').addEventListener('click', openDiploma);
+});
+
+// ========= Cierre de script =========
+</script>
+</body>
+</html>
