@@ -1,0 +1,1598 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ODA Lenguajes – Debates (Fase 5)</title>
+  <style>
+    :root{
+      --bg:#0b0f1a;
+      --panel:#0f172a;
+      --card:#0b1224;
+      --card2:#0c1730;
+      --text:#e5e7eb;
+      --muted:#a1a1aa;
+      --border:rgba(255,255,255,.10);
+      --shadow:0 18px 45px rgba(0,0,0,.45);
+
+      /* Rojo más fuerte (como pediste) */
+      --red:#dc2626;          /* rojo */
+      --red2:#b91c1c;         /* rojo oscuro */
+      --redSoft:rgba(220,38,38,.14);
+
+      --good:#16a34a;
+      --warn:#f59e0b;
+      --bad:#ef4444;
+
+      --chip:#111827;
+      --chipBorder:rgba(220,38,38,.28);
+    }
+    *{box-sizing:border-box;}
+    html,body{height:100%;}
+    body{
+      margin:0;
+      font-family:system-ui,-apple-system,"Segoe UI",sans-serif;
+      background:radial-gradient(circle at 20% 0%, rgba(220,38,38,.25) 0%, transparent 40%),
+                 radial-gradient(circle at 90% 10%, rgba(220,38,38,.18) 0%, transparent 45%),
+                 linear-gradient(180deg, #050711 0%, var(--bg) 100%);
+      color:var(--text);
+      overflow:hidden; /* la app maneja su scroll interno */
+    }
+
+    /* Marca de agua */
+    .wm{
+      position:fixed;
+      inset:10% 18%;
+      background:url("escudo_escuela.png") center/contain no-repeat;
+      opacity:.04;
+      pointer-events:none;
+      z-index:0;
+      filter:saturate(0.9);
+    }
+
+    .app{
+      position:relative;
+      z-index:1;
+      height:100%;
+      display:flex;
+      flex-direction:column;
+    }
+
+    /* Topbar */
+    .topbar{
+      flex:0 0 auto;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding:12px 14px;
+      border-bottom:1px solid var(--border);
+      background:linear-gradient(90deg, rgba(15,23,42,.95), rgba(11,18,36,.95));
+      backdrop-filter: blur(8px);
+    }
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      min-width:0;
+    }
+    .logos{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      flex:0 0 auto;
+    }
+    .logos img{
+      height:38px;
+      width:auto;
+      background:#fff;
+      padding:3px 6px;
+      border-radius:10px;
+      box-shadow:0 8px 18px rgba(0,0,0,.35);
+    }
+    .title{
+      min-width:0;
+    }
+    .title h1{
+      margin:0;
+      font-size:1.05rem;
+      line-height:1.2;
+      display:flex;
+      gap:8px;
+      align-items:center;
+      flex-wrap:wrap;
+    }
+    .title .meta{
+      margin-top:2px;
+      font-size:.82rem;
+      color:var(--muted);
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      max-width:60vw;
+    }
+
+    .top-actions{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      flex:0 0 auto;
+    }
+
+    .avatar{
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+    .avatar .circle{
+      width:50px;height:50px;
+      border-radius:999px;
+      border:2px solid rgba(220,38,38,.55);
+      background:radial-gradient(circle at 30% 20%, rgba(220,38,38,.35), rgba(0,0,0,.0) 60%);
+      overflow:hidden;
+      flex:0 0 auto;
+      box-shadow:0 10px 24px rgba(0,0,0,.45);
+    }
+    .avatar .circle img{width:100%;height:100%;object-fit:contain;}
+    .avatar .txt{
+      font-size:.78rem;
+      color:var(--text);
+      max-width:260px;
+    }
+    .avatar .txt strong{color:#fee2e2;}
+    @media(max-width:860px){
+      .avatar .txt{display:none;}
+      .title .meta{max-width:52vw;}
+    }
+
+    /* Buttons */
+    .btn{
+      border:none;
+      border-radius:999px;
+      padding:8px 12px;
+      font-size:.82rem;
+      font-weight:650;
+      cursor:pointer;
+      display:inline-flex;
+      align-items:center;
+      gap:7px;
+      color:#fff;
+      background:var(--red);
+      box-shadow:0 10px 22px rgba(220,38,38,.35);
+      transition:transform .12s ease, box-shadow .12s ease, filter .12s ease;
+      user-select:none;
+    }
+    .btn:hover{transform:translateY(-1px); box-shadow:0 14px 28px rgba(220,38,38,.45); filter:saturate(1.05);}
+    .btn:active{transform:translateY(0px); box-shadow:0 8px 16px rgba(220,38,38,.30);}
+    .btn.secondary{
+      background:rgba(255,255,255,.10);
+      border:1px solid rgba(255,255,255,.14);
+      box-shadow:none;
+    }
+    .btn.secondary:hover{box-shadow:0 12px 22px rgba(0,0,0,.28);}
+    .btn.outline{
+      background:transparent;
+      border:1px solid rgba(220,38,38,.55);
+      color:#fee2e2;
+      box-shadow:none;
+    }
+    .btn.small{padding:6px 10px; font-size:.78rem;}
+    .btn:disabled{opacity:.55; cursor:not-allowed; transform:none; box-shadow:none;}
+
+    /* Main area */
+    .main{
+      flex:1 1 auto;
+      min-height:0;
+      display:grid;
+      grid-template-columns: 360px 1fr;
+      gap:12px;
+      padding:12px;
+      overflow:hidden;
+    }
+    @media(max-width:980px){
+      .main{grid-template-columns:1fr;}
+    }
+
+    .panel{
+      background:linear-gradient(180deg, rgba(15,23,42,.92), rgba(11,18,36,.92));
+      border:1px solid var(--border);
+      border-radius:18px;
+      box-shadow:var(--shadow);
+      overflow:hidden;
+      min-height:0;
+      display:flex;
+      flex-direction:column;
+    }
+    .panel .head{
+      padding:12px 12px 10px;
+      border-bottom:1px solid var(--border);
+      background:linear-gradient(90deg, rgba(220,38,38,.18), rgba(0,0,0,0));
+    }
+    .panel .head .h{
+      margin:0;
+      font-size:.92rem;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+    }
+    .panel .body{
+      padding:12px;
+      overflow:auto;
+      min-height:0;
+    }
+
+    .chip{
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      font-size:.74rem;
+      padding:4px 10px;
+      border-radius:999px;
+      background:var(--chip);
+      border:1px solid var(--chipBorder);
+      color:#fecaca;
+      white-space:nowrap;
+    }
+    .dot{width:7px;height:7px;border-radius:999px;background:var(--red); box-shadow:0 0 0 4px rgba(220,38,38,.18);}
+
+    /* Views */
+    .view{display:none;}
+    .view.active{display:block;}
+
+    /* Cards */
+    .card{
+      background:linear-gradient(180deg, rgba(12,23,48,.75), rgba(8,14,30,.75));
+      border:1px solid var(--border);
+      border-radius:16px;
+      padding:12px;
+      margin-bottom:10px;
+    }
+    .card h3{
+      margin:0 0 6px;
+      font-size:.92rem;
+      color:#fff;
+    }
+    .muted{color:var(--muted); font-size:.86rem; line-height:1.35;}
+    .row{display:flex; gap:8px; flex-wrap:wrap; align-items:center;}
+    .field{
+      display:flex;
+      flex-direction:column;
+      gap:5px;
+      margin:8px 0;
+    }
+    .field label{
+      font-size:.78rem;
+      color:#e5e7eb;
+      font-weight:650;
+    }
+    .field input, .field select{
+      padding:9px 10px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.14);
+      background:rgba(0,0,0,.25);
+      color:var(--text);
+      outline:none;
+      font-size:.86rem;
+    }
+    .field input:focus, .field select:focus{
+      border-color:rgba(220,38,38,.65);
+      box-shadow:0 0 0 2px rgba(220,38,38,.18);
+      background:rgba(0,0,0,.18);
+    }
+
+    /* Activity common */
+    .activity{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+    .stepper{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      margin-bottom:8px;
+    }
+    .step{
+      flex:1 1 160px;
+      border-radius:14px;
+      padding:10px 10px;
+      border:1px dashed rgba(255,255,255,.18);
+      background:rgba(255,255,255,.04);
+    }
+    .step .t{
+      font-size:.78rem;
+      color:#fecaca;
+      font-weight:800;
+      text-transform:uppercase;
+      letter-spacing:.06em;
+      margin-bottom:4px;
+    }
+    .step .d{font-size:.84rem; color:var(--muted); line-height:1.25;}
+
+    .q{
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(255,255,255,.04);
+      border-radius:14px;
+      padding:10px;
+    }
+    .q .qt{
+      font-weight:750;
+      font-size:.9rem;
+      margin:0 0 6px;
+      color:#fff;
+    }
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      padding:3px 9px;
+      border-radius:999px;
+      font-size:.72rem;
+      border:1px solid rgba(255,255,255,.14);
+      background:rgba(0,0,0,.20);
+      color:#e5e7eb;
+    }
+
+    /* Classification (Hecho/Opinión) */
+    .classify{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap:8px;
+    }
+    .class-item{
+      border-radius:12px;
+      padding:10px;
+      background:rgba(0,0,0,.22);
+      border:1px solid rgba(255,255,255,.12);
+      display:flex;
+      gap:10px;
+      align-items:flex-start;
+      justify-content:space-between;
+    }
+    .class-item p{
+      margin:0;
+      font-size:.86rem;
+      line-height:1.3;
+      color:#e5e7eb;
+      flex:1;
+    }
+    .class-item select{
+      min-width:140px;
+    }
+
+    /* Drag & Drop */
+    .dd-wrap{
+      display:grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap:10px;
+      align-items:start;
+    }
+    @media(max-width:980px){
+      .dd-wrap{grid-template-columns:1fr;}
+    }
+    .bank, .dropzone{
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.14);
+      background:rgba(0,0,0,.22);
+      padding:10px;
+      min-height:120px;
+    }
+    .bank h4, .dropzone h4{
+      margin:0 0 8px;
+      font-size:.86rem;
+      color:#fff;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:8px;
+    }
+    .cards{
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+      min-height:60px;
+    }
+    .drag-card{
+      border-radius:12px;
+      padding:9px 10px;
+      border:1px solid rgba(220,38,38,.35);
+      background:linear-gradient(180deg, rgba(220,38,38,.16), rgba(0,0,0,.18));
+      color:#fff;
+      font-size:.84rem;
+      cursor:grab;
+      user-select:none;
+    }
+    .drag-card:active{cursor:grabbing;}
+    .dropzone.active{
+      outline:2px solid rgba(220,38,38,.55);
+      outline-offset:2px;
+    }
+
+    /* Order list */
+    .order-list{
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+    }
+    .order-item{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      border-radius:12px;
+      padding:10px;
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(0,0,0,.22);
+    }
+    .order-item .txt{font-size:.86rem; color:#fff; line-height:1.25;}
+    .order-item .controls{
+      display:flex;
+      gap:6px;
+      flex:0 0 auto;
+    }
+    .iconbtn{
+      width:34px;height:34px;border-radius:999px;
+      border:1px solid rgba(255,255,255,.14);
+      background:rgba(255,255,255,.06);
+      color:#fff;
+      cursor:pointer;
+      font-weight:900;
+    }
+    .iconbtn:hover{border-color:rgba(220,38,38,.55); background:rgba(220,38,38,.12);}
+
+    /* Inline selects */
+    .inline{
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+    }
+    .inline-row{
+      border-radius:12px;
+      padding:10px;
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(0,0,0,.22);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+    .inline-row .s{
+      font-size:.86rem;
+      color:#fff;
+      line-height:1.25;
+      flex:1;
+      min-width:220px;
+    }
+    .inline-row select{min-width:170px;}
+
+    /* Status / Results */
+    .status{
+      border-radius:14px;
+      padding:10px 12px;
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(255,255,255,.04);
+      font-size:.86rem;
+      color:#e5e7eb;
+      display:flex;
+      gap:10px;
+      align-items:flex-start;
+      line-height:1.25;
+    }
+    .status.good{border-color:rgba(22,163,74,.45); background:rgba(22,163,74,.12);}
+    .status.bad{border-color:rgba(239,68,68,.45); background:rgba(239,68,68,.12);}
+    .status.warn{border-color:rgba(245,158,11,.45); background:rgba(245,158,11,.12);}
+
+    .results{
+      background:linear-gradient(180deg, rgba(220,38,38,.14), rgba(0,0,0,.18));
+      border:1px solid rgba(220,38,38,.35);
+      border-radius:16px;
+      padding:12px;
+    }
+    .results h3{margin:0 0 8px; font-size:.95rem;}
+    .grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit, minmax(180px, 1fr));
+      gap:8px;
+    }
+    .metric{
+      border-radius:14px;
+      padding:10px;
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(0,0,0,.22);
+      display:flex;
+      justify-content:space-between;
+      gap:8px;
+      align-items:center;
+      font-size:.86rem;
+    }
+    .metric .v{font-weight:900; color:#fecaca;}
+    .metric .v.good{color:#bbf7d0;}
+    .metric .v.bad{color:#fecaca;}
+    .small-note{font-size:.76rem; color:var(--muted); margin-top:8px;}
+
+    /* Right panel scroll container */
+    .work{
+      height:100%;
+      min-height:0;
+      overflow:auto;
+      padding:12px;
+    }
+
+    /* Footer bar inside right panel */
+    .footbar{
+      position:sticky;
+      bottom:0;
+      margin-top:12px;
+      padding-top:10px;
+      border-top:1px solid rgba(255,255,255,.12);
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      align-items:center;
+      justify-content:space-between;
+      background:linear-gradient(180deg, transparent, rgba(11,15,26,.92) 35%, rgba(11,15,26,.98));
+      backdrop-filter: blur(6px);
+    }
+    .footbar .left{
+      display:flex; gap:8px; flex-wrap:wrap; align-items:center;
+    }
+    .footbar .right{
+      display:flex; gap:8px; flex-wrap:wrap; align-items:center;
+    }
+
+    /* Print */
+    @media print{
+      body{overflow:visible; background:#fff; color:#111;}
+      .wm, .topbar, .panel.left, .footbar .left .btn.secondary, .footbar .left .btn.outline, .footbar .right .btn.secondary{display:none !important;}
+      .main{display:block; padding:0;}
+      .panel{border:none; box-shadow:none;}
+      .work{overflow:visible;}
+      .results, .card, .q{break-inside:avoid;}
+    }
+  </style>
+</head>
+<body>
+  <div class="wm" aria-hidden="true"></div>
+
+  <div class="app">
+    <!-- TOPBAR -->
+    <div class="topbar">
+      <div class="brand">
+        <div class="logos">
+          <img src="../../img/sep_logo.png" alt="SEP">
+<img src="../../img/escudo_escuela.png" alt="Escuela">
+        </div>
+        <div class="title">
+          <h1>🗣️ ODA Lenguajes – Debate (Fase 5)</h1>
+          <div class="meta">
+            Contenido 3: <strong>Participación en debates sobre temas de interés común</strong> · 5.º y 6.º
+          </div>
+        </div>
+      </div>
+
+      <div class="top-actions">
+        <button class="btn secondary small" id="btnHome">🏠 Portada</button>
+        <button class="btn outline small" id="btnVoice">🔊 Voz</button>
+
+        <div class="avatar">
+          <div class="circle"><img src="../../img/avatar_guia.png" alt="Guía"></div>
+          <div class="txt">
+            <strong>Hola.</strong> Soy tu guía. Hoy aprenderás a debatir con argumentos y conectores.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MAIN -->
+    <div class="main">
+      <!-- LEFT PANEL -->
+      <div class="panel left">
+        <div class="head">
+          <div class="h">
+            <span>📌 Navegación</span>
+            <span class="chip"><span class="dot"></span> 2 intentos máx.</span>
+          </div>
+        </div>
+        <div class="body">
+          <div class="card">
+            <h3>Datos del alumno</h3>
+            <div class="field">
+              <label for="studentName">Nombre</label>
+              <input id="studentName" type="text" placeholder="Escribe tu nombre">
+            </div>
+            <div class="field">
+              <label for="gradeSelect">Grado</label>
+              <select id="gradeSelect">
+                <option value="">Selecciona…</option>
+                <option value="5">5.º</option>
+                <option value="6">6.º</option>
+              </select>
+            </div>
+            <div class="row">
+              <button class="btn" id="btnStart">🚀 Entrar</button>
+              <button class="btn secondary" id="btnResetAll" title="Borra intentos y reinicia toda la ODA">♻️ Reiniciar</button>
+            </div>
+            <div class="small-note">
+              *Esta ODA es autoevaluable. Al final podrás imprimir tu hoja de resultados.
+            </div>
+          </div>
+
+          <div class="card">
+            <h3>Reglas</h3>
+            <div class="muted">
+              • Tendrás <strong>2 intentos</strong> para completar la actividad.<br>
+              • Responde con calma: primero arma tu idea y luego evalúate.<br>
+              • Se evalúa: <strong>argumentos</strong>, <strong>coherencia</strong> y <strong>conectores</strong>.
+            </div>
+          </div>
+
+          <div class="card">
+            <h3>Botones útiles</h3>
+            <div class="row">
+              <button class="btn outline small" id="btnPrint">🖨️ Imprimir resultados</button>
+              <button class="btn secondary small" id="btnHelp">❓ Ayuda</button>
+            </div>
+            <div id="helpBox" class="status" style="margin-top:10px; display:none;">
+              <div>💡</div>
+              <div>
+                1) Elige grado y entra. 2) Completa la actividad. 3) Pulsa <strong>Evaluar</strong>.
+                4) Revisa tu puntaje y, si te queda un intento, vuelve a intentar.
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3>Créditos</h3>
+            <div class="muted">
+              ODA creada por el <strong>Maestro Martín Reta</strong>.<br>
+              © Uso educativo. Distribución gratuita.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT PANEL -->
+      <div class="panel">
+        <div class="head">
+          <div class="h">
+            <span id="screenTitle">🏠 Portada</span>
+            <span class="chip" id="attemptChip"><span class="dot"></span> Intentos: 0/2</span>
+          </div>
+        </div>
+
+        <div class="work">
+          <!-- VIEW: HOME -->
+          <div class="view active" id="viewHome">
+            <div class="card">
+              <h3>Bienvenido(a)</h3>
+              <div class="muted">
+                Esta ODA te ayuda a participar en un <strong>debate</strong>: reconocer posturas,
+                construir <strong>argumentos</strong> y usar <strong>conectores</strong> para hablar con claridad.
+                <br><br>
+                Selecciona tu <strong>grado</strong> en el panel izquierdo y presiona <strong>Entrar</strong>.
+              </div>
+            </div>
+
+            <div class="card">
+              <h3>¿Qué harás hoy?</h3>
+              <div class="stepper">
+                <div class="step">
+                  <div class="t">Paso 1</div>
+                  <div class="d">Distinguir <strong>hechos</strong> y <strong>opiniones</strong>.</div>
+                </div>
+                <div class="step">
+                  <div class="t">Paso 2</div>
+                  <div class="d">Organizar <strong>argumentos</strong> por postura.</div>
+                </div>
+                <div class="step">
+                  <div class="t">Paso 3</div>
+                  <div class="d">Usar <strong>conectores</strong> para hablar con coherencia.</div>
+                </div>
+              </div>
+              <div class="status warn">
+                <div>🧠</div>
+                <div>
+                  Tip: En un debate, puedes cambiar de opinión si escuchas razones bien sustentadas.
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- VIEW: GRADE 5 -->
+          <div class="view" id="view5">
+            <div class="card">
+              <h3>5.º – Actividad única: “Arma tu postura con evidencias”</h3>
+              <div class="muted">
+                Tema: <strong>¿Se debe prohibir el uso de celulares en el salón?</strong><br>
+                Completa los pasos y luego presiona <strong>Evaluar</strong>.
+              </div>
+            </div>
+
+            <div class="activity">
+
+              <!-- A) Clasificar -->
+              <div class="q">
+                <p class="qt">A) Hecho u opinión (6 enunciados)</p>
+                <div class="classify" id="c5_classify"></div>
+              </div>
+
+              <!-- B) Drag & Drop -->
+              <div class="q">
+                <p class="qt">B) Arrastra los argumentos a la postura correcta</p>
+                <div class="muted" style="margin-bottom:8px;">
+                  Coloca cada tarjeta en <strong>A favor</strong> o <strong>En contra</strong>.
+                  <span class="pill" style="margin-left:6px;">Arrastra y suelta</span>
+                </div>
+
+                <div class="dd-wrap">
+                  <div class="bank">
+                    <h4>🧩 Banco de argumentos <span class="pill" id="c5_bankCount">0</span></h4>
+                    <div class="cards" id="c5_bank"></div>
+                    <div class="row" style="margin-top:10px;">
+                      <button class="btn outline small" id="c5_changeMind" title="Permite mover 1 tarjeta sin penalización (solo si es tu primer intento).">
+                        🔁 Cambiar de opinión (1 vez)
+                      </button>
+                    </div>
+                    <div class="small-note">*En el primer intento puedes usar “Cambiar de opinión” una vez.</div>
+                  </div>
+
+                  <div class="dropzone" id="c5_for">
+                    <h4>✅ A favor</h4>
+                    <div class="cards" id="c5_forCards"></div>
+                  </div>
+
+                  <div class="dropzone" id="c5_against">
+                    <h4>⛔ En contra</h4>
+                    <div class="cards" id="c5_againstCards"></div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- C) Nexos -->
+              <div class="q">
+                <p class="qt">C) Nexos de subordinación (4 oraciones)</p>
+                <div class="inline" id="c5_nexos"></div>
+              </div>
+
+              <div id="c5_status" class="status" style="display:none;"></div>
+              <div id="c5_results" class="results" style="display:none;"></div>
+            </div>
+
+            <div class="footbar">
+              <div class="left">
+                <button class="btn secondary" id="c5_clear">🧹 Limpiar</button>
+              </div>
+              <div class="right">
+                <button class="btn" id="c5_eval">✅ Evaluar (5.º)</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- VIEW: GRADE 6 -->
+          <div class="view" id="view6">
+            <div class="card">
+              <h3>6.º – Actividad única: “Argumento sólido + conectores”</h3>
+              <div class="muted">
+                Tema: <strong>¿Debe haber tarea todos los días?</strong><br>
+                Ordena el argumento, completa conectores y elige evidencias.
+              </div>
+            </div>
+
+            <div class="activity">
+              <!-- A) Ordenar -->
+              <div class="q">
+                <p class="qt">A) Ordena el argumento (coherencia)</p>
+                <div class="muted" style="margin-bottom:8px;">Usa las flechas para acomodar las tarjetas de arriba hacia abajo.</div>
+                <div class="order-list" id="c6_order"></div>
+              </div>
+
+              <!-- B) Conectivos -->
+              <div class="q">
+                <p class="qt">B) Conectivos causales, temporales y lógicos (6 enunciados)</p>
+                <div class="inline" id="c6_connectors"></div>
+              </div>
+
+              <!-- C) Evidencias -->
+              <div class="q">
+                <p class="qt">C) ¿Qué evidencia respalda mejor? (3 afirmaciones)</p>
+                <div class="muted" style="margin-bottom:8px;">
+                  Elige la fuente/cita breve más adecuada para sustentar cada afirmación.
+                </div>
+                <div class="inline" id="c6_evidence"></div>
+              </div>
+
+              <div id="c6_status" class="status" style="display:none;"></div>
+              <div id="c6_results" class="results" style="display:none;"></div>
+            </div>
+
+            <div class="footbar">
+              <div class="left">
+                <button class="btn secondary" id="c6_shuffle">🔀 Mezclar</button>
+                <button class="btn secondary" id="c6_clear">🧹 Limpiar</button>
+              </div>
+              <div class="right">
+                <button class="btn" id="c6_eval">✅ Evaluar (6.º)</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- VIEW: RESULTS SHEET (printable) -->
+          <div class="view" id="viewSheet">
+            <div class="card">
+              <h3>Hoja de resultados</h3>
+              <div class="muted">Imprime esta hoja para el alumno(a).</div>
+            </div>
+
+            <div class="results" id="sheetBox"></div>
+            <div class="small-note">
+              *Si no aparece información, realiza primero la evaluación en 5.º o 6.º.
+            </div>
+          </div>
+
+        </div><!-- work -->
+      </div><!-- panel -->
+    </div><!-- main -->
+  </div><!-- app -->
+
+  <script>
+    /********************
+     * Utilidades generales
+     ********************/
+    const $ = (sel)=>document.querySelector(sel);
+    const $$ = (sel)=>Array.from(document.querySelectorAll(sel));
+
+    const state = {
+      studentName:"",
+      grade:"",
+      attempts: { "5":0, "6":0 },
+      maxAttempts:2,
+      allowChangeMind:true, // solo en primer intento de 5º
+      lastResult:null, // para hoja imprimible
+      voiceOn:false
+    };
+
+    function setScreenTitle(t){
+      $("#screenTitle").textContent = t;
+    }
+    function showView(id){
+      $$(".view").forEach(v=>v.classList.remove("active"));
+      $(id).classList.add("active");
+      // scroll to top of right panel
+      document.querySelector(".work").scrollTop = 0;
+    }
+    function updateAttemptChip(){
+      const g = state.grade || "—";
+      const a = (state.grade ? state.attempts[state.grade] : 0);
+      $("#attemptChip").innerHTML = `<span class="dot"></span> Intentos: ${a}/${state.maxAttempts}`;
+    }
+    function speak(text){
+      if(!state.voiceOn) return;
+      try{
+        speechSynthesis.cancel();
+        const u = new SpeechSynthesisUtterance(text);
+        u.lang = "es-MX";
+        u.rate = 1.0;
+        u.pitch = 1.0;
+        speechSynthesis.speak(u);
+      }catch(e){}
+    }
+
+    /********************
+     * Datos de actividades
+     ********************/
+    // 5º: Clasificar (hecho/opinión)
+    const c5_classify_items = [
+      { id:"c51", text:"En un grupo de 30 alumnos, al menos 10 han usado el celular durante clase esta semana.", ans:"hecho" },
+      { id:"c52", text:"Usar celulares en el salón siempre distrae y arruina el aprendizaje.", ans:"opinion" },
+      { id:"c53", text:"La escuela tiene un reglamento que prohíbe usar el celular durante los exámenes.", ans:"hecho" },
+      { id:"c54", text:"Los celulares pueden servir para aprender mejor si se usan con reglas.", ans:"opinion" },
+      { id:"c55", text:"En el último mes, se reportaron 3 casos de mensajes ofensivos enviados desde el salón.", ans:"hecho" },
+      { id:"c56", text:"Prohibirlos totalmente es la mejor solución para todos.", ans:"opinion" }
+    ];
+
+    // 5º: Drag to posture
+    const c5_arguments = [
+      { id:"a1", text:"Si se permite para investigar, puede ayudar a confirmar información en el momento.", side:"for" },
+      { id:"a2", text:"Puede causar distracciones y bajar la atención durante explicaciones importantes.", side:"against" },
+      { id:"a3", text:"Con reglas claras y tiempos definidos, se puede usar como herramienta de aprendizaje.", side:"for" },
+      { id:"a4", text:"Facilita copiar en tareas o exámenes si no hay supervisión.", side:"against" },
+      { id:"a5", text:"Puede servir para emergencias familiares si se usa con responsabilidad.", side:"for" },
+      { id:"a6", text:"Puede generar conflictos por mensajes o fotos sin permiso dentro del salón.", side:"against" }
+    ];
+
+    // 5º: Nexos (subordinación)
+    const c5_nexos_items = [
+      { id:"n1", s:'No debemos usar el celular en clase ___ estamos haciendo un examen.', options:["porque","aunque","si","cuando"], ans:"cuando" },
+      { id:"n2", s:'El celular puede ayudar ___ se utilice para buscar información del tema.', options:["porque","aunque","si","cuando"], ans:"si" },
+      { id:"n3", s:'Algunos quieren prohibirlo ___ creen que distrae mucho.', options:["porque","aunque","si","cuando"], ans:"porque" },
+      { id:"n4", s:'___ algunos lo usan bien, otros lo usan para jugar.', options:["porque","aunque","si","cuando"], ans:"aunque" }
+    ];
+
+    // 6º: Order argument cards
+    const c6_order_cards_base = [
+      { id:"o1", text:"Introducción: Hoy debatimos si debe haber tarea todos los días. Mi postura es que NO necesariamente." },
+      { id:"o2", text:"Evidencia: En mi grupo, cuando hay tarea diaria, varios terminan desvelándose y llegan cansados." },
+      { id:"o3", text:"Explicación: Si descansamos menos, disminuye la concentración y el aprendizaje en clase." },
+      { id:"o4", text:"Contraargumento: Algunas personas dicen que la tarea diaria crea disciplina y hábitos." },
+      { id:"o5", text:"Cierre: Por eso propongo tareas 3 veces por semana y proyectos que se planeen con tiempo." }
+    ];
+    // Correct order is o1,o2,o3,o4,o5
+
+    // 6º: connectors (causal/temporal/logical)
+    const c6_connector_items = [
+      { id:"k1", s:"La tarea diaria puede cansar; ___, conviene dosificarla.", options:["por lo tanto","mientras","sin embargo"], ans:"por lo tanto" },
+      { id:"k2", s:"___ terminamos el proyecto, revisamos los errores y corregimos.", options:["Después de que","Porque","En consecuencia"], ans:"Después de que" },
+      { id:"k3", s:"Algunas tareas ayudan; ___, demasiadas afectan el descanso.", options:["sin embargo","durante","porque"], ans:"sin embargo" },
+      { id:"k4", s:"Se recomienda dormir bien ___ el cerebro consolida lo aprendido.", options:["porque","luego","aunque"], ans:"porque" },
+      { id:"k5", s:"Primero hacemos un borrador; ___ lo mejoramos con retroalimentación.", options:["después","si bien","a causa de"], ans:"después" },
+      { id:"k6", s:"___ haya tareas, deben ser claras y con propósito.", options:["Si","En consecuencia","Mientras"], ans:"Si" }
+    ];
+
+    // 6º: Evidence
+    const c6_evidence_items = [
+      {
+        id:"e1",
+        claim:"Dormir menos de lo necesario afecta la atención escolar.",
+        options:[
+          "Nota de clase: 'Ayer jugamos fútbol y nos divertimos mucho'.",
+          "Ficha informativa: 'El descanso favorece la concentración y la memoria en el aprendizaje'.",
+          "Mensaje publicitario: 'Compra este producto y tendrás mejores notas'."
+        ],
+        ansIndex:1
+      },
+      {
+        id:"e2",
+        claim:"Tener tareas largas todos los días puede provocar estrés en algunos alumnos.",
+        options:[
+          "Registro de grupo: 'Varios alumnos reportaron sentirse presionados cuando la tarea diaria dura más de 40 min'.",
+          "Frase: 'A mí no me gusta la tarea porque sí'.",
+          "Dato irrelevante: 'El uniforme es de color azul'."
+        ],
+        ansIndex:0
+      },
+      {
+        id:"e3",
+        claim:"Es mejor planear tareas con un objetivo claro que dejar mucha cantidad sin sentido.",
+        options:[
+          "Rúbrica escolar: 'Las actividades deben indicar propósito, tiempo estimado y criterio de logro'.",
+          "Chiste: 'La tarea se come al recreo'.",
+          "Opinión sin sustento: 'Todas las tareas son malas'."
+        ],
+        ansIndex:0
+      }
+    ];
+
+    /********************
+     * Render inicial
+     ********************/
+    function render5(){
+      // Clasificar
+      const box = $("#c5_classify");
+      box.innerHTML = "";
+      c5_classify_items.forEach(it=>{
+        const div = document.createElement("div");
+        div.className = "class-item";
+        div.innerHTML = `
+          <p>${it.text}</p>
+          <select data-id="${it.id}">
+            <option value="">Selecciona…</option>
+            <option value="hecho">Hecho</option>
+            <option value="opinion">Opinión</option>
+          </select>
+        `;
+        box.appendChild(div);
+      });
+
+      // Drag bank
+      $("#c5_bank").innerHTML = "";
+      $("#c5_forCards").innerHTML = "";
+      $("#c5_againstCards").innerHTML = "";
+      state.allowChangeMind = true;
+
+      // shuffle bank
+      const shuffled = [...c5_arguments].sort(()=>Math.random()-0.5);
+      shuffled.forEach(a=>{
+        const d = document.createElement("div");
+        d.className = "drag-card";
+        d.draggable = true;
+        d.dataset.id = a.id;
+        d.dataset.side = a.side;
+        d.textContent = a.text;
+        addDragHandlers(d);
+        $("#c5_bank").appendChild(d);
+      });
+      $("#c5_bankCount").textContent = $("#c5_bank .drag-card").length;
+
+      // Nexos
+      const nx = $("#c5_nexos");
+      nx.innerHTML = "";
+      c5_nexos_items.forEach(it=>{
+        const row = document.createElement("div");
+        row.className = "inline-row";
+        row.innerHTML = `
+          <div class="s">${it.s.replace("___","<strong>___</strong>")}</div>
+          <select data-id="${it.id}">
+            <option value="">Selecciona…</option>
+            ${it.options.map(o=>`<option value="${o}">${o}</option>`).join("")}
+          </select>
+        `;
+        nx.appendChild(row);
+      });
+
+      // Status/results
+      $("#c5_status").style.display="none";
+      $("#c5_results").style.display="none";
+
+      // Change-mind availability
+      $("#c5_changeMind").disabled = !(state.attempts["5"]===0);
+    }
+
+    function render6(shuffle=true){
+      // Order cards
+      const list = $("#c6_order");
+      list.innerHTML = "";
+      let cards = [...c6_order_cards_base];
+      if(shuffle) cards = cards.sort(()=>Math.random()-0.5);
+
+      cards.forEach(c=>{
+        const item = document.createElement("div");
+        item.className = "order-item";
+        item.dataset.id = c.id;
+        item.innerHTML = `
+          <div class="txt">${c.text}</div>
+          <div class="controls">
+            <button class="iconbtn" title="Subir">▲</button>
+            <button class="iconbtn" title="Bajar">▼</button>
+          </div>
+        `;
+        const [up,down] = item.querySelectorAll(".iconbtn");
+        up.addEventListener("click", ()=>moveOrder(item, -1));
+        down.addEventListener("click", ()=>moveOrder(item, +1));
+        list.appendChild(item);
+      });
+
+      // Connectors
+      const cx = $("#c6_connectors");
+      cx.innerHTML = "";
+      c6_connector_items.forEach(it=>{
+        const row = document.createElement("div");
+        row.className = "inline-row";
+        row.innerHTML = `
+          <div class="s">${it.s.replace("___","<strong>___</strong>")}</div>
+          <select data-id="${it.id}">
+            <option value="">Selecciona…</option>
+            ${it.options.map(o=>`<option value="${o}">${o}</option>`).join("")}
+          </select>
+        `;
+        cx.appendChild(row);
+      });
+
+      // Evidence
+      const ev = $("#c6_evidence");
+      ev.innerHTML = "";
+      c6_evidence_items.forEach((it,idx)=>{
+        const row = document.createElement("div");
+        row.className = "inline-row";
+        row.innerHTML = `
+          <div class="s"><strong>${idx+1}.</strong> ${it.claim}</div>
+          <select data-id="${it.id}">
+            <option value="">Selecciona evidencia…</option>
+            ${it.options.map((o,i)=>`<option value="${i}">${o}</option>`).join("")}
+          </select>
+        `;
+        ev.appendChild(row);
+      });
+
+      $("#c6_status").style.display="none";
+      $("#c6_results").style.display="none";
+    }
+
+    function moveOrder(item, delta){
+      const parent = item.parentElement;
+      const siblings = Array.from(parent.children);
+      const i = siblings.indexOf(item);
+      const j = i + delta;
+      if(j<0 || j>=siblings.length) return;
+      if(delta<0) parent.insertBefore(item, siblings[j]);
+      else parent.insertBefore(siblings[j], item);
+    }
+
+    /********************
+     * Drag & Drop handlers
+     ********************/
+    function addDragHandlers(el){
+      el.addEventListener("dragstart", (e)=>{
+        e.dataTransfer.setData("text/plain", el.dataset.id);
+        e.dataTransfer.effectAllowed = "move";
+        setTimeout(()=>{ el.style.opacity=".55"; }, 0);
+      });
+      el.addEventListener("dragend", ()=>{
+        el.style.opacity="1";
+        $("#c5_bankCount").textContent = $("#c5_bank .drag-card").length;
+      });
+    }
+
+    function setupDropzone(zoneEl){
+      zoneEl.addEventListener("dragover",(e)=>{
+        e.preventDefault();
+        zoneEl.classList.add("active");
+      });
+      zoneEl.addEventListener("dragleave",()=>{
+        zoneEl.classList.remove("active");
+      });
+      zoneEl.addEventListener("drop",(e)=>{
+        e.preventDefault();
+        zoneEl.classList.remove("active");
+        const id = e.dataTransfer.getData("text/plain");
+        const card = document.querySelector(`.drag-card[data-id="${id}"]`);
+        if(!card) return;
+        zoneEl.querySelector(".cards").appendChild(card);
+        $("#c5_bankCount").textContent = $("#c5_bank .drag-card").length;
+      });
+    }
+
+    setupDropzone($("#c5_for"));
+    setupDropzone($("#c5_against"));
+
+    /********************
+     * Evaluación 5.º
+     ********************/
+    function eval5(){
+      if(state.attempts["5"] >= state.maxAttempts){
+        $("#c5_status").className = "status bad";
+        $("#c5_status").style.display="flex";
+        $("#c5_status").innerHTML = `<div>⛔</div><div>Ya no tienes intentos disponibles.</div>`;
+        speak("Ya no tienes intentos disponibles.");
+        return;
+      }
+
+      // require name
+      const name = ($("#studentName").value||"").trim();
+      if(!name){
+        $("#c5_status").className = "status warn";
+        $("#c5_status").style.display="flex";
+        $("#c5_status").innerHTML = `<div>✍️</div><div>Escribe tu <strong>nombre</strong> en el panel izquierdo.</div>`;
+        speak("Escribe tu nombre.");
+        return;
+      }
+
+      // score sections
+      let scoreA=0, scoreB=0, scoreC=0;
+
+      // A classify: 6 items
+      c5_classify_items.forEach(it=>{
+        const sel = document.querySelector(`#c5_classify select[data-id="${it.id}"]`);
+        if(sel && sel.value === it.ans) scoreA++;
+      });
+
+      // B drag: 6 cards, each in correct zone
+      const forIds = Array.from($("#c5_forCards").querySelectorAll(".drag-card")).map(c=>c.dataset.id);
+      const againstIds = Array.from($("#c5_againstCards").querySelectorAll(".drag-card")).map(c=>c.dataset.id);
+
+      c5_arguments.forEach(a=>{
+        if(a.side==="for" && forIds.includes(a.id)) scoreB++;
+        if(a.side==="against" && againstIds.includes(a.id)) scoreB++;
+      });
+
+      // C nexos: 4
+      c5_nexos_items.forEach(it=>{
+        const sel = document.querySelector(`#c5_nexos select[data-id="${it.id}"]`);
+        if(sel && sel.value === it.ans) scoreC++;
+      });
+
+      const total = scoreA + scoreB + scoreC; // 6 + 6 + 4 = 16
+      const max = 16;
+      const pct = Math.round((total/max)*100);
+
+      state.attempts["5"]++;
+      state.grade="5";
+      updateAttemptChip();
+
+      const level = pct>=85 ? "Excelente" : pct>=70 ? "Bien" : pct>=50 ? "En proceso" : "Necesita apoyo";
+      const statusClass = pct>=70 ? "good" : pct>=50 ? "warn" : "bad";
+
+      $("#c5_status").className = `status ${statusClass}`;
+      $("#c5_status").style.display="flex";
+      $("#c5_status").innerHTML = `<div>📣</div><div><strong>${level}</strong>. Puntaje: <strong>${pct}%</strong> (Intento ${state.attempts["5"]}/2).</div>`;
+
+      $("#c5_results").style.display="block";
+      $("#c5_results").innerHTML = `
+        <h3>Resultados 5.º</h3>
+        <div class="grid">
+          <div class="metric"><span>A) Hecho/Opinión</span><span class="v ${scoreA>=5?'good':''}">${scoreA}/6</span></div>
+          <div class="metric"><span>B) Argumentos por postura</span><span class="v ${scoreB>=5?'good':''}">${scoreB}/6</span></div>
+          <div class="metric"><span>C) Nexos</span><span class="v ${scoreC>=3?'good':''}">${scoreC}/4</span></div>
+          <div class="metric"><span>Total</span><span class="v ${pct>=70?'good':'bad'}">${pct}%</span></div>
+        </div>
+        <div class="small-note">
+          Recomendación: sustenta tu postura con evidencias y usa conectores para que tus ideas sean claras.
+        </div>
+      `;
+
+      // Guardar hoja imprimible
+      state.lastResult = buildSheet({
+        grade:"5.º",
+        name,
+        topic:"¿Se debe prohibir el uso de celulares en el salón?",
+        attempts:`${state.attempts["5"]}/2`,
+        pct,
+        level,
+        breakdown:[
+          ["A) Hecho/Opinión", `${scoreA}/6`],
+          ["B) Argumentos por postura", `${scoreB}/6`],
+          ["C) Nexos de subordinación", `${scoreC}/4`]
+        ]
+      });
+
+      speak(`Tu resultado es ${pct} por ciento. ${level}.`);
+      $("#c5_changeMind").disabled = true;
+
+      // bloquear si ya no hay intentos
+      if(state.attempts["5"]>=state.maxAttempts){
+        $("#c5_eval").disabled = true;
+      }
+    }
+
+    /********************
+     * Evaluación 6.º
+     ********************/
+    function eval6(){
+      if(state.attempts["6"] >= state.maxAttempts){
+        $("#c6_status").className = "status bad";
+        $("#c6_status").style.display="flex";
+        $("#c6_status").innerHTML = `<div>⛔</div><div>Ya no tienes intentos disponibles.</div>`;
+        speak("Ya no tienes intentos disponibles.");
+        return;
+      }
+
+      const name = ($("#studentName").value||"").trim();
+      if(!name){
+        $("#c6_status").className = "status warn";
+        $("#c6_status").style.display="flex";
+        $("#c6_status").innerHTML = `<div>✍️</div><div>Escribe tu <strong>nombre</strong> en el panel izquierdo.</div>`;
+        speak("Escribe tu nombre.");
+        return;
+      }
+
+      let scoreA=0, scoreB=0, scoreC=0;
+
+      // A order: 5
+      const orderIds = Array.from($("#c6_order").children).map(x=>x.dataset.id);
+      const correct = ["o1","o2","o3","o4","o5"];
+      orderIds.forEach((id,idx)=>{ if(id===correct[idx]) scoreA++; });
+
+      // B connectors: 6
+      c6_connector_items.forEach(it=>{
+        const sel = document.querySelector(`#c6_connectors select[data-id="${it.id}"]`);
+        if(sel && sel.value === it.ans) scoreB++;
+      });
+
+      // C evidence: 3
+      c6_evidence_items.forEach(it=>{
+        const sel = document.querySelector(`#c6_evidence select[data-id="${it.id}"]`);
+        if(sel && String(it.ansIndex) === (sel.value||"")) scoreC++;
+      });
+
+      const total = scoreA + scoreB + scoreC; // 5 + 6 + 3 = 14
+      const max = 14;
+      const pct = Math.round((total/max)*100);
+
+      state.attempts["6"]++;
+      state.grade="6";
+      updateAttemptChip();
+
+      const level = pct>=85 ? "Excelente" : pct>=70 ? "Bien" : pct>=50 ? "En proceso" : "Necesita apoyo";
+      const statusClass = pct>=70 ? "good" : pct>=50 ? "warn" : "bad";
+
+      $("#c6_status").className = `status ${statusClass}`;
+      $("#c6_status").style.display="flex";
+      $("#c6_status").innerHTML = `<div>📣</div><div><strong>${level}</strong>. Puntaje: <strong>${pct}%</strong> (Intento ${state.attempts["6"]}/2).</div>`;
+
+      $("#c6_results").style.display="block";
+      $("#c6_results").innerHTML = `
+        <h3>Resultados 6.º</h3>
+        <div class="grid">
+          <div class="metric"><span>A) Coherencia (orden)</span><span class="v ${scoreA>=4?'good':''}">${scoreA}/5</span></div>
+          <div class="metric"><span>B) Conectivos</span><span class="v ${scoreB>=5?'good':''}">${scoreB}/6</span></div>
+          <div class="metric"><span>C) Evidencias</span><span class="v ${scoreC>=2?'good':''}">${scoreC}/3</span></div>
+          <div class="metric"><span>Total</span><span class="v ${pct>=70?'good':'bad'}">${pct}%</span></div>
+        </div>
+        <div class="small-note">
+          Recomendación: tus argumentos deben ser claros, pertinentes y con conectores adecuados.
+        </div>
+      `;
+
+      // Guardar hoja imprimible
+      state.lastResult = buildSheet({
+        grade:"6.º",
+        name,
+        topic:"¿Debe haber tarea todos los días?",
+        attempts:`${state.attempts["6"]}/2`,
+        pct,
+        level,
+        breakdown:[
+          ["A) Orden coherente", `${scoreA}/5`],
+          ["B) Conectivos", `${scoreB}/6`],
+          ["C) Evidencias", `${scoreC}/3`]
+        ]
+      });
+
+      speak(`Tu resultado es ${pct} por ciento. ${level}.`);
+
+      if(state.attempts["6"]>=state.maxAttempts){
+        $("#c6_eval").disabled = true;
+      }
+    }
+
+    /********************
+     * Hoja de resultados
+     ********************/
+    function buildSheet({grade, name, topic, attempts, pct, level, breakdown}){
+      const now = new Date();
+      const fecha = now.toLocaleDateString("es-MX", {year:"numeric", month:"long", day:"numeric"});
+      return `
+        <h3 style="margin:0 0 8px;">📄 Resultados – Debate (Lenguajes · Fase 5)</h3>
+        <div class="grid" style="margin-bottom:10px;">
+          <div class="metric"><span>Alumno(a)</span><span class="v">${escapeHtml(name)}</span></div>
+          <div class="metric"><span>Grado</span><span class="v">${grade}</span></div>
+          <div class="metric"><span>Fecha</span><span class="v">${fecha}</span></div>
+          <div class="metric"><span>Intentos</span><span class="v">${attempts}</span></div>
+        </div>
+
+        <div class="card" style="margin:0 0 10px;">
+          <h3 style="margin:0 0 6px;">Tema</h3>
+          <div class="muted" style="color:#e5e7eb;">${escapeHtml(topic)}</div>
+        </div>
+
+        <div class="grid">
+          ${breakdown.map(([k,v])=>`
+            <div class="metric"><span>${escapeHtml(k)}</span><span class="v">${escapeHtml(v)}</span></div>
+          `).join("")}
+          <div class="metric"><span>Resultado final</span><span class="v ${pct>=70?'good':'bad'}">${pct}%</span></div>
+          <div class="metric"><span>Nivel</span><span class="v">${escapeHtml(level)}</span></div>
+        </div>
+
+        <div class="small-note" style="margin-top:10px;">
+          <strong>Observación:</strong> Un buen debate se construye con razones claras, conectores adecuados y respeto a otras posturas.
+        </div>
+
+        <div class="small-note" style="margin-top:10px;">
+          <em>ODA creada por el Maestro Martín Reta</em> · © Uso educativo
+        </div>
+      `;
+    }
+    function escapeHtml(str){
+      return String(str)
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+    }
+
+    /********************
+     * Limpieza / Reinicio por grado
+     ********************/
+    function clear5(){
+      render5();
+      speak("Actividad de quinto reiniciada.");
+    }
+    function clear6(){
+      render6(false);
+      // clear selects
+      $$("#c6_connectors select").forEach(s=>s.value="");
+      $$("#c6_evidence select").forEach(s=>s.value="");
+      $("#c6_status").style.display="none";
+      $("#c6_results").style.display="none";
+      speak("Actividad de sexto reiniciada.");
+    }
+
+    function resetAll(){
+      state.attempts["5"]=0;
+      state.attempts["6"]=0;
+      state.grade="";
+      state.studentName="";
+      state.lastResult=null;
+      $("#studentName").value="";
+      $("#gradeSelect").value="";
+      $("#c5_eval").disabled=false;
+      $("#c6_eval").disabled=false;
+      updateAttemptChip();
+      setScreenTitle("🏠 Portada");
+      showView("#viewHome");
+      speak("ODA reiniciada.");
+    }
+
+    /********************
+     * Eventos UI
+     ********************/
+    $("#btnHelp").addEventListener("click", ()=>{
+      const box = $("#helpBox");
+      box.style.display = (box.style.display==="none" || !box.style.display) ? "flex" : "none";
+    });
+
+    $("#btnHome").addEventListener("click", ()=>{
+      setScreenTitle("🏠 Portada");
+      showView("#viewHome");
+      state.grade = $("#gradeSelect").value || "";
+      updateAttemptChip();
+    });
+
+    $("#btnVoice").addEventListener("click", ()=>{
+      state.voiceOn = !state.voiceOn;
+      $("#btnVoice").textContent = state.voiceOn ? "🔇 Voz" : "🔊 Voz";
+      speak("La voz está activada.");
+    });
+
+    $("#btnPrint").addEventListener("click", ()=>{
+      // manda a la hoja
+      setScreenTitle("🖨️ Hoja de resultados");
+      showView("#viewSheet");
+      $("#sheetBox").innerHTML = state.lastResult || `
+        <h3 style="margin:0 0 8px;">📄 Resultados</h3>
+        <div class="muted">Aún no hay resultados. Evalúa primero en 5.º o 6.º.</div>
+      `;
+      setTimeout(()=>window.print(), 250);
+    });
+
+    $("#btnStart").addEventListener("click", ()=>{
+      const name = ($("#studentName").value||"").trim();
+      const g = $("#gradeSelect").value;
+
+      if(!name){
+        alert("Escribe el nombre del alumno(a).");
+        return;
+      }
+      if(!g){
+        alert("Selecciona el grado (5.º o 6.º).");
+        return;
+      }
+      state.studentName = name;
+      state.grade = g;
+      updateAttemptChip();
+
+      if(g==="5"){
+        setScreenTitle("5.º – Actividad de debate");
+        render5();
+        showView("#view5");
+        speak("Quinto grado. Completa los pasos y evalúa.");
+      }else{
+        setScreenTitle("6.º – Actividad de debate");
+        render6(true);
+        showView("#view6");
+        speak("Sexto grado. Ordena el argumento, completa conectores y elige evidencias.");
+      }
+    });
+
+    $("#btnResetAll").addEventListener("click", ()=>{
+      if(confirm("¿Seguro que deseas reiniciar toda la ODA? Se borrarán intentos y resultados.")){
+        resetAll();
+      }
+    });
+
+    $("#c5_eval").addEventListener("click", eval5);
+    $("#c6_eval").addEventListener("click", eval6);
+
+    $("#c5_clear").addEventListener("click", clear5);
+    $("#c6_clear").addEventListener("click", clear6);
+
+    $("#c6_shuffle").addEventListener("click", ()=>{
+      render6(true);
+      speak("Tarjetas mezcladas.");
+    });
+
+    $("#c5_changeMind").addEventListener("click", ()=>{
+      if(state.attempts["5"]!==0){
+        alert("“Cambiar de opinión” solo está disponible en el primer intento.");
+        return;
+      }
+      if(!state.allowChangeMind){
+        alert("Ya usaste “Cambiar de opinión”.");
+        return;
+      }
+      state.allowChangeMind = false;
+      $("#c5_changeMind").disabled = true;
+      $("#c5_status").className="status";
+      $("#c5_status").style.display="flex";
+      $("#c5_status").innerHTML = `<div>🔁</div><div>Listo: puedes mover <strong>una tarjeta</strong> de postura sin preocuparte. (Solo era una oportunidad simbólica.)</div>`;
+      speak("Cambiar de opinión activado.");
+    });
+
+    // Initial
+    updateAttemptChip();
+  </script>
+  <script>
+    /********************
+     * Extra: Validaciones ligeras y UX
+     ********************/
+    // Resaltar dropzones en dragenter/leave (ya en setupDropzone)
+    // Mantener chip de intentos sincronizado si cambian el selector
+    $("#gradeSelect").addEventListener("change", ()=>{
+      state.grade = $("#gradeSelect").value || "";
+      updateAttemptChip();
+    });
+    $("#studentName").addEventListener("input", ()=>{
+      state.studentName = $("#studentName").value || "";
+    });
+
+    // Acceso rápido a hoja
+    document.addEventListener("keydown", (e)=>{
+      if(e.key==="F9"){
+        e.preventDefault();
+        setScreenTitle("🖨️ Hoja de resultados");
+        showView("#viewSheet");
+        document.getElementById("sheetBox").innerHTML = state.lastResult || `
+          <h3 style="margin:0 0 8px;">📄 Resultados</h3>
+          <div class="muted">Aún no hay resultados. Evalúa primero en 5.º o 6.º.</div>
+        `;
+      }
+    });
+
+    /********************
+     * Mejora: asegurar que tarjetas vuelvan al banco al limpiar
+     ********************/
+    // (Ya se rehace con render5/clear5)
+
+    /********************
+     * Protección: bloquear evaluar si faltan respuestas (soft)
+     ********************/
+    function softCheck5(){
+      // A
+      const a = Array.from(document.querySelectorAll("#c5_classify select")).filter(s=>!s.value).length;
+      // C
+      const c = Array.from(document.querySelectorAll("#c5_nexos select")).filter(s=>!s.value).length;
+      // B
+      const totalCards = document.querySelectorAll("#c5_bank .drag-card, #c5_forCards .drag-card, #c5_againstCards .drag-card").length;
+      const placed = document.querySelectorAll("#c5_forCards .drag-card, #c5_againstCards .drag-card").length;
+      const notPlaced = totalCards - placed;
+
+      return {a,c,notPlaced};
+    }
+    function softCheck6(){
+      const b = Array.from(document.querySelectorAll("#c6_connectors select")).filter(s=>!s.value).length;
+      const c = Array.from(document.querySelectorAll("#c6_evidence select")).filter(s=>!s.value).length;
+      return {b,c};
+    }
+
+    // Envolver eval5/eval6 para advertir si hay muchas vacías
+    const _eval5 = eval5;
+    const _eval6 = eval6;
+
+    window.eval5 = function(){
+      const missing = softCheck5();
+      if(missing.a + missing.c + (missing.notPlaced>0 ? 1:0) >= 3){
+        const ok = confirm("Te faltan varias respuestas o tarjetas por colocar. ¿Aun así deseas evaluar?");
+        if(!ok) return;
+      }
+      _eval5();
+    };
+
+    window.eval6 = function(){
+      const missing = softCheck6();
+      if(missing.b + missing.c >= 4){
+        const ok = confirm("Te faltan varias respuestas. ¿Aun así deseas evaluar?");
+        if(!ok) return;
+      }
+      _eval6();
+    };
+
+    // Re-vincular botones a las funciones envueltas
+    document.getElementById("c5_eval").removeEventListener("click", _eval5);
+    document.getElementById("c6_eval").removeEventListener("click", _eval6);
+    document.getElementById("c5_eval").addEventListener("click", window.eval5);
+    document.getElementById("c6_eval").addEventListener("click", window.eval6);
+
+    /********************
+     * Mensaje inicial con voz (si la activan)
+     ********************/
+    $("#btnVoice").addEventListener("click", ()=>{
+      if(state.voiceOn){
+        speak("Bienvenido. Selecciona grado, entra y completa la actividad. Tienes dos intentos.");
+      }
+    });
+
+  </script>
+</body>
+</html>
