@@ -1,0 +1,1662 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ODA Lenguajes – Contenido 7: Reseñas (Fase 5)</title>
+  <style>
+    :root{
+      --vino:#5b0b22;
+      --vino2:#7a1231;
+      --rojo:#b91c1c;
+      --naranja:#f97316;
+      --dorado:#d7b56d;
+      --bg:#0b0b10;
+      --card:#ffffff;
+      --muted:#6b7280;
+      --text:#111827;
+      --border:#e5e7eb;
+      --soft:#fff1f2;
+      --soft2:#fff7ed;
+      --ok:#166534;
+      --bad:#b91c1c;
+      --shadow:0 18px 50px rgba(0,0,0,.28);
+    }
+
+    *{box-sizing:border-box;}
+    html,body{height:100%; margin:0; font-family:system-ui,-apple-system,"Segoe UI",sans-serif; background:radial-gradient(circle at top,#1b0a10 0,#06060b 55%,#000 100%); color:#fff;}
+    a{color:inherit}
+    button,input,select{font-family:inherit}
+
+    /* Marca de agua */
+    body::before{
+      content:"";
+      position:fixed;
+      inset:10% 18%;
+      background:url("escudo_escuela.png") center/contain no-repeat;
+      opacity:.04;
+      pointer-events:none;
+      z-index:0;
+    }
+    .school-logo-fixed{
+      position:fixed;
+      right:16px;
+      bottom:12px;
+      height:84px;
+      opacity:.95;
+      z-index:50;
+      pointer-events:none;
+      border-radius:999px;
+      background:#fff;
+      padding:4px;
+      box-shadow:0 10px 24px rgba(0,0,0,.4);
+    }
+
+    /* App wrapper */
+    .app{
+      position:relative;
+      z-index:1;
+      min-height:100vh;
+      padding:16px;
+      display:flex;
+      justify-content:center;
+      align-items:flex-start;
+    }
+    .shell{
+      width:100%;
+      max-width:1200px;
+      background:radial-gradient(circle at top left,#ffe4e6 0,#ffffff 38%,#fff7ed 120%);
+      border-radius:28px;
+      box-shadow:var(--shadow);
+      border:1px solid rgba(255,255,255,.15);
+      overflow:hidden;
+      color:var(--text);
+    }
+
+    /* Header */
+    .topbar{
+      display:flex;
+      gap:12px;
+      align-items:center;
+      justify-content:space-between;
+      padding:12px 14px;
+      background:linear-gradient(90deg,#2b0710,#5b0b22,#7a1231);
+      color:#fff;
+      position:relative;
+      overflow:hidden;
+    }
+    .topbar::before{
+      content:"";
+      position:absolute; inset:0;
+      background:
+        radial-gradient(circle at 0 0,rgba(249,115,22,.25) 0,transparent 55%),
+        radial-gradient(circle at 100% 0,rgba(215,181,109,.20) 0,transparent 55%);
+      opacity:.9;
+      pointer-events:none;
+    }
+    .top-left{display:flex; gap:10px; align-items:center; z-index:1;}
+    .top-left img{height:42px; width:auto; background:#fff; padding:3px 8px; border-radius:10px; box-shadow:0 10px 22px rgba(0,0,0,.25);}
+    .titleblock{z-index:1; flex:1; min-width:0;}
+    .titleblock h1{margin:0; font-size:1.06rem; display:flex; gap:8px; align-items:center; flex-wrap:wrap;}
+    .titleblock .meta{margin-top:3px; font-size:.84rem; color:#ffe4e6;}
+    .titleblock .meta strong{color:#fff}
+    .tag{
+      display:inline-flex; align-items:center; gap:6px;
+      margin-top:5px; font-size:.78rem; font-weight:700;
+      padding:3px 10px; border-radius:999px;
+      background:rgba(255,255,255,.12);
+      border:1px solid rgba(255,255,255,.22);
+      width:max-content;
+    }
+    .tag .dot{width:7px;height:7px;border-radius:999px;background:#22c55e; box-shadow:0 0 0 4px rgba(34,197,94,.25);}
+    .top-right{z-index:1; display:flex; gap:10px; align-items:center;}
+    .avatarMini{
+      display:flex; gap:10px; align-items:center;
+      padding:6px 10px;
+      border-radius:18px;
+      background:rgba(255,255,255,.10);
+      border:1px solid rgba(255,255,255,.18);
+      max-width:360px;
+    }
+    .avatarMini img{
+      width:54px; height:54px; object-fit:contain;
+      border-radius:999px; background:radial-gradient(circle at 30% 0,#f59e0b 0,#111827 70%);
+      padding:3px; border:2px solid rgba(255,255,255,.35);
+      flex-shrink:0;
+    }
+    .avatarMini .txt{font-size:.78rem; color:#fff;}
+    .avatarMini .txt strong{color:#fef3c7;}
+
+    /* Layout */
+    .main{
+      display:grid;
+      grid-template-columns:310px 1fr;
+      gap:12px;
+      padding:12px;
+    }
+    @media(max-width:980px){
+      .main{grid-template-columns:1fr;}
+    }
+
+    .card{
+      background:var(--card);
+      border:1px solid var(--border);
+      border-radius:22px;
+      padding:12px 12px;
+      box-shadow:0 12px 28px rgba(17,24,39,.08);
+      position:relative;
+      overflow:hidden;
+    }
+    .card::before{
+      content:"";
+      position:absolute; inset:0;
+      background:
+        radial-gradient(circle at 0 0,rgba(249,115,22,.12) 0,transparent 55%),
+        radial-gradient(circle at 100% 100%,rgba(185,28,28,.10) 0,transparent 55%);
+      opacity:.65;
+      pointer-events:none;
+    }
+    .card > *{position:relative; z-index:1;}
+
+    .cardTitle{
+      display:flex; align-items:center; justify-content:space-between; gap:8px;
+      margin-bottom:8px;
+    }
+    .cardTitle h2{
+      margin:0;
+      font-size:.98rem;
+      display:flex; align-items:center; gap:8px;
+      color:#111827;
+    }
+    .badge{
+      font-size:.72rem;
+      font-weight:800;
+      padding:3px 10px;
+      border-radius:999px;
+      background:#fff1f2;
+      border:1px solid #fecaca;
+      color:#7f1d1d;
+      white-space:nowrap;
+    }
+    .muted{color:var(--muted); font-size:.86rem;}
+
+    /* Sidebar */
+    .row{display:flex; gap:8px; flex-wrap:wrap;}
+    .field{display:flex; flex-direction:column; gap:4px; margin-bottom:10px;}
+    .field label{font-size:.8rem; font-weight:800; color:#374151;}
+    .field input{
+      border:1px solid #fecaca;
+      background:#fff;
+      border-radius:999px;
+      padding:8px 10px;
+      font-size:.86rem;
+      outline:none;
+    }
+    .field input:focus{box-shadow:0 0 0 3px rgba(185,28,28,.15); border-color:#fda4af;}
+
+    .btn{
+      border:none;
+      border-radius:999px;
+      padding:9px 12px;
+      font-weight:800;
+      font-size:.85rem;
+      cursor:pointer;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      transition:transform .12s ease, box-shadow .12s ease, opacity .12s ease;
+      user-select:none;
+    }
+    .btn:active{transform:translateY(1px);}
+    .btnPrimary{
+      background:linear-gradient(135deg,var(--rojo),var(--naranja));
+      color:#fff;
+      box-shadow:0 12px 26px rgba(185,28,28,.25);
+    }
+    .btnPrimary:hover{box-shadow:0 16px 34px rgba(185,28,28,.32);}
+    .btnOutline{
+      background:#fff;
+      color:#7f1d1d;
+      border:1px solid #fecaca;
+    }
+    .btnGhost{
+      background:#f3f4f6;
+      color:#111827;
+      border:1px solid #e5e7eb;
+    }
+    .btnSmall{padding:7px 10px; font-size:.8rem;}
+
+    .navList{
+      display:flex; flex-direction:column; gap:8px;
+      margin-top:8px;
+    }
+    .navBtn{
+      width:100%;
+      justify-content:space-between;
+      border-radius:16px;
+      border:1px solid #fee2e2;
+      background:#fff;
+      padding:10px 10px;
+      font-weight:900;
+      color:#7f1d1d;
+    }
+    .navBtn.active{
+      background:linear-gradient(90deg,#b91c1c,#f97316);
+      color:#fff;
+      border-color:#b91c1c;
+      box-shadow:0 12px 28px rgba(185,28,28,.25);
+    }
+    .navBtn span.sub{font-size:.72rem; font-weight:700; opacity:.9;}
+    .lock{
+      display:inline-flex; align-items:center; gap:6px;
+      font-size:.75rem; font-weight:900;
+      padding:3px 10px;
+      border-radius:999px;
+      background:#fef2f2;
+      border:1px solid #fecaca;
+      color:#7f1d1d;
+    }
+
+    /* Screens */
+    .screen{display:none;}
+    .screen.active{display:block;}
+
+    .hero{
+      display:grid;
+      grid-template-columns:1.2fr .8fr;
+      gap:14px;
+      align-items:center;
+    }
+    @media(max-width:980px){ .hero{grid-template-columns:1fr;} }
+
+    .cover{
+      background:linear-gradient(135deg,#2b0710,#5b0b22);
+      color:#fff;
+      border-radius:22px;
+      padding:16px 16px;
+      border:1px solid rgba(255,255,255,.18);
+      position:relative;
+      overflow:hidden;
+    }
+    .cover::before{
+      content:"";
+      position:absolute; inset:0;
+      background:
+        radial-gradient(circle at 0 0,rgba(249,115,22,.25) 0,transparent 60%),
+        radial-gradient(circle at 100% 100%,rgba(215,181,109,.20) 0,transparent 60%);
+      opacity:.9;
+      pointer-events:none;
+    }
+    .cover > *{position:relative; z-index:1;}
+
+    .cover h3{margin:0 0 6px; font-size:1.3rem;}
+    .cover p{margin:0; color:#ffe4e6; line-height:1.35;}
+    .cover .mini{
+      margin-top:10px;
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:10px;
+      font-size:.88rem;
+      color:#fff;
+    }
+    .pill{
+      border-radius:16px;
+      border:1px solid rgba(255,255,255,.22);
+      background:rgba(255,255,255,.08);
+      padding:10px 10px;
+    }
+    .pill strong{color:#fef3c7;}
+    .cover .actions{margin-top:12px; display:flex; flex-wrap:wrap; gap:8px;}
+    .copyright{
+      margin-top:10px;
+      font-size:.78rem;
+      color:#ffe4e6;
+      opacity:.95;
+    }
+
+    .infoBox{
+      background:#fff7ed;
+      border:1px solid #fed7aa;
+      border-radius:18px;
+      padding:12px;
+      color:#7c2d12;
+    }
+    .infoBox h4{margin:0 0 6px; color:#9a3412;}
+    .infoGrid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
+      margin-top:10px;
+    }
+    @media(max-width:980px){.infoGrid{grid-template-columns:1fr;}}
+    .videoBox{
+      border-radius:18px;
+      overflow:hidden;
+      border:1px solid #fed7aa;
+      background:#fff;
+    }
+    .videoHead{
+      padding:10px 10px;
+      font-weight:900;
+      background:#fff7ed;
+      border-bottom:1px solid #fed7aa;
+      color:#9a3412;
+    }
+    .videoWrap{position:relative; padding-top:56.25%;}
+    .videoWrap iframe{
+      position:absolute; inset:0; width:100%; height:100%;
+      border:0;
+    }
+
+    /* Activity */
+    .pdaHeader{
+      display:flex; flex-wrap:wrap; gap:8px; align-items:center; justify-content:space-between;
+      margin-bottom:8px;
+    }
+    .pdaHeader .left{
+      display:flex; gap:8px; align-items:center; flex-wrap:wrap;
+    }
+    .pdaTitle{
+      margin:0;
+      font-size:1.02rem;
+      color:#111827;
+    }
+    .pdaSub{
+      font-size:.85rem;
+      color:#6b7280;
+      margin-top:2px;
+    }
+
+    .activity{
+      border-radius:18px;
+      border:1px solid #fee2e2;
+      background:#fff;
+      padding:12px;
+      margin-top:10px;
+    }
+    .activity h3{
+      margin:0 0 6px;
+      font-size:.95rem;
+      color:#7f1d1d;
+      display:flex; gap:8px; align-items:center;
+    }
+    .activity .hint{font-size:.83rem; color:#6b7280; margin-bottom:8px;}
+    .q{
+      padding:10px;
+      border-radius:14px;
+      border:1px solid #e5e7eb;
+      background:#f9fafb;
+      margin-bottom:10px;
+    }
+    .q .qt{font-size:.9rem; font-weight:900; color:#111827; margin-bottom:8px;}
+    .opts{display:grid; gap:6px;}
+    .opt{
+      display:flex; gap:8px; align-items:flex-start;
+      padding:8px 10px;
+      border-radius:12px;
+      border:1px solid #e5e7eb;
+      background:#fff;
+      cursor:pointer;
+      font-size:.88rem;
+      color:#111827;
+    }
+    .opt input{margin-top:2px;}
+    .opt:hover{border-color:#fca5a5; box-shadow:0 0 0 3px rgba(185,28,28,.08);}
+    .tfRow{
+      display:flex; align-items:center; justify-content:space-between; gap:10px;
+      padding:8px 10px;
+      border-radius:12px;
+      border:1px solid #e5e7eb;
+      background:#fff;
+      margin-bottom:8px;
+      font-size:.88rem;
+    }
+    .tfRow .stmt{flex:1; font-weight:800;}
+    .tfRow select{
+      border-radius:999px;
+      border:1px solid #fecaca;
+      padding:6px 10px;
+      background:#fff;
+      font-weight:900;
+      color:#7f1d1d;
+    }
+
+    .matchGrid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:8px;
+    }
+    @media(max-width:780px){.matchGrid{grid-template-columns:1fr;}}
+    .matchItem{
+      padding:8px 10px;
+      border-radius:12px;
+      border:1px solid #e5e7eb;
+      background:#fff;
+      display:flex; gap:10px; align-items:center; justify-content:space-between;
+      font-size:.88rem;
+    }
+    .matchItem .a{font-weight:900;}
+    .matchItem select{
+      border-radius:999px;
+      border:1px solid #fecaca;
+      padding:6px 10px;
+      background:#fff;
+      font-weight:900;
+      color:#7f1d1d;
+      width:220px;
+      max-width:100%;
+    }
+
+    .status{
+      margin-top:10px;
+      padding:10px 12px;
+      border-radius:16px;
+      font-size:.86rem;
+      display:flex;
+      gap:10px;
+      align-items:flex-start;
+      border:1px solid;
+    }
+    .status.info{background:#fff1f2; border-color:#fecaca; color:#7f1d1d;}
+    .status.ok{background:#ecfdf3; border-color:#bbf7d0; color:#166534;}
+    .status.bad{background:#fef2f2; border-color:#fecaca; color:#b91c1c;}
+    .status .bubble{
+      width:24px; height:24px; border-radius:999px;
+      display:flex; align-items:center; justify-content:center;
+      font-weight:900;
+      background:rgba(0,0,0,.08);
+      flex-shrink:0;
+    }
+
+    .resultsBox{
+      background:#0b0b10;
+      color:#fff;
+      border-radius:18px;
+      border:1px solid rgba(255,255,255,.18);
+      padding:12px;
+    }
+    .resultsBox h3{margin:0 0 8px; color:#fef3c7;}
+    .resGrid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+      gap:8px;
+    }
+    .resPill{
+      background:rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.14);
+      border-radius:999px;
+      padding:8px 10px;
+      display:flex; justify-content:space-between; gap:10px;
+      font-size:.85rem;
+    }
+    .resPill .k{opacity:.9; font-weight:800;}
+    .resPill .v{font-weight:900; color:#bbf7d0;}
+    .resPill.bad .v{color:#fecaca;}
+    .foot{
+      display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px;
+      padding:12px 14px;
+      border-top:1px solid #fee2e2;
+      color:#6b7280;
+      font-size:.78rem;
+      background:rgba(255,255,255,.7);
+    }
+    .foot strong{color:#111827;}
+    .printNote{font-size:.76rem; color:#6b7280; margin-top:8px;}
+
+    @media print{
+      body{background:#fff; color:#111; }
+      body::before,.school-logo-fixed{display:none!important;}
+      .topbar,.foot,.btn,.navList,.printHide{display:none!important;}
+      .shell{box-shadow:none; border:none; border-radius:0;}
+      .main{padding:0;}
+      .card{box-shadow:none;}
+      .resultsBox{background:#fff;color:#111;border:1px solid #e5e7eb;}
+      .resultsBox h3{color:#111;}
+      .resPill{background:#fff;border:1px solid #e5e7eb;}
+      .resPill .v{color:#111;}
+    }
+  </style>
+</head>
+
+<body>
+  <img src="../../img/escudo_escuela.png" alt="Escudo escuela" class="school-logo-fixed">
+
+  <div class="app">
+    <div class="shell">
+
+      <!-- TOPBAR -->
+      <div class="topbar">
+        <div class="top-left">
+          <img src="../../img/sep_logo.png" alt="SEP">
+        </div>
+
+        <div class="titleblock">
+          <h1>📚 ODA Lenguajes – Contenido 7: Reseñas</h1>
+          <div class="meta">
+            <strong>Elaboración e intercambio de reseñas</strong> de diversos textos y/o audiovisuales · <strong>Fase 5</strong>
+          </div>
+          <div class="tag"><span class="dot"></span>ODA de lenguajes estandar</div>
+        </div>
+
+        <div class="top-right">
+          <div class="avatarMini">
+            <img src="../../img/avatar_guia.png" alt="Avatar guía">
+            <div class="txt">
+              <strong>Hola, soy el maestro Martín.</strong><br>
+              Hoy aprenderás a crear reseñas de textos y materiales audiovisuales.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="main">
+
+        <!-- SIDEBAR -->
+        <aside class="card">
+          <div class="cardTitle">
+            <h2>🧑‍🎓 Datos</h2>
+            <span class="badge">Resultados automáticos</span>
+          </div>
+
+          <div class="field">
+            <label for="studentName">Nombre del alumno(a)</label>
+            <input id="studentName" type="text" placeholder="Escribe tu nombre">
+          </div>
+
+          <div class="field">
+            <label>Grado</label>
+            <div class="row">
+              <button class="btn btnOutline btnSmall" id="btnGrade5">5.º grado</button>
+              <button class="btn btnOutline btnSmall" id="btnGrade6">6.º grado</button>
+            </div>
+            <div class="muted" id="gradeHint">Selecciona un grado para iniciar.</div>
+          </div>
+
+          <div class="cardTitle" style="margin-top:10px;">
+            <h2>🧭 Navegación</h2>
+            <span class="lock" id="attemptInfo">Intentos: 2 por actividad</span>
+          </div>
+
+          <div class="navList" id="navList">
+            <!-- Se llena con JS -->
+          </div>
+
+          <div class="row" style="margin-top:10px;">
+            <button class="btn btnGhost btnSmall" id="btnHome">🏠 Portada</button>
+            <button class="btn btnGhost btnSmall" id="btnResults">📄 Resultados</button>
+            <button class="btn btnGhost btnSmall" id="btnPrintResults">🖨️ Imprimir resultados</button>
+          </div>
+
+          <div class="printNote">
+            💡 Tip: Completa actividades y revisa tu hoja de resultados.
+          </div>
+        </aside>
+
+        <!-- CONTENT -->
+        <section class="card">
+          <!-- SCREENS -->
+          <div id="screen-cover" class="screen active">
+            <div class="hero">
+              <div class="cover">
+                <h3>Bienvenido(a) 👋</h3>
+                <p>
+                  En esta ODA aprenderás a reconocer, escribir y mejorar <strong>reseñas</strong>.
+                  Primero verás una <strong>hoja informativa</strong> según tu grado y después resolverás
+                  actividades por <strong>PDA</strong>.
+                </p>
+
+                <div class="mini">
+                  <div class="pill">
+                    <strong>5.º grado</strong><br>
+                    Reseña de texto + opinión con expresiones.
+                  </div>
+                  <div class="pill">
+                    <strong>6.º grado</strong><br>
+                    Reseña audiovisual + opinión sustentada con conectores.
+                  </div>
+                </div>
+
+                <div class="actions printHide">
+                  <button class="btn btnPrimary" id="btnStart5">🚀 Iniciar 5.º</button>
+                  <button class="btn btnPrimary" id="btnStart6">🚀 Iniciar 6.º</button>
+                </div>
+
+                <div class="copyright">
+                  ODA creada por el <strong>Maestro Martín Reta</strong> · © Secretaría de Educación Pública (uso educativo)
+                </div>
+              </div>
+
+              <div class="infoBox">
+                <h4>🎯 Propósito</h4>
+                <div class="muted" style="color:#7c2d12">
+                  Identificar características de la reseña, registrar datos de identificación,
+                  expresar una opinión y mejorar el texto evitando reiteraciones y errores.
+                </div>
+                <div class="infoGrid">
+                  <div class="pill" style="background:#fff; border-color:#fed7aa;">
+                    <strong style="color:#9a3412">Cómo avanzas</strong><br>
+                    Portada → Hoja informativa → PDAs → Resultados.
+                  </div>
+                  <div class="pill" style="background:#fff; border-color:#fed7aa;">
+                    <strong style="color:#9a3412">Regla</strong><br>
+                    2 intentos por actividad. Después se bloquea.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- INFO 5 -->
+          <div id="screen-info5" class="screen">
+            <div class="pdaHeader">
+              <div class="left">
+                <h2 class="pdaTitle">📘 Hoja informativa – 5.º grado</h2>
+                <span class="badge">Textos</span>
+              </div>
+              <div class="row printHide">
+                <button class="btn btnOutline btnSmall" id="btnToPdas5">➡️ Ir a PDAs</button>
+              </div>
+            </div>
+
+            <div class="infoGrid">
+              <div class="infoBox">
+                <h4>¿Qué es una reseña?</h4>
+                <p style="margin:0 0 6px;">
+                  Una <strong>reseña</strong> es un texto donde <strong>describes</strong> un texto leído (cuento, libro, artículo)
+                  y compartes tu <strong>opinión</strong> para recomendarlo o no.
+                </p>
+                <ul style="margin:6px 0 0; padding-left:18px;">
+                  <li>Incluye datos: <strong>título, autor, editorial, lugar/fecha, páginas</strong>.</li>
+                  <li>Describe de qué trata (sin contar todo).</li>
+                  <li>Da tu opinión con expresiones: <em>creo que, en mi opinión, pienso que…</em></li>
+                  <li>Revisa para evitar repetir palabras y corregir ortografía.</li>
+                </ul>
+              </div>
+
+              <div class="videoBox">
+                <div class="videoHead">🎥 Video: ¿Qué es una reseña?</div>
+                <div class="videoWrap">
+                  <iframe
+                    src="https://www.youtube.com/embed/nXXRaUKVrZQ"
+                    title="¿Qué es una reseña?"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen></iframe>
+                </div>
+              </div>
+            </div>
+
+            <div class="status info">
+              <div class="bubble">💡</div>
+              <div>
+                Cuando termines, pulsa <strong>“Ir a PDAs”</strong> y empieza con el PDA 1.
+              </div>
+            </div>
+          </div>
+
+          <!-- INFO 6 -->
+          <div id="screen-info6" class="screen">
+            <div class="pdaHeader">
+              <div class="left">
+                <h2 class="pdaTitle">📘 Hoja informativa – 6.º grado</h2>
+                <span class="badge">Audiovisuales</span>
+              </div>
+              <div class="row printHide">
+                <button class="btn btnOutline btnSmall" id="btnToPdas6">➡️ Ir a PDAs</button>
+              </div>
+            </div>
+
+            <div class="infoGrid">
+              <div class="infoBox">
+                <h4>¿Para qué sirve una reseña?</h4>
+                <p style="margin:0 0 6px;">
+                  Una reseña sirve para <strong>informar</strong> y dar una <strong>opinión sustentada</strong>
+                  sobre un material (texto o audiovisual).
+                </p>
+                <ul style="margin:6px 0 0; padding-left:18px;">
+                  <li>Describe el material y su tema.</li>
+                  <li>Registra datos: <strong>título, tema, director, protagonistas, productora, fecha</strong>.</li>
+                  <li>Opina con argumentos usando conectores: <em>porque, ya que, debido a…</em></li>
+                  <li>Revisa para corregir reiteraciones, concordancia y ortografía.</li>
+                </ul>
+              </div>
+
+              <div class="videoBox">
+                <div class="videoHead">🎥 Video: La reseña explicada</div>
+                <div class="videoWrap">
+                  <iframe
+                    src="https://www.youtube.com/embed/nXXRaUKVrZQ"
+                    title="¿Qué es una reseña?"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen></iframe>
+                </div>
+              </div>
+            </div>
+
+            <div class="status info">
+              <div class="bubble">💡</div>
+              <div>
+                Pulsa <strong>“Ir a PDAs”</strong> y comienza por el PDA 1.
+              </div>
+            </div>
+          </div>
+
+          <!-- PDA SCREEN (dinámica) -->
+          <div id="screen-pda" class="screen">
+            <div class="pdaHeader">
+              <div class="left">
+                <div>
+                  <h2 class="pdaTitle" id="pdaTitle">PDA</h2>
+                  <div class="pdaSub" id="pdaSub">Descripción</div>
+                </div>
+              </div>
+              <div class="row printHide">
+                <button class="btn btnGhost btnSmall" id="btnPrintActivity">🖨️ Imprimir actividad</button>
+              </div>
+            </div>
+
+            <div id="pdaContainer"></div>
+
+            <div class="status info" id="pdaStatus">
+              <div class="bubble">🧠</div>
+              <div>Resuelve las actividades. Recuerda: <strong>2 intentos</strong> por actividad.</div>
+            </div>
+          </div>
+
+          <!-- RESULTS -->
+          <div id="screen-results" class="screen">
+            <div class="pdaHeader">
+              <div class="left">
+                <h2 class="pdaTitle">📄 Hoja de resultados</h2>
+                <span class="badge">Autoevaluación</span>
+              </div>
+              <div class="row printHide">
+                <button class="btn btnPrimary btnSmall" id="btnRefreshResults">🔄 Actualizar</button>
+              </div>
+            </div>
+
+            <div class="resultsBox" id="resultsBox">
+              <!-- Se llena con JS -->
+            </div>
+
+            <div class="status info">
+              <div class="bubble">🖨️</div>
+              <div>
+                Puedes imprimir esta hoja con el botón <strong>“Imprimir resultados”</strong>.
+              </div>
+            </div>
+          </div>
+
+        </section>
+      </div>
+
+      <div class="foot">
+        <div>
+          <strong>Campo formativo:</strong> Lenguajes · <strong>Fase:</strong> 5
+        </div>
+        <div class="project">
+          ODA creada por el <strong>Maestro Martín Reta</strong> · Diseño tipo aplicación educativa
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+<script>
+/* =========================
+   DATA (Preguntas y PDAs)
+   ========================= */
+
+const YT_ID = "nXXRaUKVrZQ";
+const MAX_ATTEMPTS = 2;
+
+const PDAS = {
+  "5": [
+    {
+      id:"5-PDA1",
+      title:"PDA 1",
+      desc:"Reconoce las características y función de las reseñas.",
+      activities:[
+        {
+          id:"5-PDA1-A1",
+          name:"Actividad 1 · ¿Es una reseña?",
+          type:"mcq",
+          hint:"Elige una respuesta correcta en cada reactivo (5).",
+          questions:[
+            {q:"¿Para qué sirve una reseña?", options:["Para contar una historia inventada","Para dar información y opinión sobre un texto","Para copiar un texto","Para escribir sin orden"], a:1},
+            {q:"Una reseña siempre incluye:", options:["Dibujos","Opinión personal","Diálogos","Personajes"], a:1},
+            {q:"¿Qué se puede reseñar?", options:["Solo cuentos","Solo poemas","Libros y textos leídos","Solo anuncios"], a:2},
+            {q:"La reseña ayuda a:", options:["Memorizar palabras","Recomendar o no un texto","Copiar información","Escribir sin leer"], a:1},
+            {q:"La reseña es un texto:", options:["Informativo","Instructivo","Descriptivo","Informativo y de opinión"], a:3},
+          ]
+        },
+        {
+          id:"5-PDA1-A2",
+          name:"Actividad 2 · Función de la reseña",
+          type:"truefalse",
+          hint:"Selecciona Verdadero (V) o Falso (F) en cada enunciado (5).",
+          questions:[
+            {q:"La reseña sirve para expresar lo que pienso de un texto.", a:"V"},
+            {q:"En una reseña no se da ninguna opinión.", a:"F"},
+            {q:"Las reseñas ayudan a decidir si leer un texto.", a:"V"},
+            {q:"Una reseña solo se escribe en la escuela.", a:"F"},
+            {q:"La reseña puede recomendar o no un texto.", a:"V"},
+          ]
+        }
+      ]
+    },
+    {
+      id:"5-PDA2",
+      title:"PDA 2",
+      desc:"Describe un texto leído y construye una opinión acerca del mismo, explicando su parecer.",
+      activities:[
+        {
+          id:"5-PDA2-A1",
+          name:"Actividad 1 · Leo un texto y opino",
+          type:"mcq_text",
+          hint:"Lee el texto y responde (5).",
+          passageTitle:"Texto: “El puente de madera”",
+          passage:`En el ejido, había un canal de riego que dividía el camino a la escuela. Para cruzarlo, existía un puente de madera que ya estaba viejo. Un día, después de una lluvia fuerte, las tablas quedaron flojas y algunos niños se asustaron al pasar.
+Mariana, que siempre observaba todo, propuso hablar con los vecinos para arreglarlo. Al día siguiente, reunió a sus compañeros y fueron a pedir ayuda. Don Luis, un carpintero, explicó que no bastaba con cambiar una tabla: era necesario poner clavos nuevos, reforzar los soportes y revisar si el agua estaba debilitando la base.
+Las familias se organizaron. Unos llevaron herramientas, otros consiguieron madera y algunos limpiaron el área. Al terminar, el puente quedó más firme y también colocaron un letrero que decía: “Cruza con cuidado y no empujes”.
+Mariana se sintió orgullosa porque entendió que cuando una comunidad se une, puede resolver problemas importantes. Desde ese día, todos cuidaron más el puente y aprendieron a pensar en la seguridad de los demás.`,
+          questions:[
+            {q:"¿Cuál es el problema principal del texto?", options:["La escuela estaba cerrada","El puente estaba viejo y peligroso","Mariana perdió su mochila","El canal se secó"], a:1},
+            {q:"¿Qué hizo Mariana para ayudar?", options:["Se quejó y se fue a su casa","Esperó a que alguien lo arreglara","Propuso hablar con vecinos y organizar ayuda","Cambió el puente sola"], a:2},
+            {q:"¿Qué enseñó Don Luis?", options:["Solo hay que pintar el puente","Es mejor no cruzar nunca","Arreglar requiere reforzar y revisar la base","Las lluvias no afectan la madera"], a:2},
+            {q:"¿Cuál es un mensaje del texto?", options:["Nadie debe participar","La comunidad unida resuelve problemas","Es mejor ignorar los riesgos","Los letreros no sirven"], a:1},
+            {q:"¿Qué opinión está mejor justificada con el texto?", options:["El puente es bonito.","Creo que el trabajo en equipo fue importante porque las familias se organizaron y lo hicieron más seguro.","Pienso que Mariana no hizo nada.","Me da risa el letrero."], a:1},
+          ]
+        },
+        {
+          id:"5-PDA2-A2",
+          name:"Actividad 2 · ¿Qué frases son opinión?",
+          type:"multi2",
+          hint:"En cada reactivo selecciona EXACTAMENTE 2 opciones que sí sean opinión (5).",
+          questions:[
+            {q:"Selecciona 2 opiniones:", options:["Me gustó el texto.","El texto tiene 20 páginas.","Creo que es interesante.","El autor nació en México."], a:[0,2]},
+            {q:"Selecciona 2 opiniones:", options:["En mi opinión es divertido.","El título es largo.","Pienso que enseña una lección.","Fue publicado en 2020."], a:[0,2]},
+            {q:"Selecciona 2 opiniones:", options:["Considero que el final sorprende.","La editorial es X.","Creo que el tema es importante.","Tiene 3 capítulos."], a:[0,2]},
+            {q:"Selecciona 2 opiniones:", options:["Desde mi punto de vista, el personaje es valiente.","El libro está en la biblioteca.","Pienso que se entiende fácil.","Se imprimió en México."], a:[0,2]},
+            {q:"Selecciona 2 opiniones:", options:["En mi opinión, vale la pena leerlo.","Tiene índice y portada.","Creo que el mensaje es positivo.","Tiene 80 páginas."], a:[0,2]},
+          ]
+        }
+      ]
+    },
+    {
+      id:"5-PDA3",
+      title:"PDA 3",
+      desc:"Usa expresiones como creo que, en mi opinión, pienso que, de acuerdo con, desde mi punto de vista, considero que, para organizar y compartir su opinión.",
+      activities:[
+        {
+          id:"5-PDA3-A1",
+          name:"Actividad 1 · Completa la opinión",
+          type:"mcq",
+          hint:"Elige la opción que completa mejor (5).",
+          questions:[
+            {q:"_____ el texto es interesante.", options:["Por","Creo que","Aunque","Desde"], a:1},
+            {q:"_____, la historia fue divertida.", options:["En mi opinión","Porque","Sin embargo","Después"], a:0},
+            {q:"_____ el autor explica bien el tema.", options:["Pienso que","Entonces","Ayer","Entre"], a:0},
+            {q:"_____, el final me sorprendió.", options:["En","Desde mi punto de vista","Sobre","Mientras"], a:1},
+            {q:"_____ es un texto recomendado para mi grupo.", options:["Considero que","Allá","Primero","Nunca"], a:0},
+          ]
+        },
+        {
+          id:"5-PDA3-A2",
+          name:"Actividad 2 · ¿Qué función cumple?",
+          type:"match",
+          hint:"Relaciona cada expresión con su función (6).",
+          pairs:[
+            {left:"En mi opinión…", right:"Dar una opinión"},
+            {left:"Estoy de acuerdo con…", right:"Mostrar acuerdo"},
+            {left:"Sin embargo…", right:"Contrastar / oponer ideas"},
+            {left:"Por ejemplo…", right:"Dar un ejemplo"},
+            {left:"Recomiendo que…", right:"Recomendar / sugerir"},
+            {left:"Debido a que…", right:"Explicar una causa"},
+          ],
+          rightOptions:["Dar una opinión","Mostrar acuerdo","Contrastar / oponer ideas","Dar un ejemplo","Recomendar / sugerir","Explicar una causa"]
+        }
+      ]
+    },
+    {
+      id:"5-PDA4",
+      title:"PDA 4",
+      desc:"Registra datos de identificación del texto: título, autor, editorial y lugar y fecha de publicación, número de páginas.",
+      activities:[
+        {
+          id:"5-PDA4-A1",
+          name:"Actividad 1 · ¿Qué dato es?",
+          type:"mcq_with_icon",
+          hint:"Observa la ficha y responde (5).",
+          questions:[
+            {q:"¿Qué dato indica quién escribió el texto?", options:["Título","Autor","Editorial","Páginas"], a:1},
+            {q:"¿Qué dato indica el nombre del texto?", options:["Autor","Título","Lugar","Fecha"], a:1},
+            {q:"¿Qué dato indica quién publicó el libro?", options:["Editorial","Páginas","Tema","Opinión"], a:0},
+            {q:"¿Qué dato indica cuántas páginas tiene?", options:["Lugar","Número de páginas","Autor","Director"], a:1},
+            {q:"¿Qué dato indica cuándo se publicó?", options:["Lugar","Fecha de publicación","Personajes","Resumen"], a:1},
+          ]
+        },
+        {
+          id:"5-PDA4-A2",
+          name:"Actividad 2 · Identificación correcta",
+          type:"multiselect",
+          hint:"En cada reactivo elige TODAS las opciones que sí son datos de identificación (5).",
+          questions:[
+            {q:"Selecciona los datos de identificación:", options:["Título","Opinión","Autor","Editorial","Lugar de publicación"], a:[0,2,3,4]},
+            {q:"Selecciona los datos de identificación:", options:["Fecha de publicación","Resumen","Número de páginas","Tema","Autor"], a:[0,2,4]},
+            {q:"Selecciona los datos de identificación:", options:["Editorial","Personajes","Lugar","Título","Conectores"], a:[0,2,3]},
+            {q:"Selecciona los datos de identificación:", options:["Autor","Fecha","Ortografía","Lugar","Título"], a:[0,1,3,4]},
+            {q:"Selecciona los datos de identificación:", options:["Número de páginas","Opinión","Editorial","Título","Resumen"], a:[0,2,3]},
+          ]
+        }
+      ]
+    },
+    {
+      id:"5-PDA5",
+      title:"PDA 5",
+      desc:"Revisa y corrige reiteraciones innecesarias en la escritura de la reseña: errores de concordancia y de ortografía en general.",
+      activities:[
+        {
+          id:"5-PDA5-A1",
+          name:"Actividad 1 · ¿Qué es correcto?",
+          type:"truefalse",
+          hint:"Marca V o F (5).",
+          questions:[
+            {q:"Repetir muchas veces una palabra es correcto.", a:"F"},
+            {q:"Una reseña debe revisarse antes de entregarse.", a:"V"},
+            {q:"La ortografía es importante en una reseña.", a:"V"},
+            {q:"Los errores no afectan la comprensión.", a:"F"},
+            {q:"Revisar ayuda a mejorar el texto.", a:"V"},
+          ]
+        },
+        {
+          id:"5-PDA5-A2",
+          name:"Actividad 2 · Detecta el problema",
+          type:"mcq",
+          hint:"Elige la respuesta correcta (5).",
+          questions:[
+            {q:"¿Qué problema tiene esta oración? “El texto el texto me gustó mucho.”", options:["Ortografía","Repetición","Falta de título","Ninguno"], a:1},
+            {q:"¿Qué problema tiene? “Los personajes es valientes.”", options:["Concordancia","Repetición","Título","Tema"], a:0},
+            {q:"¿Qué problema tiene? “Me gusto mucho por que es divertido.”", options:["Ortografía (acentos/por qué)","Concordancia","Repetición","Ninguno"], a:0},
+            {q:"¿Qué mejora es mejor? “Me gustó, me gustó, me gustó el libro.”", options:["Quitar repeticiones","Agregar más repeticiones","Quitar punto final","Cambiar a mayúsculas"], a:0},
+            {q:"¿Qué debo hacer antes de entregar la reseña?", options:["No revisarla","Revisar ortografía y repeticiones","Borrar el título","Cambiar el tema"], a:1},
+          ]
+        }
+      ]
+    }
+  ],
+  "6": [
+    {
+      id:"6-PDA1",
+      title:"PDA 1",
+      desc:"Explica la utilidad de las reseñas y comenta sus características.",
+      activities:[
+        {
+          id:"6-PDA1-A1",
+          name:"Actividad 1 · Utilidad de la reseña",
+          type:"mcq",
+          hint:"Elige la respuesta correcta (5).",
+          questions:[
+            {q:"¿Para qué sirve una reseña?", options:["Para copiar un texto","Para orientar a otras personas con descripción y opinión","Para escribir reglas","Para contar chistes"], a:1},
+            {q:"Una característica de la reseña es que:", options:["No tiene opinión","Incluye descripción y valoración","Siempre es un cuento","No tiene datos"], a:1},
+            {q:"La reseña ayuda a:", options:["Confundir al lector","Decidir si ver/leer un material","Olvidar información","Escribir sin revisar"], a:1},
+            {q:"Una reseña debe ser:", options:["Clara y con ideas ordenadas","Larguísima y repetitiva","Sin datos del material","Solo con dibujos"], a:0},
+            {q:"Además de describir, una reseña:", options:["Da una opinión","Copia el texto completo","Evita decir el tema","Cambia el autor"], a:0},
+          ]
+        },
+        {
+          id:"6-PDA1-A2",
+          name:"Actividad 2 · Verdadero/Falso",
+          type:"truefalse",
+          hint:"Marca V o F (5).",
+          questions:[
+            {q:"Una reseña puede ser sobre un video, documental o película.", a:"V"},
+            {q:"La reseña no necesita datos del material.", a:"F"},
+            {q:"La reseña incluye una opinión del autor o autora.", a:"V"},
+            {q:"Una reseña se escribe sin pensar en el destinatario.", a:"F"},
+            {q:"Revisar la reseña mejora la claridad.", a:"V"},
+          ]
+        }
+      ]
+    },
+    {
+      id:"6-PDA2",
+      title:"PDA 2",
+      desc:"Describe el material audiovisual consultado y registra los datos de identificación de este: título, tema, director, protagonistas, institución o empresa productora, fecha de realización, etcétera.",
+      activities:[
+        {
+          id:"6-PDA2-A1",
+          name:"Actividad 1 · Ficha audiovisual",
+          type:"match",
+          hint:"Relaciona el dato con lo que significa (6).",
+          pairs:[
+            {left:"Título", right:"Nombre del material"},
+            {left:"Tema", right:"De qué trata"},
+            {left:"Director", right:"Quien dirige la producción"},
+            {left:"Protagonistas", right:"Personas/personajes principales"},
+            {left:"Productora", right:"Institución/empresa que lo produce"},
+            {left:"Fecha de realización", right:"Año o fecha de creación"},
+          ],
+          rightOptions:["Nombre del material","De qué trata","Quien dirige la producción","Personas/personajes principales","Institución/empresa que lo produce","Año o fecha de creación"]
+        },
+        {
+          id:"6-PDA2-A2",
+          name:"Actividad 2 · ¿Qué datos corresponden?",
+          type:"multiselect",
+          hint:"Selecciona TODAS las opciones correctas (5).",
+          questions:[
+            {q:"Datos de identificación de un material audiovisual:", options:["Título","Director","Ortografía","Protagonistas","Fecha de realización"], a:[0,1,3,4]},
+            {q:"Datos de identificación:", options:["Tema","Productora","Opinión","Lugar de filmación","Título"], a:[0,1,4]},
+            {q:"Datos de identificación:", options:["Director","Resumen completo","Protagonistas","Fecha","Productora"], a:[0,2,3,4]},
+            {q:"Datos de identificación:", options:["Título","Tema","Conectores","Autor (de un libro)","Director"], a:[0,1,4]},
+            {q:"Datos de identificación:", options:["Productora","Fecha de realización","Reiteraciones","Tema","Protagonistas"], a:[0,1,3,4]},
+          ]
+        }
+      ]
+    },
+    {
+      id:"6-PDA3",
+      title:"PDA 3",
+      desc:"Elabora una opinión sustentada acerca de un material reseñado.",
+      activities:[
+        {
+          id:"6-PDA3-A1",
+          name:"Actividad 1 · Opinión sustentada",
+          type:"mcq",
+          hint:"Elige la opinión mejor sustentada (5).",
+          questions:[
+            {q:"¿Cuál opinión está mejor sustentada?", options:[
+              "Me gustó.",
+              "Me gustó porque explica el tema con ejemplos claros.",
+              "Está feo.",
+              "No sé."
+            ], a:1},
+            {q:"¿Cuál opinión está mejor sustentada?", options:[
+              "No lo recomiendo.",
+              "No lo recomiendo porque repite ideas y no explica bien el tema.",
+              "No lo recomiendo porque sí.",
+              "No lo vi."
+            ], a:1},
+            {q:"Una opinión sustentada incluye:", options:["Solo una palabra","Razones","Solo datos","Solo el título"], a:1},
+            {q:"Para sustentar una opinión conviene usar:", options:["Razones y ejemplos","Solo mayúsculas","Repeticiones","Apodos"], a:0},
+            {q:"¿Qué opción es más sustentada?", options:[
+              "Es interesante.",
+              "Es interesante porque presenta el tema de forma ordenada y con información clara.",
+              "Es interesante porque sí.",
+              "Es interesante y ya."
+            ], a:1},
+          ]
+        },
+        {
+          id:"6-PDA3-A2",
+          name:"Actividad 2 · Elige las 2 mejores razones",
+          type:"multi2",
+          hint:"En cada reactivo selecciona EXACTAMENTE 2 razones válidas (5).",
+          questions:[
+            {q:"Para sustentar “Lo recomiendo”, elige 2 razones:", options:["Da ejemplos claros","Es largo","Tiene información confiable","Tiene letras bonitas"], a:[0,2]},
+            {q:"Para sustentar “No lo recomiendo”, elige 2 razones:", options:["No se entiende el tema","Repite ideas muchas veces","Tiene portada","Es de color azul"], a:[0,1]},
+            {q:"Para sustentar “Es útil”, elige 2 razones:", options:["Aprendo algo nuevo","Explica con orden","Tiene anuncios","No tiene título"], a:[0,1]},
+            {q:"Para sustentar “Me gustó”, elige 2 razones:", options:["Me hizo reflexionar","Usa ejemplos","No tiene datos","Está borroso"], a:[0,1]},
+            {q:"Para sustentar “Es claro”, elige 2 razones:", options:["Ideas organizadas","Pocas faltas","Solo música","Repite lo mismo"], a:[0,1]},
+          ]
+        }
+      ]
+    },
+    {
+      id:"6-PDA4",
+      title:"PDA 4",
+      desc:"Usa conectores como porque, ya que, puesto que, por, debido a, etcétera, con los que apoya la argumentación de sus opiniones.",
+      activities:[
+        {
+          id:"6-PDA4-A1",
+          name:"Actividad 1 · Completa con conector",
+          type:"mcq",
+          hint:"Elige el conector que mejor complete (5).",
+          questions:[
+            {q:"Lo recomiendo ____ explica el tema con ejemplos.", options:["porque","después","aunque","allá"], a:0},
+            {q:"No me gustó, ____ repite ideas varias veces.", options:["ya que","ayer","entre","aquí"], a:0},
+            {q:"Me pareció útil ____ ayuda a comprender el tema.", options:["puesto que","nunca","sobre","junto"], a:0},
+            {q:"No lo recomiendo ____ la información es confusa.", options:["debido a","primero","casi","cuando"], a:0},
+            {q:"Me gustó ____ tiene datos claros y ordenados.", options:["por","encima","en","sin"], a:0},
+          ]
+        },
+        {
+          id:"6-PDA4-A2",
+          name:"Actividad 2 · ¿Qué función tiene el conector?",
+          type:"match",
+          hint:"Relaciona el conector con su función (5).",
+          pairs:[
+            {left:"porque", right:"Introduce una causa"},
+            {left:"ya que", right:"Introduce una causa"},
+            {left:"puesto que", right:"Introduce una causa"},
+            {left:"debido a", right:"Introduce una causa"},
+            {left:"por", right:"Introduce una causa"},
+          ],
+          rightOptions:["Introduce una causa"]
+        }
+      ]
+    },
+    {
+      id:"6-PDA5",
+      title:"PDA 5",
+      desc:"Revisa y corrige reiteraciones innecesarias, y errores de concordancia y ortografía en general.",
+      activities:[
+        {
+          id:"6-PDA5-A1",
+          name:"Actividad 1 · Verdadero/Falso",
+          type:"truefalse",
+          hint:"Marca V o F (5).",
+          questions:[
+            {q:"Revisar reiteraciones mejora la calidad de la reseña.", a:"V"},
+            {q:"La concordancia no importa en una reseña.", a:"F"},
+            {q:"Corregir ortografía ayuda a que el texto sea claro.", a:"V"},
+            {q:"Se puede entregar una reseña sin revisarla.", a:"F"},
+            {q:"Revisar también ayuda a ordenar ideas.", a:"V"},
+          ]
+        },
+        {
+          id:"6-PDA5-A2",
+          name:"Actividad 2 · Detecta el error",
+          type:"mcq",
+          hint:"Elige el tipo de error (5).",
+          questions:[
+            {q:"“Las ideas está ordenadas.”", options:["Concordancia","Repetición","Ninguno","Título"], a:0},
+            {q:"“Me gustó gustó el documental.”", options:["Ortografía","Repetición","Concordancia","Ninguno"], a:1},
+            {q:"“Por que el tema es claro, lo recomiendo.”", options:["Ortografía (por qué/porque)","Repetición","Concordancia","Ninguno"], a:0},
+            {q:"“El video tiene datos datos importantes.”", options:["Concordancia","Repetición","Ortografía","Ninguno"], a:1},
+            {q:"“Los protagonista fueron buenos.”", options:["Concordancia","Repetición","Ninguno","Tema"], a:0},
+          ]
+        }
+      ]
+    }
+  ]
+};
+
+/* =========================
+   STATE
+   ========================= */
+let currentGrade = null;      // "5" o "6"
+let currentPdaIndex = null;   // número
+let attempts = {};            // {activityId: number}
+let scores = {};              // {activityId: {score, total, locked}}
+let pdaScores = {};           // {pdaId: {done, percent, details...}}
+
+function $(id){ return document.getElementById(id); }
+function esc(str){ return String(str).replace(/[&<>"']/g, s=>({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[s])); }
+
+function showScreen(screenId){
+  ["screen-cover","screen-info5","screen-info6","screen-pda","screen-results"].forEach(id=>{
+    $(id).classList.toggle("active", id===screenId);
+  });
+}
+
+function setGrade(g){
+  currentGrade = g;
+  $("gradeHint").textContent = `Grado seleccionado: ${g==="5" ? "5.º" : "6.º"} · Primero verás la hoja informativa.`;
+  $("btnGrade5").classList.toggle("active", g==="5");
+  $("btnGrade6").classList.toggle("active", g==="6");
+  buildNav();
+  if(g==="5") showScreen("screen-info5");
+  else showScreen("screen-info6");
+}
+
+function buildNav(){
+  const nav = $("navList");
+  nav.innerHTML = "";
+
+  if(!currentGrade){
+    nav.innerHTML = `<div class="muted">Selecciona un grado para habilitar los PDAs.</div>`;
+    return;
+  }
+
+  // Info + PDAs
+  const infoBtn = document.createElement("button");
+  infoBtn.className = "btn navBtn";
+  infoBtn.innerHTML = `📘 Hoja informativa <span class="sub">${currentGrade==="5"?"5.º":"6.º"} grado</span> <span>➜</span>`;
+  infoBtn.onclick = ()=> showScreen(currentGrade==="5" ? "screen-info5" : "screen-info6");
+  nav.appendChild(infoBtn);
+
+  PDAS[currentGrade].forEach((pda, idx)=>{
+    const b = document.createElement("button");
+    b.className = "btn navBtn";
+    b.innerHTML = `📌 ${esc(pda.title)} <span class="sub">${esc(pda.desc)}</span> <span>➜</span>`;
+    b.onclick = ()=> openPda(idx);
+    nav.appendChild(b);
+  });
+
+  const resBtn = document.createElement("button");
+  resBtn.className = "btn navBtn";
+  resBtn.innerHTML = `📄 Resultados <span class="sub">Ver calificaciones</span> <span>➜</span>`;
+  resBtn.onclick = ()=> { showScreen("screen-results"); renderResults(); };
+  nav.appendChild(resBtn);
+}
+
+function openPda(idx){
+  if(!currentGrade) return;
+  currentPdaIndex = idx;
+  const pda = PDAS[currentGrade][idx];
+  $("pdaTitle").textContent = `${pda.title} · ${pda.desc}`;
+  $("pdaSub").textContent = `Grado ${currentGrade==="5"?"5.º":"6.º"} · 2 actividades · 2 intentos por actividad`;
+  renderPda(pda);
+  showScreen("screen-pda");
+
+  // nav active highlight
+  [...document.querySelectorAll(".navBtn")].forEach(btn=>btn.classList.remove("active"));
+}
+
+function getAttempts(actId){ return attempts[actId] ?? 0; }
+function incAttempts(actId){ attempts[actId] = getAttempts(actId) + 1; }
+function isLocked(actId){ return (scores[actId]?.locked) === true; }
+
+function lockActivity(actId){
+  scores[actId] = scores[actId] || {score:0,total:0,locked:false};
+  scores[actId].locked = true;
+}
+
+function setScore(actId, score, total){
+  scores[actId] = {score,total,locked: isLocked(actId) || (getAttempts(actId) >= MAX_ATTEMPTS)};
+  if(getAttempts(actId) >= MAX_ATTEMPTS) scores[actId].locked = true;
+}
+
+function pct(score,total){ return total ? Math.round((score/total)*100) : 0; }
+
+function computePdaSummary(pda){
+  const allActs = pda.activities.map(a=>a.id);
+  const doneActs = allActs.filter(id => scores[id] && scores[id].total>0);
+  const sumScore = doneActs.reduce((acc,id)=>acc + scores[id].score, 0);
+  const sumTotal = doneActs.reduce((acc,id)=>acc + scores[id].total, 0);
+  const percent = sumTotal ? pct(sumScore,sumTotal) : 0;
+  const done = doneActs.length === allActs.length && allActs.length>0;
+  pdaScores[pda.id] = {done, percent, sumScore, sumTotal, acts: allActs};
+}
+
+function renderPda(pda){
+  const wrap = $("pdaContainer");
+  wrap.innerHTML = "";
+
+  pda.activities.forEach((act, actIdx)=>{
+    const aCard = document.createElement("div");
+    aCard.className = "activity";
+    const locked = isLocked(act.id);
+    const used = getAttempts(act.id);
+    const sc = scores[act.id];
+
+    aCard.innerHTML = `
+      <h3>🧩 ${esc(act.name)} <span class="badge" style="margin-left:auto;">Intentos: ${used}/${MAX_ATTEMPTS}${locked?" · BLOQUEADO":""}</span></h3>
+      <div class="hint">${esc(act.hint || "")}</div>
+      <div id="act-${esc(act.id)}"></div>
+      <div class="row printHide" style="margin-top:8px;">
+        <button class="btn btnPrimary btnSmall" id="check-${esc(act.id)}">✅ Comprobar</button>
+        <button class="btn btnOutline btnSmall" id="clear-${esc(act.id)}">🧹 Borrar</button>
+      </div>
+      <div id="status-${esc(act.id)}" class="status ${sc? (pct(sc.score,sc.total)>=70?"ok":"bad"):"info"}">
+        <div class="bubble">${sc? (pct(sc.score,sc.total)>=70?"✅":"⚠️"):"💡"}</div>
+        <div>
+          ${sc? `Puntaje actual: <strong>${sc.score}/${sc.total}</strong> (${pct(sc.score,sc.total)}%). ${sc.locked? "<strong>Actividad bloqueada.</strong>":"Puedes intentar de nuevo."}` :
+          `Resuelve y pulsa <strong>Comprobar</strong>.`}
+        </div>
+      </div>
+    `;
+    wrap.appendChild(aCard);
+
+    // Render questions
+    renderActivityInto($(`act-${act.id}`), act);
+
+    // Buttons
+    const btnCheck = $(`check-${act.id}`);
+    const btnClear = $(`clear-${act.id}`);
+
+    if(locked){
+      btnCheck.disabled = true;
+      btnCheck.style.opacity = .55;
+      btnClear.disabled = true;
+      btnClear.style.opacity = .55;
+      disableActivityInputs(act.id);
+    }else{
+      btnCheck.onclick = ()=> checkActivity(pda, act);
+      btnClear.onclick = ()=> clearActivity(act);
+    }
+  });
+
+  computePdaSummary(pda);
+}
+
+function disableActivityInputs(actId){
+  const root = document.querySelector(`[data-actroot="${actId}"]`);
+  if(!root) return;
+  [...root.querySelectorAll("input,select,button,textarea")].forEach(el=>{
+    el.disabled = true;
+    el.style.opacity = .85;
+    el.style.cursor = "not-allowed";
+  });
+}
+
+function renderActivityInto(container, act){
+  const root = document.createElement("div");
+  root.dataset.actroot = act.id;
+
+  // optional icon header for PDA4 A1
+  if(act.type === "mcq_with_icon"){
+    root.innerHTML += `
+      <div style="display:flex;align-items:center;gap:10px;margin:6px 0 12px;padding:10px;border:1px solid #fecaca;border-radius:16px;background:#fff1f2;">
+        <svg width="64" height="64" viewBox="0 0 64 64" aria-label="Libro" role="img">
+          <rect x="10" y="10" width="20" height="44" rx="3" fill="#b91c1c"/>
+          <rect x="34" y="10" width="20" height="44" rx="3" fill="#f97316"/>
+          <rect x="14" y="16" width="12" height="2" fill="#fff"/>
+          <rect x="14" y="22" width="12" height="2" fill="#fff"/>
+          <rect x="38" y="16" width="12" height="2" fill="#fff"/>
+          <rect x="38" y="22" width="12" height="2" fill="#fff"/>
+          <rect x="30" y="10" width="4" height="44" fill="#7f1d1d"/>
+        </svg>
+        <div>
+          <div style="font-weight:1000;color:#7f1d1d;">Ficha del libro</div>
+          <div style="font-size:.9rem;color:#7f1d1d;">Identifica qué dato corresponde a cada pregunta.</div>
+        </div>
+      </div>
+    `;
+  }
+
+  if(act.type === "mcq_text"){
+    root.innerHTML += `
+      <div class="q" style="background:#fff7ed;border-color:#fed7aa;">
+        <div class="qt">${esc(act.passageTitle || "Texto")}</div>
+        <div style="white-space:pre-wrap; font-weight:700; color:#7c2d12; line-height:1.35;">${esc(act.passage)}</div>
+      </div>
+    `;
+  }
+
+  if(act.type === "mcq" || act.type === "mcq_text" || act.type === "mcq_with_icon"){
+    act.questions.forEach((qq, i)=>{
+      const qEl = document.createElement("div");
+      qEl.className = "q";
+      qEl.innerHTML = `
+        <div class="qt">${i+1}. ${esc(qq.q)}</div>
+        <div class="opts">
+          ${qq.options.map((opt, j)=>`
+            <label class="opt">
+              <input type="radio" name="${act.id}-q${i}" value="${j}">
+              <span>${esc(opt)}</span>
+            </label>
+          `).join("")}
+        </div>
+      `;
+      root.appendChild(qEl);
+    });
+  }
+
+  if(act.type === "truefalse"){
+    act.questions.forEach((qq,i)=>{
+      const row = document.createElement("div");
+      row.className = "tfRow";
+      row.innerHTML = `
+        <div class="stmt">${i+1}. ${esc(qq.q)}</div>
+        <select data-q="${i}">
+          <option value="">—</option>
+          <option value="V">V</option>
+          <option value="F">F</option>
+        </select>
+      `;
+      root.appendChild(row);
+    });
+  }
+
+  if(act.type === "multiselect"){
+    act.questions.forEach((qq,i)=>{
+      const qEl = document.createElement("div");
+      qEl.className = "q";
+      qEl.innerHTML = `
+        <div class="qt">${i+1}. ${esc(qq.q)}</div>
+        <div class="opts">
+          ${qq.options.map((opt,j)=>`
+            <label class="opt">
+              <input type="checkbox" data-q="${i}" value="${j}">
+              <span>${esc(opt)}</span>
+            </label>
+          `).join("")}
+        </div>
+      `;
+      root.appendChild(qEl);
+    });
+  }
+
+  if(act.type === "multi2"){
+    act.questions.forEach((qq,i)=>{
+      const qEl = document.createElement("div");
+      qEl.className = "q";
+      qEl.innerHTML = `
+        <div class="qt">${i+1}. ${esc(qq.q)}</div>
+        <div class="opts">
+          ${qq.options.map((opt,j)=>`
+            <label class="opt">
+              <input type="checkbox" data-q="${i}" value="${j}">
+              <span>${esc(opt)}</span>
+            </label>
+          `).join("")}
+        </div>
+        <div class="muted" style="margin-top:6px;">Selecciona exactamente <strong>2</strong>.</div>
+      `;
+      root.appendChild(qEl);
+    });
+  }
+
+  if(act.type === "match"){
+    const grid = document.createElement("div");
+    grid.className = "matchGrid";
+
+    act.pairs.forEach((p, i)=>{
+      const item = document.createElement("div");
+      item.className = "matchItem";
+      item.innerHTML = `
+        <div class="a">${i+1}. ${esc(p.left)}</div>
+        <select data-q="${i}">
+          <option value="">— Selecciona —</option>
+          ${act.rightOptions.map(opt=>`<option value="${esc(opt)}">${esc(opt)}</option>`).join("")}
+        </select>
+      `;
+      grid.appendChild(item);
+    });
+
+    root.appendChild(grid);
+  }
+
+  container.appendChild(root);
+}
+
+/* Parte 2 continúa con: checkActivity(), clearActivity(), renderResults(), impresión y eventos. */
+</script>
+<script>
+/* =========================
+   CHECK + CLEAR
+   ========================= */
+function clearActivity(act){
+  const root = document.querySelector(`[data-actroot="${act.id}"]`);
+  if(!root) return;
+
+  // Reset inputs by type
+  if(act.type==="mcq" || act.type==="mcq_text" || act.type==="mcq_with_icon"){
+    [...root.querySelectorAll('input[type="radio"]')].forEach(r=>r.checked=false);
+  }
+  if(act.type==="truefalse"){
+    [...root.querySelectorAll("select")].forEach(s=>s.value="");
+  }
+  if(act.type==="multiselect" || act.type==="multi2"){
+    [...root.querySelectorAll('input[type="checkbox"]')].forEach(c=>c.checked=false);
+  }
+  if(act.type==="match"){
+    [...root.querySelectorAll("select")].forEach(s=>s.value="");
+  }
+}
+
+function checkActivity(pda, act){
+  if(isLocked(act.id)) return;
+
+  // Cuenta intento
+  incAttempts(act.id);
+
+  let score = 0;
+  let total = 0;
+
+  const root = document.querySelector(`[data-actroot="${act.id}"]`);
+  if(!root) return;
+
+  if(act.type==="mcq" || act.type==="mcq_text" || act.type==="mcq_with_icon"){
+    total = act.questions.length;
+    act.questions.forEach((qq,i)=>{
+      const chosen = root.querySelector(`input[name="${act.id}-q${i}"]:checked`);
+      if(chosen && Number(chosen.value)===qq.a) score++;
+    });
+  }
+
+  if(act.type==="truefalse"){
+    total = act.questions.length;
+    act.questions.forEach((qq,i)=>{
+      const sel = root.querySelector(`select[data-q="${i}"]`);
+      if(sel && sel.value === qq.a) score++;
+    });
+  }
+
+  if(act.type==="multiselect"){
+    total = act.questions.length;
+    act.questions.forEach((qq,i)=>{
+      const checks = [...root.querySelectorAll(`input[type="checkbox"][data-q="${i}"]:checked`)].map(c=>Number(c.value)).sort((a,b)=>a-b);
+      const ans = [...qq.a].sort((a,b)=>a-b);
+      const ok = (checks.length===ans.length) && checks.every((v,idx)=>v===ans[idx]);
+      if(ok) score++;
+    });
+  }
+
+  if(act.type==="multi2"){
+    total = act.questions.length;
+    act.questions.forEach((qq,i)=>{
+      const checks = [...root.querySelectorAll(`input[type="checkbox"][data-q="${i}"]:checked`)].map(c=>Number(c.value)).sort((a,b)=>a-b);
+      const ans = [...qq.a].sort((a,b)=>a-b);
+      const ok = (checks.length===2) && (checks.length===ans.length) && checks.every((v,idx)=>v===ans[idx]);
+      if(ok) score++;
+    });
+  }
+
+  if(act.type==="match"){
+    total = act.pairs.length;
+    act.pairs.forEach((p,i)=>{
+      const sel = root.querySelector(`select[data-q="${i}"]`);
+      if(sel && sel.value === p.right) score++;
+    });
+  }
+
+  setScore(act.id, score, total);
+
+  // Lock if used attempts up to MAX
+  if(getAttempts(act.id) >= MAX_ATTEMPTS){
+    lockActivity(act.id);
+    disableActivityInputs(act.id);
+  }
+
+  // Refresh PDA view + status
+  renderPda(PDAS[currentGrade][currentPdaIndex]);
+
+  // Update PDA summary
+  computePdaSummary(pda);
+}
+
+function renderResults(){
+  const name = $("studentName").value.trim() || "(Sin nombre)";
+  const grade = currentGrade ? (currentGrade==="5" ? "5.º" : "6.º") : "(Sin grado)";
+  const box = $("resultsBox");
+
+  if(!currentGrade){
+    box.innerHTML = `
+      <h3>Resultados</h3>
+      <div class="muted" style="color:#e5e7eb;">Selecciona un grado para ver resultados.</div>
+    `;
+    return;
+  }
+
+  // Build totals
+  const pdaList = PDAS[currentGrade];
+  let globalScore = 0;
+  let globalTotal = 0;
+
+  pdaList.forEach(p=>{
+    computePdaSummary(p);
+    globalScore += pdaScores[p.id].sumScore;
+    globalTotal += pdaScores[p.id].sumTotal;
+  });
+
+  const globalPct = globalTotal ? pct(globalScore, globalTotal) : 0;
+  const globalOk = globalPct >= 70;
+
+  const resRows = pdaList.map(p=>{
+    const s = pdaScores[p.id];
+    const ok = s.sumTotal ? (pct(s.sumScore,s.sumTotal) >= 70) : false;
+    return `
+      <div class="resPill ${ok?"":"bad"}">
+        <span class="k">${esc(p.title)}</span>
+        <span class="v">${s.sumTotal? `${pct(s.sumScore,s.sumTotal)}%` : "—"}</span>
+      </div>
+    `;
+  }).join("");
+
+  box.innerHTML = `
+    <h3>📄 Hoja de resultados</h3>
+    <div class="muted" style="color:#e5e7eb;">
+      <strong>Alumno(a):</strong> ${esc(name)} · <strong>Grado:</strong> ${esc(grade)} ·
+      <strong>Contenido:</strong> 7 (Reseñas)
+    </div>
+
+    <div style="margin-top:10px;" class="resGrid">
+      ${resRows}
+    </div>
+
+    <div style="margin-top:12px;" class="resPill ${globalOk?"":"bad"}">
+      <span class="k">Promedio global</span>
+      <span class="v">${globalTotal ? `${globalPct}% (${globalScore}/${globalTotal})` : "—"}</span>
+    </div>
+
+    <div class="printNote" style="color:#e5e7eb;">
+      Regla: 2 intentos por actividad. Si una actividad está bloqueada, ya no se puede modificar.
+    </div>
+  `;
+}
+
+/* =========================
+   PRINT
+   ========================= */
+function printResults(){
+  showScreen("screen-results");
+  renderResults();
+  setTimeout(()=>window.print(), 200);
+}
+
+function printActivity(){
+  // imprime la pantalla actual del PDA
+  showScreen("screen-pda");
+  setTimeout(()=>window.print(), 200);
+}
+
+/* =========================
+   EVENTS
+   ========================= */
+$("btnStart5").onclick = ()=> setGrade("5");
+$("btnStart6").onclick = ()=> setGrade("6");
+$("btnGrade5").onclick = ()=> setGrade("5");
+$("btnGrade6").onclick = ()=> setGrade("6");
+
+$("btnToPdas5").onclick = ()=> openPda(0);
+$("btnToPdas6").onclick = ()=> openPda(0);
+
+$("btnHome").onclick = ()=> showScreen("screen-cover");
+$("btnResults").onclick = ()=> { showScreen("screen-results"); renderResults(); };
+$("btnRefreshResults").onclick = ()=> renderResults();
+$("btnPrintResults").onclick = ()=> printResults();
+$("btnPrintActivity").onclick = ()=> printActivity();
+
+/* Build initial nav (no grade yet) */
+buildNav();
+
+/* If user types name, keep results fresh (optional) */
+$("studentName").addEventListener("input", ()=>{
+  if($("screen-results").classList.contains("active")) renderResults();
+});
+</script>
+
+</body>
+</html>
