@@ -1,0 +1,2041 @@
+<!-- ===========================
+PARTE 1/2 — ODA Lenguajes Estándar (Contenido 6: Textos discontinuos)
+Pega esta parte y debajo la Parte 2/2
+=========================== -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ODA Lenguajes Estándar — Contenido 6: Textos discontinuos (Fase 5)</title>
+
+  <style>
+    :root{
+      --rojo:#b1002a;
+      --rojo2:#d11b3f;
+      --vino:#5b0b22;
+      --dorado:#d7b56d;
+      --crema:#fff7e6;
+      --bg1:#14030a;
+      --bg2:#2a0613;
+      --card:#ffffff;
+      --border:rgba(255,255,255,.18);
+      --muted:rgba(255,255,255,.72);
+      --muted2:#6b7280;
+      --ok:#16a34a;
+      --bad:#b91c1c;
+      --shadow:0 18px 55px rgba(0,0,0,.45);
+    }
+
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+    body{
+      margin:0;
+      font-family:system-ui,-apple-system,"Segoe UI",sans-serif;
+      background: radial-gradient(circle at 12% 0%, rgba(209,27,63,.25) 0, transparent 45%),
+                  radial-gradient(circle at 88% 0%, rgba(215,181,109,.20) 0, transparent 50%),
+                  linear-gradient(180deg,var(--bg1),var(--bg2));
+      color:#fff;
+      overflow-x:hidden;
+    }
+
+    /* ====== App Shell ====== */
+    .app{
+      min-height:100vh;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      padding:16px;
+      position:relative;
+    }
+
+    .watermark{
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      opacity:.05;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      filter:grayscale(1);
+    }
+    .watermark img{
+      width:min(65vw,560px);
+      height:auto;
+    }
+
+    .frame{
+      width:100%;
+      max-width:1200px;
+      background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.04));
+      border:1px solid var(--border);
+      border-radius:26px;
+      box-shadow:var(--shadow);
+      overflow:hidden;
+      position:relative;
+    }
+
+    header{
+      padding:14px 16px;
+      background: linear-gradient(90deg, rgba(177,0,42,.55), rgba(91,11,34,.45));
+      border-bottom:1px solid rgba(255,255,255,.18);
+      display:grid;
+      grid-template-columns:auto 1fr auto;
+      gap:12px;
+      align-items:center;
+    }
+
+    .logos{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+    .logos img{
+      height:44px;
+      width:auto;
+      background:#fff;
+      padding:4px 6px;
+      border-radius:10px;
+      box-shadow:0 8px 18px rgba(0,0,0,.25);
+    }
+
+    .titleBlock{
+      min-width:0;
+    }
+    .titleBlock h1{
+      margin:0;
+      font-size:1.15rem;
+      letter-spacing:.2px;
+      display:flex;
+      align-items:center;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      padding:4px 10px;
+      border-radius:999px;
+      background: rgba(215,181,109,.16);
+      border:1px solid rgba(215,181,109,.35);
+      font-size:.78rem;
+      color:#fff;
+      font-weight:700;
+      letter-spacing:.04em;
+      text-transform:uppercase;
+      white-space:nowrap;
+    }
+    .meta{
+      margin-top:4px;
+      font-size:.86rem;
+      color:rgba(255,255,255,.86);
+      line-height:1.25;
+    }
+    .meta strong{ color: #ffe7b6; }
+
+    .author{
+      text-align:right;
+      font-size:.82rem;
+      color:rgba(255,255,255,.82);
+      line-height:1.15;
+    }
+    .author strong{
+      display:block;
+      color:#fff;
+      font-size:.9rem;
+    }
+
+    @media (max-width:950px){
+      header{ grid-template-columns:1fr; text-align:center; }
+      .logos{ justify-content:center; }
+      .author{ text-align:center; }
+    }
+
+    /* ====== Views ====== */
+    .view{
+      display:none;
+      padding:16px;
+    }
+    .view.active{ display:block; }
+
+    /* ====== Cards & UI ====== */
+    .grid{
+      display:grid;
+      grid-template-columns: 1.35fr 1fr;
+      gap:12px;
+    }
+    @media(max-width:980px){
+      .grid{ grid-template-columns:1fr; }
+    }
+
+    .card{
+      background: rgba(255,255,255,.95);
+      color:#111827;
+      border:1px solid rgba(255,255,255,.6);
+      border-radius:22px;
+      box-shadow:0 10px 24px rgba(0,0,0,.12);
+      padding:12px 12px;
+      position:relative;
+      overflow:hidden;
+    }
+    .card::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:
+        radial-gradient(circle at 0 0, rgba(177,0,42,.10) 0, transparent 55%),
+        radial-gradient(circle at 100% 0, rgba(215,181,109,.12) 0, transparent 58%);
+      pointer-events:none;
+      opacity:.85;
+    }
+    .card > *{ position:relative; z-index:1; }
+
+    .cardTitle{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      margin-bottom:8px;
+    }
+    .cardTitle h2{
+      margin:0;
+      font-size:1rem;
+      color:#111827;
+      display:flex;
+      align-items:center;
+      gap:8px;
+    }
+    .tag{
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      padding:4px 10px;
+      border-radius:999px;
+      background:#fff0f2;
+      border:1px solid #fecdd3;
+      color:#9f1239;
+      font-size:.78rem;
+      font-weight:800;
+      white-space:nowrap;
+    }
+
+    .btnRow{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      margin-top:10px;
+    }
+    .btn{
+      border:none;
+      cursor:pointer;
+      border-radius:999px;
+      padding:9px 12px;
+      font-weight:800;
+      letter-spacing:.2px;
+      font-size:.86rem;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      transition:transform .12s ease, filter .12s ease, box-shadow .12s ease;
+      user-select:none;
+    }
+    .btn:hover{ transform:translateY(-1px); filter:saturate(1.05); }
+    .btn:active{ transform:translateY(0px); filter:saturate(.95); }
+
+    .btnPrimary{
+      background: linear-gradient(135deg, var(--rojo2), var(--rojo));
+      color:#fff;
+      box-shadow:0 10px 20px rgba(177,0,42,.35);
+    }
+    .btnGold{
+      background: linear-gradient(135deg, #f4d48a, var(--dorado));
+      color:#3b1a08;
+      box-shadow:0 10px 20px rgba(215,181,109,.30);
+    }
+    .btnGhost{
+      background: rgba(255,255,255,.10);
+      color:#fff;
+      border:1px solid rgba(255,255,255,.25);
+      box-shadow:0 10px 20px rgba(0,0,0,.15);
+    }
+    .btnLight{
+      background:#111827;
+      color:#fff;
+      box-shadow:0 10px 20px rgba(0,0,0,.18);
+    }
+    .btnSmall{
+      padding:7px 10px;
+      font-size:.8rem;
+      font-weight:800;
+    }
+    .btnDisabled{
+      opacity:.55;
+      cursor:not-allowed;
+      filter:grayscale(.2);
+      transform:none!important;
+    }
+
+    .muted{
+      color:var(--muted2);
+      font-size:.88rem;
+      line-height:1.35;
+      margin:0;
+    }
+    .notice{
+      margin-top:10px;
+      padding:10px 10px;
+      border-radius:16px;
+      border:1px solid #fecaca;
+      background:#fff1f2;
+      color:#7f1d1d;
+      font-size:.86rem;
+      font-weight:700;
+    }
+    .notice.ok{
+      border-color:#bbf7d0;
+      background:#f0fdf4;
+      color:#14532d;
+    }
+
+    /* ====== Avatar Guide ====== */
+    .guide{
+      display:flex;
+      gap:12px;
+      align-items:center;
+    }
+    .avatarCircle{
+      width:88px;
+      height:88px;
+      border-radius:999px;
+      background: radial-gradient(circle at 30% 20%, #ffe7b6, #d7b56d 38%, rgba(0,0,0,.25) 100%);
+      border:3px solid rgba(255,255,255,.65);
+      overflow:hidden;
+      box-shadow:0 14px 30px rgba(0,0,0,.18);
+      flex-shrink:0;
+    }
+    .avatarCircle img{
+      width:100%;
+      height:100%;
+      object-fit:contain;
+      display:block;
+    }
+    .guideText{
+      min-width:0;
+    }
+    .guideText strong{ color:#9f1239; }
+    .guideText p{ margin:0; color:#111827; font-size:.9rem; line-height:1.35; }
+
+    /* ====== Cover ====== */
+    .cover{
+      display:grid;
+      grid-template-columns: 1.35fr 1fr;
+      gap:12px;
+    }
+    @media(max-width:980px){
+      .cover{ grid-template-columns:1fr; }
+    }
+    .coverHero{
+      padding:18px 16px;
+      border-radius:24px;
+      border:1px solid rgba(255,255,255,.18);
+      background: radial-gradient(circle at 0% 0%, rgba(209,27,63,.22), transparent 55%),
+                  radial-gradient(circle at 100% 0%, rgba(215,181,109,.18), transparent 60%),
+                  linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.03));
+    }
+    .coverHero h2{
+      margin:0 0 8px 0;
+      font-size:1.6rem;
+      line-height:1.1;
+    }
+    .coverHero p{
+      margin:0;
+      color:rgba(255,255,255,.88);
+      line-height:1.35;
+      font-size:.95rem;
+    }
+    .coverHero .mini{
+      margin-top:10px;
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+    }
+    .miniChip{
+      padding:6px 10px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.20);
+      background: rgba(0,0,0,.18);
+      font-size:.82rem;
+      color:#fff;
+      font-weight:800;
+    }
+
+    .formRow{
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+      margin-top:10px;
+    }
+    .formRow label{
+      font-weight:900;
+      font-size:.9rem;
+      color:#fff;
+    }
+    .formRow input{
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.22);
+      background: rgba(255,255,255,.10);
+      padding:10px 12px;
+      color:#fff;
+      outline:none;
+      font-size:.95rem;
+    }
+    .formRow input::placeholder{ color:rgba(255,255,255,.60); }
+    .formRow input:focus{
+      border-color: rgba(215,181,109,.65);
+      box-shadow:0 0 0 3px rgba(215,181,109,.20);
+    }
+
+    /* ====== Grade Info examples ====== */
+    .infoGrid{
+      display:grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap:12px;
+      margin-top:10px;
+    }
+    @media(max-width:980px){
+      .infoGrid{ grid-template-columns:1fr; }
+    }
+
+    .exampleBox{
+      border-radius:18px;
+      border:1px solid #e5e7eb;
+      padding:10px 10px;
+      background: #fff;
+      overflow:auto;
+    }
+    .exampleTitle{
+      font-weight:900;
+      color:#9f1239;
+      margin:0 0 6px 0;
+      font-size:.92rem;
+    }
+
+    /* Simple table example */
+    .miniTable{
+      width:100%;
+      border-collapse:collapse;
+      font-size:.84rem;
+    }
+    .miniTable th, .miniTable td{
+      border:1px solid #e5e7eb;
+      padding:6px 7px;
+      text-align:left;
+    }
+    .miniTable th{
+      background:#fff1f2;
+      color:#9f1239;
+      font-weight:900;
+    }
+
+    /* Timeline */
+    .timeline{
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+      margin-top:4px;
+      padding-left:10px;
+      border-left:3px solid #fecdd3;
+    }
+    .tItem{
+      position:relative;
+      padding-left:10px;
+    }
+    .tItem::before{
+      content:"";
+      position:absolute;
+      left:-14px;
+      top:3px;
+      width:10px; height:10px;
+      border-radius:999px;
+      background:#e11d48;
+      box-shadow:0 0 0 4px rgba(225,29,72,.18);
+    }
+    .tYear{
+      font-weight:900;
+      color:#9f1239;
+      font-size:.82rem;
+      letter-spacing:.02em;
+    }
+    .tText{
+      color:#374151;
+      font-size:.86rem;
+    }
+
+    /* Concept map / synoptic */
+    .mapWrap{
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+    }
+    .node{
+      border:1px solid #e5e7eb;
+      border-radius:14px;
+      padding:8px 9px;
+      background:#f9fafb;
+      font-size:.86rem;
+    }
+    .node strong{ color:#9f1239; }
+    .branches{
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:8px;
+    }
+    @media(max-width:600px){ .branches{ grid-template-columns:1fr; } }
+
+    /* Simple bars */
+    .bars{
+      display:flex;
+      align-items:flex-end;
+      gap:10px;
+      height:120px;
+      padding:8px;
+      border-radius:14px;
+      background:#f9fafb;
+      border:1px solid #e5e7eb;
+    }
+    .bar{
+      flex:1;
+      border-radius:10px 10px 6px 6px;
+      background:linear-gradient(180deg,#fb7185,#e11d48);
+      position:relative;
+      min-width:38px;
+    }
+    .bar span{
+      position:absolute;
+      left:50%;
+      transform:translateX(-50%);
+      bottom:-22px;
+      font-size:.78rem;
+      color:#374151;
+      font-weight:900;
+      white-space:nowrap;
+    }
+    .bar em{
+      position:absolute;
+      left:50%;
+      transform:translateX(-50%);
+      top:-22px;
+      font-style:normal;
+      font-size:.78rem;
+      color:#111827;
+      font-weight:900;
+      background:#fff;
+      border:1px solid #e5e7eb;
+      padding:2px 6px;
+      border-radius:999px;
+      box-shadow:0 6px 12px rgba(0,0,0,.08);
+    }
+
+    /* ====== PDA Menu ====== */
+    .pdaTop{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      align-items:center;
+      justify-content:space-between;
+      margin-bottom:10px;
+    }
+    .pdaTop .left{
+      display:flex;
+      flex-wrap:wrap;
+      align-items:center;
+      gap:10px;
+    }
+    .pdaTop .right{
+      display:flex;
+      flex-wrap:wrap;
+      align-items:center;
+      gap:10px;
+      justify-content:flex-end;
+    }
+
+    .pdaMenu{
+      display:grid;
+      grid-template-columns:repeat(4,minmax(0,1fr));
+      gap:10px;
+      margin-top:10px;
+    }
+    @media(max-width:980px){
+      .pdaMenu{ grid-template-columns:repeat(2,minmax(0,1fr)); }
+    }
+    @media(max-width:520px){
+      .pdaMenu{ grid-template-columns:1fr; }
+    }
+
+    .pdaBtn{
+      border:1px solid rgba(255,255,255,.16);
+      background: radial-gradient(circle at 0 0, rgba(209,27,63,.25), transparent 55%),
+                  linear-gradient(180deg, rgba(255,255,255,.12), rgba(0,0,0,.12));
+      color:#fff;
+      border-radius:18px;
+      padding:12px 12px;
+      cursor:pointer;
+      text-align:left;
+      transition:transform .12s ease, box-shadow .12s ease, border .12s ease;
+      min-height:96px;
+      box-shadow:0 14px 28px rgba(0,0,0,.22);
+    }
+    .pdaBtn:hover{
+      transform:translateY(-1px);
+      border-color: rgba(215,181,109,.45);
+      box-shadow:0 18px 34px rgba(0,0,0,.28);
+    }
+    .pdaBtn.active{
+      border-color: rgba(215,181,109,.75);
+      box-shadow:0 18px 36px rgba(215,181,109,.12), 0 18px 34px rgba(0,0,0,.28);
+    }
+    .pdaBtn .k{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      font-weight:1000;
+      letter-spacing:.02em;
+    }
+    .pdaBadge{
+      width:26px; height:26px;
+      border-radius:999px;
+      background: linear-gradient(135deg, #f4d48a, var(--dorado));
+      color:#3b1a08;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      font-weight:1000;
+      box-shadow:0 10px 20px rgba(215,181,109,.22);
+      flex-shrink:0;
+    }
+    .pdaBtn .s{
+      margin-top:6px;
+      font-size:.82rem;
+      color:rgba(255,255,255,.88);
+      line-height:1.25;
+    }
+    .pdaBtn .small{
+      margin-top:8px;
+      font-size:.78rem;
+      color:rgba(255,255,255,.80);
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+    .pillMini{
+      padding:3px 8px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.20);
+      background: rgba(0,0,0,.18);
+      font-weight:900;
+    }
+
+    /* ====== Activity ====== */
+    .activity{
+      margin-top:12px;
+      display:none;
+    }
+    .activity.active{ display:block; }
+
+    .q{
+      border-radius:18px;
+      border:1px solid #e5e7eb;
+      background:#fff;
+      padding:10px 10px;
+      margin-bottom:10px;
+    }
+    .qHead{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:10px;
+      margin-bottom:8px;
+    }
+    .qHead .n{
+      font-weight:1000;
+      color:#9f1239;
+      font-size:.9rem;
+    }
+    .qHead .type{
+      font-size:.78rem;
+      padding:3px 8px;
+      border-radius:999px;
+      background:#fff1f2;
+      border:1px solid #fecdd3;
+      color:#9f1239;
+      font-weight:1000;
+      white-space:nowrap;
+    }
+    .qText{
+      margin:0;
+      color:#111827;
+      font-size:.92rem;
+      line-height:1.35;
+      font-weight:700;
+    }
+
+    .opts{
+      margin-top:8px;
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+      gap:8px;
+    }
+    .opt{
+      border:1px solid #e5e7eb;
+      border-radius:14px;
+      padding:8px 9px;
+      display:flex;
+      gap:8px;
+      align-items:flex-start;
+      background:#f9fafb;
+      cursor:pointer;
+    }
+    .opt input{ margin-top:3px; }
+    .opt span{
+      font-size:.9rem;
+      color:#111827;
+      line-height:1.25;
+    }
+
+    .tfRow{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      padding:8px 9px;
+      border:1px solid #e5e7eb;
+      border-radius:14px;
+      background:#f9fafb;
+      margin-top:8px;
+    }
+    .tfRow .stmt{
+      font-size:.9rem;
+      color:#111827;
+      line-height:1.25;
+      font-weight:700;
+      flex:1;
+    }
+    .tfRow select{
+      border-radius:999px;
+      border:1px solid #e5e7eb;
+      padding:6px 10px;
+      font-weight:900;
+      background:#fff;
+      font-size:.86rem;
+    }
+
+    .matchGrid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
+      margin-top:8px;
+    }
+    @media(max-width:760px){ .matchGrid{ grid-template-columns:1fr; } }
+
+    .matchCol{
+      border:1px solid #e5e7eb;
+      background:#f9fafb;
+      border-radius:16px;
+      padding:10px;
+    }
+    .matchCol h4{
+      margin:0 0 8px;
+      color:#9f1239;
+      font-size:.9rem;
+    }
+    .matchItem{
+      border:1px dashed #d1d5db;
+      background:#fff;
+      border-radius:14px;
+      padding:8px 9px;
+      margin-bottom:8px;
+      font-size:.9rem;
+      font-weight:800;
+      color:#111827;
+    }
+    .matchCol select{
+      width:100%;
+      border-radius:999px;
+      border:1px solid #e5e7eb;
+      padding:8px 10px;
+      font-weight:900;
+      background:#fff;
+      font-size:.88rem;
+      margin-bottom:8px;
+    }
+
+    .actions{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      margin-top:10px;
+      align-items:center;
+      justify-content:space-between;
+    }
+    .actions .left, .actions .right{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      align-items:center;
+    }
+
+    .attempts{
+      font-weight:1000;
+      font-size:.86rem;
+      color:#111827;
+      padding:6px 10px;
+      border-radius:999px;
+      background:#fff1f2;
+      border:1px solid #fecdd3;
+    }
+
+    /* ====== Results ====== */
+    .resultsHeader{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      align-items:center;
+      justify-content:space-between;
+      margin-bottom:10px;
+    }
+    .resultsGrid{
+      display:grid;
+      grid-template-columns:repeat(4,minmax(0,1fr));
+      gap:10px;
+      margin-top:10px;
+    }
+    @media(max-width:980px){
+      .resultsGrid{ grid-template-columns:repeat(2,minmax(0,1fr)); }
+    }
+    @media(max-width:520px){
+      .resultsGrid{ grid-template-columns:1fr; }
+    }
+
+    .scorePill{
+      border-radius:18px;
+      border:1px solid #e5e7eb;
+      background:#fff;
+      padding:10px;
+      color:#111827;
+    }
+    .scorePill .t{
+      font-weight:1000;
+      color:#9f1239;
+      margin-bottom:6px;
+    }
+    .scorePill .v{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+      font-size:.95rem;
+      font-weight:900;
+    }
+    .scorePill .v span:last-child{
+      padding:4px 10px;
+      border-radius:999px;
+      border:1px solid #e5e7eb;
+      background:#f9fafb;
+    }
+
+    .badges{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      margin-top:10px;
+    }
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:8px 12px;
+      border-radius:999px;
+      border:1px solid #e5e7eb;
+      background:#fff;
+      color:#111827;
+      font-weight:1000;
+      font-size:.86rem;
+    }
+    .badge .dot{
+      width:10px; height:10px;
+      border-radius:999px;
+      background:#d1d5db;
+    }
+    .badge.on .dot{ background: var(--ok); box-shadow:0 0 0 4px rgba(22,163,74,.15); }
+
+    /* ====== Diploma ====== */
+    .diploma{
+      margin-top:12px;
+      border-radius:22px;
+      border:2px solid rgba(215,181,109,.8);
+      background: linear-gradient(135deg, #fff7e6, #ffffff);
+      color:#111827;
+      padding:16px;
+      position:relative;
+      overflow:hidden;
+    }
+    .diploma::before{
+      content:"";
+      position:absolute;
+      inset:-40px -40px auto auto;
+      width:240px; height:240px;
+      background: radial-gradient(circle at 30% 30%, rgba(215,181,109,.45), transparent 60%);
+      transform:rotate(20deg);
+      opacity:.6;
+      pointer-events:none;
+    }
+    .diplomaTop{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      flex-wrap:wrap;
+    }
+    .diplomaTop img{
+      height:46px;
+      width:auto;
+      background:#fff;
+      padding:4px 6px;
+      border-radius:10px;
+      border:1px solid #eee;
+    }
+    .diploma h3{
+      margin:10px 0 4px;
+      font-size:1.4rem;
+      color:#7a1231;
+    }
+    .diploma p{
+      margin:4px 0;
+      line-height:1.35;
+      font-size:.95rem;
+    }
+    .signature{
+      margin-top:12px;
+      display:flex;
+      align-items:flex-end;
+      justify-content:space-between;
+      gap:12px;
+      flex-wrap:wrap;
+    }
+    .sigLine{
+      width:260px;
+      border-top:2px solid #111827;
+      padding-top:6px;
+      font-weight:900;
+      color:#111827;
+    }
+    .sigSmall{
+      font-size:.85rem;
+      color:#374151;
+      font-weight:800;
+    }
+
+    footer{
+      padding:12px 16px;
+      border-top:1px solid rgba(255,255,255,.18);
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      align-items:center;
+      justify-content:space-between;
+      color:rgba(255,255,255,.78);
+      font-size:.82rem;
+      background: rgba(0,0,0,.12);
+    }
+    footer strong{ color:#fff; }
+    .copy{
+      font-style:italic;
+      opacity:.95;
+    }
+
+    /* Print: results + diploma */
+    @media print{
+      body{ background:#fff; color:#111827; }
+      .app{ padding:0; }
+      .watermark, header, footer, .btnRow, .pdaMenu, .pdaTop, .actions, .notice, .attempts { display:none!important; }
+      .frame{ box-shadow:none; border:none; border-radius:0; }
+      .view{ padding:0; }
+      .card{ box-shadow:none; }
+      .diploma{ page-break-inside:avoid; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="watermark">
+    <img src="../../img/escudo_escuela.png" alt="Marca de agua">
+  </div>
+
+  <div class="app">
+    <div class="frame">
+
+      <header>
+        <div class="logos">
+          <img src="../../img/sep_logo.png" alt="SEP">
+          <img src="../../img/escudo_escuela.png" alt="Escuela">
+        </div>
+
+        <div class="titleBlock">
+          <h1>🔴 ODA de Lenguajes estándar <span class="pill">Fase 5</span> <span class="pill">Contenido 6</span></h1>
+          <div class="meta">
+            Tema: <strong>Comprensión y producción de textos discontinuos</strong> (tablas, líneas del tiempo, cuadros, gráficas, mapas conceptuales).<br>
+            Plataforma interactiva con <strong>2 intentos por PDA</strong>, resultados, insignias y diploma.
+          </div>
+        </div>
+
+        <div class="author">
+          <strong>Mtro. Martín Reta</strong>
+          Primaria “Gral. Lázaro Cárdenas”<br>
+          Ejido Santa María, Pesquería, N.L.
+        </div>
+      </header>
+
+      <!-- =======================
+      VIEW 1: PORTADA
+      ======================== -->
+      <section id="viewCover" class="view active">
+        <div class="cover">
+          <div class="coverHero">
+            <h2>📚 Textos discontinuos: entender, organizar y presentar información</h2>
+            <p>
+              En esta ODA aprenderás a reconocer y usar <strong>textos discontinuos</strong> como tablas, líneas del tiempo,
+              cuadros cronológicos, gráficas, cuadros sinópticos y mapas conceptuales.
+            </p>
+
+            <div class="mini">
+              <div class="miniChip">✅ 4 PDA por grado</div>
+              <div class="miniChip">🎯 Autoevaluación</div>
+              <div class="miniChip">🔁 2 intentos por PDA</div>
+              <div class="miniChip">🏅 Insignias + diploma</div>
+            </div>
+
+            <div class="formRow">
+              <label for="studentName">Nombre del alumno(a):</label>
+              <input id="studentName" type="text" placeholder="Escribe tu nombre completo">
+            </div>
+
+            <div class="btnRow">
+              <button class="btn btnPrimary" id="btnGo5">➡️ Entrar a 5.º</button>
+              <button class="btn btnGold" id="btnGo6">➡️ Entrar a 6.º</button>
+              <button class="btn btnGhost" id="btnResetAll">🧹 Reiniciar ODA</button>
+            </div>
+
+            <div class="notice" id="coverNotice" style="display:none;"></div>
+          </div>
+
+          <div class="card">
+            <div class="cardTitle">
+              <h2>🧭 Guía de la ODA</h2>
+              <span class="tag">Modo estudiante</span>
+            </div>
+
+            <div class="guide">
+              <div class="avatarCircle">
+                <img src="../../img/avatar_guia.png" alt="Avatar guía">
+              </div>
+              <div class="guideText">
+                <p>
+                  <strong>¡Hola!</strong> Soy tu guía. Primero verás una <strong>pestaña informativa</strong> con ejemplos,
+                  y luego podrás entrar a tus <strong>PDA</strong> para contestar actividades. Al final, imprime tus resultados.
+                </p>
+              </div>
+            </div>
+
+            <div style="margin-top:10px;">
+              <p class="muted"><strong>Reglas:</strong></p>
+              <ul class="muted" style="margin:6px 0 0; padding-left:18px;">
+                <li>Escribe tu nombre antes de iniciar.</li>
+                <li>Cada PDA se puede intentar <strong>solo 2 veces</strong>.</li>
+                <li>Al finalizar, revisa insignias y genera tu diploma.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =======================
+      VIEW 2: INFO POR GRADO
+      ======================== -->
+      <section id="viewInfo" class="view">
+        <div class="pdaTop">
+          <div class="left">
+            <button class="btn btnGhost btnSmall" id="btnBackCover">⬅️ Volver a portada</button>
+            <span class="pill" id="infoGradePill">Grado</span>
+            <span class="pill">Pestaña informativa</span>
+          </div>
+          <div class="right">
+            <button class="btn btnGold btnSmall" id="btnGoPDA">🚀 Comenzar actividades</button>
+          </div>
+        </div>
+
+        <div class="grid">
+          <div class="card">
+            <div class="cardTitle">
+              <h2>🧩 ¿Qué son los textos discontinuos?</h2>
+              <span class="tag" id="infoTag">Explicación</span>
+            </div>
+
+            <p class="muted">
+              Los <strong>textos discontinuos</strong> son textos que <strong>no se leen como un cuento</strong> (de principio a fin en párrafos).
+              En lugar de eso, organizan la información con <strong>tablas, esquemas, gráficas o líneas del tiempo</strong>
+              para que sea más fácil <strong>entender, comparar, resumir y explicar</strong>.
+            </p>
+
+            <div style="margin-top:10px;" class="notice ok">
+              ✅ Tip: Cuando veas un texto discontinuo, pregúntate: <em>“¿Qué información organiza y cómo me ayuda a entenderla?”</em>
+            </div>
+
+            <div class="infoGrid">
+              <div class="exampleBox" id="boxExampleA">
+                <!-- Se rellena con ejemplos según grado -->
+              </div>
+              <div class="exampleBox" id="boxExampleB">
+                <!-- Se rellena con ejemplos según grado -->
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="cardTitle">
+              <h2>🎯 ¿Para qué sirven?</h2>
+              <span class="tag">Usos</span>
+            </div>
+
+            <div class="muted" style="display:grid; gap:8px;">
+              <div class="node"><strong>📌 Organizar</strong> información (por temas o categorías).</div>
+              <div class="node"><strong>🔍 Comparar</strong> datos rápidamente (más/menos, sí/no).</div>
+              <div class="node"><strong>⏳ Ordenar</strong> hechos en el tiempo (antes/después).</div>
+              <div class="node"><strong>🧠 Resumir</strong> ideas sin perder lo importante.</div>
+              <div class="node"><strong>🗣️ Exponer</strong> información a otras personas de forma clara.</div>
+            </div>
+
+            <div style="margin-top:10px;">
+              <div class="guide">
+                <div class="avatarCircle" style="width:76px;height:76px;">
+                  <img src="../../img/avatar_guia.png" alt="Avatar guía">
+                </div>
+                <div class="guideText">
+                  <p>
+                    <strong>Cuando estés listo(a)</strong>, da clic en <em>“Comenzar actividades”</em>.
+                    Recuerda: ¡solo <strong>2 intentos</strong> por cada PDA!
+                  </p>
+                </div>
+              </div>
+              <div class="btnRow">
+                <button class="btn btnPrimary" id="btnListenInfo">🔊 Escuchar explicación</button>
+                <button class="btn btnLight" id="btnStopVoice">⏹️ Detener voz</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =======================
+      VIEW 3: PDA + ACTIVIDADES
+      ======================== -->
+      <section id="viewPDA" class="view">
+        <div class="pdaTop">
+          <div class="left">
+            <button class="btn btnGhost btnSmall" id="btnBackInfo">⬅️ Volver a info</button>
+            <span class="pill" id="pdaGradePill">Grado</span>
+            <span class="pill">Menú por PDA</span>
+          </div>
+          <div class="right">
+            <button class="btn btnGold btnSmall" id="btnGoResults">📄 Ver resultados</button>
+          </div>
+        </div>
+
+        <div class="pdaMenu" id="pdaMenu"></div>
+
+        <div id="activityArea"></div>
+      </section>
+
+      <!-- =======================
+      VIEW 4: RESULTADOS + DIPLOMA
+      ======================== -->
+      <section id="viewResults" class="view">
+        <div class="resultsHeader">
+          <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
+            <button class="btn btnGhost btnSmall" id="btnBackPDA">⬅️ Volver a PDA</button>
+            <span class="pill">Hoja de resultados</span>
+            <span class="pill" id="resGradePill">Grado</span>
+          </div>
+          <div style="display:flex; gap:8px; flex-wrap:wrap;">
+            <button class="btn btnGold btnSmall" onclick="window.print()">🖨️ Imprimir / Guardar PDF</button>
+            <button class="btn btnPrimary btnSmall" id="btnResetAttempts">🔁 Reiniciar intentos (solo esta ODA)</button>
+          </div>
+        </div>
+
+        <div class="grid">
+          <div class="card">
+            <div class="cardTitle">
+              <h2>📊 Resultados del alumno</h2>
+              <span class="tag">Automático</span>
+            </div>
+
+            <p class="muted" id="resStudentLine">Alumno:</p>
+
+            <div class="resultsGrid" id="scoresGrid"></div>
+
+            <div class="notice ok" id="totalBox" style="margin-top:10px;">
+              Total: —
+            </div>
+
+            <div class="cardTitle" style="margin-top:10px;">
+              <h2>🏅 Insignias / Logros</h2>
+              <span class="tag">Motivación</span>
+            </div>
+            <div class="badges" id="badgesRow"></div>
+          </div>
+
+          <div class="card">
+            <div class="cardTitle">
+              <h2>🎓 Diploma imprimible</h2>
+              <span class="tag">Moderno</span>
+            </div>
+
+            <div class="diploma" id="diploma">
+              <div class="diplomaTop">
+                <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+                  <img src="../../img/sep_logo.png" alt="SEP">
+                  <img src="../../img/escudo_escuela.png" alt="Escuela">
+                </div>
+                <div class="pill" style="background:rgba(122,18,49,.08); border-color:rgba(122,18,49,.20); color:#7a1231;">
+                  Lenguajes · Fase 5
+                </div>
+              </div>
+
+              <h3>Diploma de Logro</h3>
+              <p id="dipName"><strong>Se otorga a:</strong> —</p>
+              <p id="dipGrade"><strong>Grado:</strong> —</p>
+              <p><strong>Contenido:</strong> Comprensión y producción de textos discontinuos para organizar y presentar información.</p>
+              <p id="dipResult"><strong>Resultado:</strong> —</p>
+
+              <div class="signature">
+                <div>
+                  <div class="sigLine">Mtro. Martín Reta</div>
+                  <div class="sigSmall">ODA creada por el Maestro Martín Reta</div>
+                </div>
+                <div class="sigSmall" id="dipDate">Fecha: —</div>
+              </div>
+
+              <p style="margin-top:10px; font-size:.82rem; color:#6b7280;">
+                © Secretaría de Educación Pública · Uso didáctico. Recurso digital interactivo.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <footer>
+        <div>
+          <strong>Créditos:</strong> ODA creada por el Maestro Martín Reta
+        </div>
+        <div class="copy">
+          © ODA Lenguajes estándar · Contenido 6 (Textos discontinuos) · Fase 5
+        </div>
+      </footer>
+
+    </div>
+  </div>
+
+  <script>
+    /***************
+     * STATE
+     ***************/
+    const APP_KEY = "ODA_LEN_STD_C6_DISCONTINUOS_V1";
+    const MAX_ATTEMPTS = 2;
+
+    const state = {
+      grade: null,          // "5" | "6"
+      student: "",
+      activePDA: 1,
+      // scores: { "5": {1:{best:0,attempts:0}, ...}, "6": {...} }
+      scores: null
+    };
+
+    function defaultScores(){
+      const base = { best:0, attempts:0, locked:false };
+      const mk = ()=>({1:{...base},2:{...base},3:{...base},4:{...base}});
+      return { "5": mk(), "6": mk() };
+    }
+
+    function load(){
+      try{
+        const raw = localStorage.getItem(APP_KEY);
+        if(!raw) return defaultScores();
+        const parsed = JSON.parse(raw);
+        // backfill
+        if(!parsed["5"] || !parsed["6"]) return defaultScores();
+        for(const g of ["5","6"]){
+          for(let p=1;p<=4;p++){
+            if(!parsed[g][p]) parsed[g][p] = {best:0,attempts:0,locked:false};
+            if(typeof parsed[g][p].best!=="number") parsed[g][p].best=0;
+            if(typeof parsed[g][p].attempts!=="number") parsed[g][p].attempts=0;
+            if(typeof parsed[g][p].locked!=="boolean") parsed[g][p].locked=false;
+            // lock rule
+            if(parsed[g][p].attempts>=MAX_ATTEMPTS) parsed[g][p].locked=true;
+          }
+        }
+        return parsed;
+      }catch(e){
+        return defaultScores();
+      }
+    }
+
+    function save(){
+      localStorage.setItem(APP_KEY, JSON.stringify(state.scores));
+    }
+
+    state.scores = load();
+
+    /***************
+     * VIEW HELPERS
+     ***************/
+    const views = {
+      cover: document.getElementById("viewCover"),
+      info: document.getElementById("viewInfo"),
+      pda: document.getElementById("viewPDA"),
+      results: document.getElementById("viewResults")
+    };
+
+    function showView(name){
+      Object.values(views).forEach(v=>v.classList.remove("active"));
+      views[name].classList.add("active");
+      window.scrollTo({top:0, behavior:"smooth"});
+    }
+
+    /***************
+     * VOICE
+     ***************/
+    let speaking = false;
+    function speak(text){
+      try{
+        window.speechSynthesis.cancel();
+        const u = new SpeechSynthesisUtterance(text);
+        u.lang = "es-MX";
+        u.rate = 1.0;
+        u.pitch = 1.0;
+        u.onend = ()=>{ speaking=false; };
+        speaking=true;
+        window.speechSynthesis.speak(u);
+      }catch(e){}
+    }
+    function stopSpeak(){
+      try{ window.speechSynthesis.cancel(); }catch(e){}
+      speaking=false;
+    }
+
+    /***************
+     * DATA: PDA TITLES + PROMPTS + ANSWERS
+     ***************/
+    const PDA_META = {
+      "5": [
+        {
+          title:"Identifico tipos (tabla/línea/cuadro)",
+          pdaText:"Reconoce características y funciones de tablas de doble entrada, líneas del tiempo y cuadros cronológicos."
+        },
+        {
+          title:"¿Para qué sirven?",
+          pdaText:"Reflexiona sobre la utilidad de textos discontinuos para organizar y presentar información."
+        },
+        {
+          title:"Selecciono información clave",
+          pdaText:"Selecciona información adecuada para organizarla en textos discontinuos."
+        },
+        {
+          title:"Lo hago legible",
+          pdaText:"Produce textos discontinuos pensando en el destinatario y la legibilidad (tamaño de letra y orden)."
+        }
+      ],
+      "6": [
+        {
+          title:"Identifico tipos (gráfica/sinóptico/mapa)",
+          pdaText:"Reconoce características y funciones de gráficas, cuadros sinópticos y mapas conceptuales."
+        },
+        {
+          title:"Posibilidades para exponer",
+          pdaText:"Reflexiona sobre cómo ayudan a organizar información para exponer a otros."
+        },
+        {
+          title:"Sintetizo sin perder sentido",
+          pdaText:"Sintetiza información sin perder significado y la organiza en textos discontinuos."
+        },
+        {
+          title:"Diseño con elementos gráficos",
+          pdaText:"Produce textos discontinuos usando tipografía, viñetas, espacios, interlineado y uso correcto de mayúsculas/minúsculas."
+        }
+      ]
+    };
+
+    // 5 preguntas por PDA, autoevaluables
+    // Tipos: mcq, tf, check, match
+    const PDA_QUESTIONS = {
+      "5": {
+        1: [
+          {type:"mcq", text:"Presenta hechos ordenados por años y fechas.", options:["Tabla de doble entrada","Línea del tiempo","Texto narrativo"], answer:1},
+          {type:"mcq", text:"Organiza información usando filas y columnas para comparar.", options:["Línea del tiempo","Tabla de doble entrada","Mapa conceptual"], answer:1},
+          {type:"mcq", text:"Registra eventos en orden cronológico en una lista con fechas.", options:["Cuadro cronológico","Gráfica","Carta"], answer:0},
+          {type:"mcq", text:"Sirve para comparar dos categorías (por ejemplo: día/noche; sí/no).", options:["Tabla de doble entrada","Cuento","Cuadro sinóptico"], answer:0},
+          {type:"mcq", text:"Representa visualmente una secuencia de hechos a lo largo del tiempo.", options:["Línea del tiempo","Lista de compras","Mapa de México"], answer:0},
+        ],
+        2: [
+          {type:"tf", text:"Los textos discontinuos ayudan a entender información más rápido.", answer:"V"},
+          {type:"tf", text:"Una línea del tiempo sirve para contar un cuento con párrafos largos.", answer:"F"},
+          {type:"tf", text:"Las tablas permiten comparar datos con facilidad.", answer:"V"},
+          {type:"tf", text:"Los textos discontinuos solo se usan en matemáticas.", answer:"F"},
+          {type:"tf", text:"Los cuadros cronológicos ordenan hechos por fecha.", answer:"V"},
+        ],
+        3: [
+          {type:"check", text:"Vas a hacer una línea del tiempo sobre tu vida escolar. Marca SOLO lo adecuado:",
+            options:["Tu comida favorita","Año en que entraste a primaria","Cambio de grado escolar","Tu canción favorita","Regreso a clases después de pandemia"],
+            answer:[1,2,4]
+          },
+          {type:"check", text:"Harás una tabla de doble entrada para comparar hábitos. Marca lo que sí sirve:",
+            options:["Horas de sueño / Días de la semana","Color favorito / Canción favorita","Deportes / ¿Me gusta? (sí/no)","Personajes de un cuento / diálogos","Frutas / ¿Las consumo? (sí/no)"],
+            answer:[0,2,4]
+          },
+          {type:"mcq", text:"Si quieres ordenar hechos por fecha, lo mejor es usar:", options:["Cuadro cronológico","Mapa conceptual","Texto descriptivo"], answer:0},
+          {type:"mcq", text:"Si quieres comparar dos categorías (por ejemplo: equipo A y B) conviene usar:", options:["Tabla de doble entrada","Poema","Leyenda"], answer:0},
+          {type:"mcq", text:"Si necesitas resumir ideas en recuadros con llaves, eso es más parecido a:", options:["Cuadro sinóptico","Línea del tiempo","Carta personal"], answer:0},
+        ],
+        4: [
+          {type:"mcq", text:"Para que un texto se lea bien, la letra debe ser:", options:["Muy pequeña","Clara y legible","Decorada y difícil"], answer:1},
+          {type:"mcq", text:"Si el destinatario es un niño pequeño, conviene usar:", options:["Letra grande y clara","Mucho texto junto","Letra muy delgada"], answer:0},
+          {type:"mcq", text:"Un buen texto discontinuo debe:", options:["Estar desordenado","Tener colores sin sentido","Estar organizado visualmente"], answer:2},
+          {type:"mcq", text:"El espacio entre filas o secciones ayuda a:", options:["Leer mejor la información","Confundir al lector","Quitar significado"], answer:0},
+          {type:"mcq", text:"Si usas un tamaño de letra demasiado pequeño, puede ocurrir que:", options:["No se lea bien","Se entienda mejor","Se vea más claro"], answer:0},
+        ],
+      },
+
+      "6": {
+        1: [
+          {type:"mcq", text:"Organiza ideas principales y secundarias usando llaves o sangrías.", options:["Mapa conceptual","Cuadro sinóptico","Línea del tiempo"], answer:1},
+          {type:"mcq", text:"Representa datos con barras, líneas o círculos.", options:["Tabla","Gráfica","Cuadro cronológico"], answer:1},
+          {type:"mcq", text:"Relaciona conceptos con conectores (causa, efecto, relación).", options:["Cuadro sinóptico","Mapa conceptual","Carta"], answer:1},
+          {type:"mcq", text:"Permite comparar cantidades de forma visual.", options:["Gráfica","Poema","Cuento"], answer:0},
+          {type:"mcq", text:"Resume información extensa en una estructura visual.", options:["Texto continuo","Gráfica","Cuadro sinóptico"], answer:2},
+        ],
+        2: [
+          {type:"tf", text:"Los textos discontinuos ayudan a explicar información compleja con claridad.", answer:"V"},
+          {type:"tf", text:"Un mapa conceptual no sirve para estudiar.", answer:"F"},
+          {type:"tf", text:"Las gráficas permiten interpretar datos rápidamente.", answer:"V"},
+          {type:"tf", text:"Los textos discontinuos solo se usan en la escuela.", answer:"F"},
+          {type:"tf", text:"Un cuadro sinóptico puede ayudar a exponer un tema.", answer:"V"},
+        ],
+        3: [
+          {type:"check", text:"Harás un cuadro sinóptico sobre el cuidado del agua. Marca SOLO lo adecuado:",
+            options:["Causas del desperdicio de agua","Historias personales","Consecuencias de la contaminación","Acciones para cuidarla","Chistes sobre el agua"],
+            answer:[0,2,3]
+          },
+          {type:"mcq", text:"Sintetizar información significa:", options:["Copiar todo tal cual","Elegir lo esencial sin cambiar el sentido","Inventar información"], answer:1},
+          {type:"mcq", text:"Si un texto tiene muchas ideas repetidas, para sintetizar conviene:", options:["Eliminar lo que no aporta","Agregar más ejemplos","Hacerlo más largo"], answer:0},
+          {type:"mcq", text:"Al pasar un texto a mapa conceptual, lo primero es:", options:["Elegir conceptos clave","Poner muchos colores","Escribir párrafos"], answer:0},
+          {type:"mcq", text:"Si cambias el sentido original al resumir, entonces:", options:["No se conservó el significado","Se hizo mejor","No importa"], answer:0},
+        ],
+        4: [
+          {type:"mcq", text:"Para un cartel informativo, la tipografía debe ser:", options:["Pequeña y decorativa","Clara y legible","Difícil de leer"], answer:1},
+          {type:"mcq", text:"Las viñetas sirven para:", options:["Desordenar","Organizar información","Borrar ideas"], answer:1},
+          {type:"mcq", text:"El interlineado ayuda a:", options:["Mejorar la lectura","Confundir","Quitar sentido"], answer:0},
+          {type:"mcq", text:"Usar mayúsculas y minúsculas correctamente permite:", options:["Leer mejor","Confundir al lector","No importa"], answer:0},
+          {type:"match",
+           text:"Relaciona el elemento gráfico con su función:",
+           left:["Gráfica","Cuadro sinóptico","Mapa conceptual","Viñetas","Tipografía clara"],
+           right:["Representar datos numéricos","Organizar ideas principales","Relacionar conceptos","Ordenar información","Facilitar la lectura"],
+           answer:[0,1,2,3,4]
+          }
+        ],
+      }
+    };
+
+    /***************
+     * BUILD INFO EXAMPLES
+     ***************/
+    function renderInfoExamples(){
+      const grade = state.grade;
+      document.getElementById("infoGradePill").textContent = `Grado: ${grade}°`;
+      document.getElementById("pdaGradePill").textContent = `Grado: ${grade}°`;
+      document.getElementById("resGradePill").textContent = `Grado: ${grade}°`;
+
+      const boxA = document.getElementById("boxExampleA");
+      const boxB = document.getElementById("boxExampleB");
+
+      if(grade === "5"){
+        document.getElementById("infoTag").textContent = "Ejemplos: 5.º";
+        boxA.innerHTML = `
+          <p class="exampleTitle">📋 Ejemplo: Tabla de doble entrada</p>
+          <div class="muted" style="margin-bottom:8px;">
+            Compara dos cosas a la vez (por ejemplo: <strong>frutas</strong> y <strong>si las consumo</strong>).
+          </div>
+          <table class="miniTable">
+            <thead>
+              <tr><th>Fruta</th><th>¿La consumo?</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Manzana</td><td>Sí</td></tr>
+              <tr><td>Plátano</td><td>Sí</td></tr>
+              <tr><td>Uva</td><td>No</td></tr>
+            </tbody>
+          </table>
+        `;
+
+        boxB.innerHTML = `
+          <p class="exampleTitle">⏳ Ejemplo: Línea del tiempo (vida escolar)</p>
+          <div class="muted" style="margin-bottom:8px;">
+            Ordena hechos por fecha: <strong>¿qué pasó primero y qué pasó después?</strong>
+          </div>
+          <div class="timeline">
+            <div class="tItem"><div class="tYear">2019</div><div class="tText">Entré a 1.º de primaria</div></div>
+            <div class="tItem"><div class="tYear">2021</div><div class="tText">Regresamos a clases presenciales</div></div>
+            <div class="tItem"><div class="tYear">2026</div><div class="tText">Estoy en 5.º grado</div></div>
+          </div>
+          <p class="muted" style="margin-top:8px;">
+            También existe el <strong>cuadro cronológico</strong>: lista con fechas y eventos (más “tabla” que línea).
+          </p>
+        `;
+      }else{
+        document.getElementById("infoTag").textContent = "Ejemplos: 6.º";
+        boxA.innerHTML = `
+          <p class="exampleTitle">📊 Ejemplo: Gráfica de barras (libros leídos)</p>
+          <div class="muted" style="margin-bottom:8px;">
+            Muestra cantidades para comparar rápido.
+          </div>
+          <div class="bars" aria-label="Gráfica de barras">
+            <div class="bar" style="height:40px;"><em>2</em><span>Ana</span></div>
+            <div class="bar" style="height:80px;"><em>4</em><span>Luis</span></div>
+            <div class="bar" style="height:60px;"><em>3</em><span>Leo</span></div>
+          </div>
+        `;
+
+        boxB.innerHTML = `
+          <p class="exampleTitle">🧠 Ejemplo: Mapa conceptual + Cuadro sinóptico</p>
+          <div class="mapWrap">
+            <div class="node"><strong>TEMA:</strong> Cuidado del agua</div>
+            <div class="branches">
+              <div class="node"><strong>Causas</strong><br><span class="muted">desperdicio, fugas</span></div>
+              <div class="node"><strong>Consecuencias</strong><br><span class="muted">escasez, contaminación</span></div>
+              <div class="node"><strong>Acciones</strong><br><span class="muted">cerrar llaves, reparar fugas</span></div>
+              <div class="node"><strong>Apoyos</strong><br><span class="muted">campañas, acuerdos</span></div>
+            </div>
+          </div>
+          <p class="muted" style="margin-top:8px;">
+            En 6.º usarás más elementos gráficos: <strong>viñetas, tipografía clara, espacios</strong> y buena organización.
+          </p>
+        `;
+      }
+    }
+
+    /***************
+     * BUILD PDA MENU + ACTIVITIES
+     ***************/
+    function buildPDA(){
+      const grade = state.grade;
+      const menu = document.getElementById("pdaMenu");
+      const area = document.getElementById("activityArea");
+
+      menu.innerHTML = "";
+      area.innerHTML = "";
+
+      const meta = PDA_META[grade];
+
+      for(let p=1;p<=4;p++){
+        const m = meta[p-1];
+        const st = state.scores[grade][p];
+        const locked = st.attempts >= MAX_ATTEMPTS;
+
+        const btn = document.createElement("button");
+        btn.className = "pdaBtn";
+        btn.dataset.pda = String(p);
+
+        btn.innerHTML = `
+          <div class="k">
+            <span class="pdaBadge">${p}</span>
+            <span>${m.title}</span>
+          </div>
+          <div class="s">${m.pdaText}</div>
+          <div class="small">
+            <span class="pillMini">Mejor: ${st.best}/5</span>
+            <span class="pillMini">${locked ? "🔒 Bloqueado" : `Intentos: ${st.attempts}/${MAX_ATTEMPTS}`}</span>
+          </div>
+        `;
+
+        btn.addEventListener("click", ()=> selectPDA(p));
+        menu.appendChild(btn);
+
+        const act = document.createElement("div");
+        act.className = "activity";
+        act.id = `activityPDA${p}`;
+
+        act.innerHTML = buildActivityHTML(grade, p);
+        area.appendChild(act);
+      }
+
+      selectPDA(state.activePDA || 1);
+    }
+
+    function selectPDA(p){
+      state.activePDA = p;
+
+      // highlight menu
+      document.querySelectorAll(".pdaBtn").forEach(b=>{
+        b.classList.toggle("active", Number(b.dataset.pda) === p);
+      });
+
+      // show activity
+      document.querySelectorAll(".activity").forEach(a=>a.classList.remove("active"));
+      const panel = document.getElementById(`activityPDA${p}`);
+      if(panel) panel.classList.add("active");
+
+      // update attempts text + lock buttons
+      refreshActivityControls();
+      window.scrollTo({top:0, behavior:"smooth"});
+    }
+
+    function buildActivityHTML(grade, p){
+      const st = state.scores[grade][p];
+      const locked = st.attempts >= MAX_ATTEMPTS;
+
+      const qs = PDA_QUESTIONS[grade][p];
+
+      let html = `
+        <div class="card" style="margin-top:12px;">
+          <div class="cardTitle">
+            <h2>🧪 PDA ${p} · Actividades</h2>
+            <span class="tag">5 reactivos</span>
+          </div>
+
+          <p class="muted"><strong>PDA:</strong> ${PDA_META[grade][p-1].pdaText}</p>
+
+          <div class="notice" id="statusPDA${p}" style="display:none;"></div>
+
+          <div class="actions">
+            <div class="left">
+              <span class="attempts" id="attemptsPDA${p}">Intentos: ${st.attempts}/${MAX_ATTEMPTS}</span>
+              <span class="attempts" style="background:#f0fdf4;border-color:#bbf7d0;color:#14532d;" id="bestPDA${p}">Mejor: ${st.best}/5</span>
+            </div>
+            <div class="right">
+              <button class="btn btnPrimary btnSmall" id="btnCheckPDA${p}">✅ Revisar</button>
+              <button class="btn btnLight btnSmall" id="btnClearPDA${p}">🧽 Limpiar</button>
+            </div>
+          </div>
+
+          <div style="margin-top:10px;">
+      `;
+
+      qs.forEach((q, idx)=>{
+        const n = idx+1;
+
+        if(q.type === "mcq"){
+          html += `
+            <div class="q" data-qtype="mcq" data-qid="${p}_${idx}">
+              <div class="qHead">
+                <div class="n">Reactivo ${n}</div>
+                <div class="type">Opción múltiple</div>
+              </div>
+              <p class="qText">${q.text}</p>
+              <div class="opts">
+                ${q.options.map((op, oi)=>`
+                  <label class="opt">
+                    <input type="radio" name="mcq_${p}_${idx}" value="${oi}">
+                    <span>${op}</span>
+                  </label>
+                `).join("")}
+              </div>
+            </div>
+          `;
+        }
+
+        if(q.type === "tf"){
+          html += `
+            <div class="q" data-qtype="tf" data-qid="${p}_${idx}">
+              <div class="qHead">
+                <div class="n">Reactivo ${n}</div>
+                <div class="type">Verdadero/Falso</div>
+              </div>
+              <p class="qText">${q.text}</p>
+              <div class="tfRow">
+                <div class="stmt">Elige tu respuesta:</div>
+                <select id="tf_${p}_${idx}">
+                  <option value="">— Selecciona —</option>
+                  <option value="V">Verdadero</option>
+                  <option value="F">Falso</option>
+                </select>
+              </div>
+            </div>
+          `;
+        }
+
+        if(q.type === "check"){
+          html += `
+            <div class="q" data-qtype="check" data-qid="${p}_${idx}">
+              <div class="qHead">
+                <div class="n">Reactivo ${n}</div>
+                <div class="type">Selecciona (varias)</div>
+              </div>
+              <p class="qText">${q.text}</p>
+              <div class="opts">
+                ${q.options.map((op, oi)=>`
+                  <label class="opt">
+                    <input type="checkbox" id="chk_${p}_${idx}_${oi}">
+                    <span>${op}</span>
+                  </label>
+                `).join("")}
+              </div>
+            </div>
+          `;
+        }
+
+        if(q.type === "match"){
+          // dropdown match (estable y fácil)
+          html += `
+            <div class="q" data-qtype="match" data-qid="${p}_${idx}">
+              <div class="qHead">
+                <div class="n">Reactivo ${n}</div>
+                <div class="type">Relaciona columnas</div>
+              </div>
+              <p class="qText">${q.text}</p>
+              <div class="matchGrid">
+                <div class="matchCol">
+                  <h4>Columna A</h4>
+                  ${q.left.map((l)=>`<div class="matchItem">${l}</div>`).join("")}
+                </div>
+                <div class="matchCol">
+                  <h4>Columna B (elige la relación correcta)</h4>
+                  ${q.left.map((l, li)=>`
+                    <select id="match_${p}_${idx}_${li}">
+                      <option value="">— Selecciona —</option>
+                      ${q.right.map((r, ri)=>`<option value="${ri}">${r}</option>`).join("")}
+                    </select>
+                  `).join("")}
+                </div>
+              </div>
+              <p class="muted" style="margin-top:8px;">
+                Tip: no repitas opciones; cada elemento suele tener una función principal.
+              </p>
+            </div>
+          `;
+        }
+      });
+
+      html += `
+          </div>
+        </div>
+      `;
+
+      // Attach script to buttons after insertion (done in refreshActivityControls)
+      return html;
+    }
+
+    function refreshActivityControls(){
+      const grade = state.grade;
+      for(let p=1;p<=4;p++){
+        const st = state.scores[grade][p];
+        const locked = st.attempts >= MAX_ATTEMPTS;
+
+        // update attempts/best labels
+        const aEl = document.getElementById(`attemptsPDA${p}`);
+        const bEl = document.getElementById(`bestPDA${p}`);
+        if(aEl) aEl.textContent = `Intentos: ${st.attempts}/${MAX_ATTEMPTS}`;
+        if(bEl) bEl.textContent = `Mejor: ${st.best}/5`;
+
+        // lock buttons if needed
+        const checkBtn = document.getElementById(`btnCheckPDA${p}`);
+        const clearBtn = document.getElementById(`btnClearPDA${p}`);
+        if(checkBtn){
+          checkBtn.classList.toggle("btnDisabled", locked);
+          checkBtn.disabled = locked;
+          // bind once safely: remove old by cloning
+          const newBtn = checkBtn.cloneNode(true);
+          checkBtn.parentNode.replaceChild(newBtn, checkBtn);
+          newBtn.addEventListener("click", ()=> gradeCheckPDA(p));
+        }
+        if(clearBtn){
+          const newBtn2 = clearBtn.cloneNode(true);
+          clearBtn.parentNode.replaceChild(newBtn2, clearBtn);
+          newBtn2.addEventListener("click", ()=> clearPDA(p));
+          if(locked){
+            // still allow limpiar (para ver, no reintenta), pero no afecta intentos
+            newBtn2.classList.remove("btnDisabled");
+            newBtn2.disabled = false;
+          }
+        }
+
+        // update menu pills
+        const menuBtn = document.querySelector(`.pdaBtn[data-pda="${p}"]`);
+        if(menuBtn){
+          const lockedTxt = locked ? "🔒 Bloqueado" : `Intentos: ${st.attempts}/${MAX_ATTEMPTS}`;
+          menuBtn.querySelectorAll(".pillMini")[0].textContent = `Mejor: ${st.best}/5`;
+          menuBtn.querySelectorAll(".pillMini")[1].textContent = lockedTxt;
+        }
+      }
+      save();
+    }
+
+    function clearPDA(p){
+      // clear inputs in active panel only
+      const panel = document.getElementById(`activityPDA${p}`);
+      if(!panel) return;
+
+      // radios
+      panel.querySelectorAll('input[type="radio"]').forEach(r=> r.checked=false);
+      // checks
+      panel.querySelectorAll('input[type="checkbox"]').forEach(c=> c.checked=false);
+      // selects
+      panel.querySelectorAll('select').forEach(s=> s.value="");
+
+      const status = document.getElementById(`statusPDA${p}`);
+      if(status){
+        status.style.display="none";
+        status.className="notice";
+        status.textContent="";
+      }
+      window.scrollTo({top:0, behavior:"smooth"});
+    }
+
+    function gradeCheckPDA(p){
+      const grade = state.grade;
+      const st = state.scores[grade][p];
+      const locked = st.attempts >= MAX_ATTEMPTS;
+      if(locked) return;
+
+      const qs = PDA_QUESTIONS[grade][p];
+      let score = 0;
+
+      // Evaluate each question
+      qs.forEach((q, idx)=>{
+        if(q.type==="mcq"){
+          const sel = document.querySelector(`input[name="mcq_${p}_${idx}"]:checked`);
+          if(sel && Number(sel.value) === q.answer) score++;
+        }
+        if(q.type==="tf"){
+          const val = document.getElementById(`tf_${p}_${idx}`).value;
+          if(val && val === q.answer) score++;
+        }
+        if(q.type==="check"){
+          const chosen = [];
+          q.options.forEach((op, oi)=>{
+            const c = document.getElementById(`chk_${p}_${idx}_${oi}`);
+            if(c && c.checked) chosen.push(oi);
+          });
+          const a = [...q.answer].sort((a,b)=>a-b);
+          const c = [...chosen].sort((a,b)=>a-b);
+          if(a.length === c.length && a.every((v,i)=>v===c[i])) score++;
+        }
+        if(q.type==="match"){
+          let ok = true;
+          for(let li=0; li<q.left.length; li++){
+            const v = document.getElementById(`match_${p}_${idx}_${li}`).value;
+            if(v==="" || Number(v)!== q.answer[li]){ ok=false; break; }
+          }
+          if(ok) score++;
+        }
+      });
+
+      // update attempts and best
+      st.attempts += 1;
+      if(score > st.best) st.best = score;
+      if(st.attempts >= MAX_ATTEMPTS) st.locked = true;
+
+      const status = document.getElementById(`statusPDA${p}`);
+      if(status){
+        const msg = `Resultado: ${score}/5. Mejor marca: ${st.best}/5. Intento ${st.attempts}/${MAX_ATTEMPTS}.`;
+        status.style.display="block";
+        status.textContent = msg;
+        status.className = (score>=4) ? "notice ok" : "notice";
+      }
+
+      refreshActivityControls();
+    }
+
+    /***************
+     * RESULTS
+     ***************/
+    function buildResults(){
+      const grade = state.grade;
+      const student = state.student || "—";
+      const grid = document.getElementById("scoresGrid");
+      const badges = document.getElementById("badgesRow");
+      const totalBox = document.getElementById("totalBox");
+
+      document.getElementById("resStudentLine").innerHTML =
+        `<strong>Alumno(a):</strong> ${escapeHtml(student)} · <strong>Grado:</strong> ${grade}°`;
+
+      grid.innerHTML = "";
+      let total = 0;
+
+      for(let p=1;p<=4;p++){
+        const st = state.scores[grade][p];
+        total += st.best;
+        const el = document.createElement("div");
+        el.className="scorePill";
+        el.innerHTML = `
+          <div class="t">PDA ${p}</div>
+          <div class="v"><span>Mejor marca</span><span>${st.best}/5</span></div>
+          <div class="v" style="margin-top:6px;"><span>Intentos</span><span>${st.attempts}/${MAX_ATTEMPTS}</span></div>
+        `;
+        grid.appendChild(el);
+      }
+
+      totalBox.textContent = `Total (mejores marcas): ${total}/20`;
+
+      // badges
+      badges.innerHTML = "";
+      const b1 = { name:"Explorador(a) de formatos", rule: total>=8 };
+      const b2 = { name:"Organizador(a) de ideas", rule: total>=12 };
+      const b3 = { name:"Maestro(a) del orden", rule: total>=16 };
+      const b4 = { name:"¡Nivel excelente!", rule: total>=18 };
+
+      [b1,b2,b3,b4].forEach(b=>{
+        const d = document.createElement("div");
+        d.className = "badge" + (b.rule ? " on" : "");
+        d.innerHTML = `<span class="dot"></span> ${b.name}`;
+        badges.appendChild(d);
+      });
+
+      // diploma
+      document.getElementById("dipName").innerHTML = `<strong>Se otorga a:</strong> ${escapeHtml(student)}`;
+      document.getElementById("dipGrade").innerHTML = `<strong>Grado:</strong> ${grade}° de primaria`;
+      document.getElementById("dipResult").innerHTML = `<strong>Resultado:</strong> ${total}/20 (mejores marcas)`;
+
+      const now = new Date();
+      const opts = { year:"numeric", month:"long", day:"numeric" };
+      document.getElementById("dipDate").textContent = `Fecha: ${now.toLocaleDateString("es-MX", opts)}`;
+    }
+
+    function escapeHtml(str){
+      return String(str).replace(/[&<>"']/g, s=>({
+        "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
+      }[s]));
+    }
+
+    /***************
+     * NAVIGATION
+     ***************/
+    const coverNotice = document.getElementById("coverNotice");
+
+    function ensureStudent(){
+      const name = document.getElementById("studentName").value.trim();
+      if(!name){
+        coverNotice.style.display="block";
+        coverNotice.className="notice";
+        coverNotice.textContent="⚠️ Escribe tu nombre para iniciar.";
+        return false;
+      }
+      coverNotice.style.display="none";
+      state.student = name;
+      return true;
+    }
+
+    function goGrade(grade){
+      if(!ensureStudent()) return;
+      state.grade = grade;
+      renderInfoExamples();
+      showView("info");
+    }
+
+    document.getElementById("btnGo5").addEventListener("click", ()=>goGrade("5"));
+    document.getElementById("btnGo6").addEventListener("click", ()=>goGrade("6"));
+
+    document.getElementById("btnBackCover").addEventListener("click", ()=>{
+      stopSpeak();
+      showView("cover");
+    });
+
+    document.getElementById("btnGoPDA").addEventListener("click", ()=>{
+      stopSpeak();
+      buildPDA();
+      showView("pda");
+    });
+
+    document.getElementById("btnBackInfo").addEventListener("click", ()=>{
+      stopSpeak();
+      showView("info");
+    });
+
+    document.getElementById("btnGoResults").addEventListener("click", ()=>{
+      stopSpeak();
+      buildResults();
+      showView("results");
+    });
+
+    document.getElementById("btnBackPDA").addEventListener("click", ()=>{
+      stopSpeak();
+      showView("pda");
+    });
+
+    document.getElementById("btnListenInfo").addEventListener("click", ()=>{
+      const g = state.grade;
+      const extra = (g==="5")
+        ? "En quinto grado verás tablas de doble entrada, líneas del tiempo y cuadros cronológicos."
+        : "En sexto grado verás gráficas, cuadros sinópticos y mapas conceptuales.";
+      speak("Los textos discontinuos no se leen como un cuento. Organizan información con tablas, esquemas, gráficas o líneas del tiempo para entender, comparar y explicar mejor. " + extra + " Cuando estés listo, comienza las actividades.");
+    });
+
+    document.getElementById("btnStopVoice").addEventListener("click", stopSpeak);
+
+    /***************
+     * RESET BUTTONS
+     ***************/
+    document.getElementById("btnResetAll").addEventListener("click", ()=>{
+      stopSpeak();
+      localStorage.removeItem(APP_KEY);
+      state.scores = defaultScores();
+      state.grade = null;
+      state.activePDA = 1;
+      coverNotice.style.display="block";
+      coverNotice.className="notice ok";
+      coverNotice.textContent="✅ ODA reiniciada. Puedes comenzar de nuevo.";
+      showView("cover");
+    });
+
+    document.getElementById("btnResetAttempts").addEventListener("click", ()=>{
+      stopSpeak();
+      // reinicia solo intentos/best (esta ODA)
+      state.scores = defaultScores();
+      save();
+      buildResults();
+      alert("Listo: intentos y mejores marcas reiniciados para esta ODA.");
+    });
+
+    // Safety: when changing name, keep in state
+    document.getElementById("studentName").addEventListener("input", (e)=>{
+      state.student = e.target.value.trim();
+    });
+  </script>
+<!-- ===========================
+PARTE 2/2 — Continúa el mismo archivo
+Pega esto debajo de la Parte 1/2 (cierra el HTML)
+=========================== -->
+  <script>
+    /***************
+     * SMALL UX IMPROVEMENTS
+     ***************/
+    // Autoselección suave del primer PDA al entrar
+    // (si no hay grado aún, no hace nada)
+    (function init(){
+      // Placeholder: keep cover view
+      // Nothing else required.
+    })();
+
+    // Atajo: si presiona Enter en nombre, no recarga; solo evita comportamiento raro en algunos editores
+    document.getElementById("studentName").addEventListener("keydown", (e)=>{
+      if(e.key === "Enter"){
+        e.preventDefault();
+      }
+    });
+
+    // Si el alumno ya estaba en un grado (por localStorage), no lo forzamos.
+    // Esta ODA se comporta como recurso de práctica, no como login.
+
+  </script>
+
+</body>
+</html>
