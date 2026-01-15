@@ -1,0 +1,1794 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>ODA de Lenguajes Estandar · Contenido 5 · Textos informativos (Fase 5)</title>
+
+<style>
+  :root{
+    --vino:#7a0b1f;
+    --vino2:#b1122a;
+    --rojo:#e11d48;
+    --dorado:#d7b56d;
+    --fondo:#fff6f7;
+    --card:#ffffff;
+    --text:#1f2937;
+    --muted:#6b7280;
+    --border:#ffd1d8;
+    --shadow:0 18px 48px rgba(122,11,31,.18);
+    --shadow2:0 10px 24px rgba(225,29,72,.18);
+    --ok:#16a34a;
+    --bad:#b91c1c;
+    --info:#0ea5e9;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0;
+    font-family:system-ui,-apple-system,"Segoe UI",sans-serif;
+    color:var(--text);
+    background:
+      radial-gradient(circle at 10% 0, rgba(225,29,72,.10), transparent 42%),
+      radial-gradient(circle at 100% 10%, rgba(215,181,109,.14), transparent 45%),
+      linear-gradient(180deg,#fff1f2 0,#fff7f8 45%,#ffffff 100%);
+    overflow:hidden;
+  }
+  /* Watermark escudo */
+  body::before{
+    content:"";
+    position:fixed;
+    inset:10% 12%;
+    background:url("escudo_escuela.png") center/contain no-repeat;
+    opacity:.035;
+    pointer-events:none;
+    z-index:0;
+  }
+
+  /* App shell */
+  .app{
+    position:relative;
+    z-index:1;
+    height:100%;
+    display:flex;
+    flex-direction:column;
+  }
+
+  /* Top bar */
+  .topbar{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    padding:12px 14px;
+    background:linear-gradient(90deg,var(--vino),var(--rojo));
+    color:#fff;
+    box-shadow:0 10px 30px rgba(122,11,31,.22);
+  }
+  .top-left{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    min-width:0;
+  }
+  .logo{
+    height:44px;
+    background:#fff;
+    border-radius:10px;
+    padding:4px 8px;
+    box-shadow:0 8px 18px rgba(0,0,0,.18);
+  }
+  .title{
+    min-width:0;
+  }
+  .title h1{
+    margin:0;
+    font-size:1.05rem;
+    line-height:1.1;
+    font-weight:800;
+    letter-spacing:.2px;
+  }
+  .title .meta{
+    margin-top:2px;
+    font-size:.78rem;
+    opacity:.92;
+  }
+  .top-right{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    text-align:right;
+    font-size:.78rem;
+    opacity:.95;
+  }
+  .top-right strong{display:block;font-size:.82rem}
+
+  /* Main layout */
+  .main{
+    flex:1;
+    min-height:0;
+    display:grid;
+    grid-template-columns: 310px 1fr;
+    gap:12px;
+    padding:12px;
+    overflow:hidden;
+  }
+  @media(max-width:980px){
+    .main{grid-template-columns:1fr}
+  }
+
+  /* Sidebar */
+  .side{
+    background:linear-gradient(180deg,#fff, #fff8f9);
+    border:1px solid var(--border);
+    border-radius:22px;
+    box-shadow:var(--shadow);
+    padding:12px;
+    display:flex;
+    flex-direction:column;
+    min-height:0;
+    overflow:hidden;
+  }
+  .side .block{
+    background:linear-gradient(180deg,#fff, #fff);
+    border:1px solid #ffe0e5;
+    border-radius:18px;
+    padding:10px;
+    box-shadow:var(--shadow2);
+    margin-bottom:10px;
+  }
+  .chip{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    padding:4px 10px;
+    border-radius:999px;
+    background:rgba(225,29,72,.10);
+    border:1px solid rgba(225,29,72,.22);
+    color:var(--vino);
+    font-size:.74rem;
+    font-weight:800;
+  }
+  .dot{width:8px;height:8px;border-radius:50%;background:var(--rojo); box-shadow:0 0 0 4px rgba(225,29,72,.18)}
+
+  .student{
+    display:grid;
+    gap:8px;
+  }
+  .field label{
+    font-size:.78rem;
+    font-weight:800;
+    color:#374151;
+    display:block;
+    margin-bottom:4px;
+  }
+  .field input, .field select{
+    width:100%;
+    border-radius:999px;
+    border:1px solid #ffd1d8;
+    padding:9px 12px;
+    outline:none;
+    font-size:.86rem;
+    background:#fff;
+  }
+  .field input:focus, .field select:focus{
+    border-color:rgba(225,29,72,.65);
+    box-shadow:0 0 0 3px rgba(225,29,72,.14);
+  }
+
+  .avatarCard{
+    display:grid;
+    grid-template-columns:110px 1fr;
+    gap:10px;
+    align-items:center;
+  }
+  .avatarWrap{
+    width:110px;height:110px;border-radius:22px;
+    background:radial-gradient(circle at 25% 15%, rgba(215,181,109,.55), rgba(225,29,72,.10) 55%, rgba(122,11,31,.08) 100%);
+    border:1px solid rgba(225,29,72,.25);
+    display:flex;align-items:center;justify-content:center;
+    overflow:hidden;
+  }
+  .avatarWrap img{width:110px;height:auto;object-fit:contain}
+  .avatarText{
+    font-size:.84rem;
+    color:#111827;
+  }
+  .avatarText strong{color:var(--vino)}
+  .mini{
+    margin-top:6px;
+    font-size:.78rem;
+    color:var(--muted);
+    line-height:1.35;
+  }
+
+  .sideBtns{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    margin-top:8px;
+  }
+
+  /* Buttons */
+  .btn{
+    border:none;
+    border-radius:999px;
+    padding:10px 12px;
+    font-weight:900;
+    cursor:pointer;
+    font-size:.82rem;
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    white-space:nowrap;
+    transition:transform .12s ease, box-shadow .12s ease, opacity .12s ease;
+  }
+  .btn:active{transform:translateY(1px)}
+  .btnPrimary{
+    background:linear-gradient(90deg,var(--vino),var(--rojo));
+    color:#fff;
+    box-shadow:0 12px 26px rgba(122,11,31,.22);
+  }
+  .btnGhost{
+    background:#fff;
+    color:var(--vino);
+    border:1px solid rgba(225,29,72,.25);
+  }
+  .btnSoft{
+    background:rgba(225,29,72,.10);
+    color:var(--vino);
+    border:1px solid rgba(225,29,72,.22);
+  }
+  .btnPrimary:hover{opacity:.95}
+  .btnGhost:hover,.btnSoft:hover{box-shadow:0 12px 24px rgba(225,29,72,.12)}
+
+  /* Content */
+  .content{
+    background:linear-gradient(180deg,#fff,#fff);
+    border:1px solid var(--border);
+    border-radius:22px;
+    box-shadow:var(--shadow);
+    padding:12px;
+    min-height:0;
+    overflow:hidden;
+    display:flex;
+    flex-direction:column;
+  }
+
+  .view{
+    flex:1;
+    min-height:0;
+    overflow:auto;
+    padding-right:4px;
+  }
+  .view::-webkit-scrollbar{width:10px}
+  .view::-webkit-scrollbar-thumb{background:#ffd1d8;border-radius:99px}
+  .view::-webkit-scrollbar-track{background:transparent}
+
+  .hero{
+    border-radius:20px;
+    border:1px solid #ffd1d8;
+    background:
+      radial-gradient(circle at 20% 0, rgba(225,29,72,.12), transparent 50%),
+      radial-gradient(circle at 90% 15%, rgba(215,181,109,.18), transparent 55%),
+      linear-gradient(180deg,#fff1f2,#fff);
+    padding:14px;
+    box-shadow:var(--shadow2);
+  }
+  .hero h2{
+    margin:0 0 6px;
+    font-size:1.15rem;
+    color:#111827;
+  }
+  .hero p{
+    margin:0;
+    color:#374151;
+    line-height:1.5;
+    font-size:.92rem;
+  }
+
+  .grid2{
+    margin-top:12px;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+  }
+  @media(max-width:980px){ .grid2{grid-template-columns:1fr} }
+
+  .card{
+    background:#fff;
+    border:1px solid #ffe0e5;
+    border-radius:18px;
+    padding:12px;
+    box-shadow:var(--shadow2);
+  }
+  .card h3{
+    margin:0 0 6px;
+    font-size:.98rem;
+    color:var(--vino);
+  }
+  .sub{
+    font-size:.82rem;
+    color:var(--muted);
+    margin:0 0 10px;
+    line-height:1.35;
+  }
+
+  .bigChoice{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+    margin-top:8px;
+  }
+  @media(max-width:520px){ .bigChoice{grid-template-columns:1fr} }
+  .bigBtn{
+    border-radius:18px;
+    padding:14px 14px;
+    border:1px solid rgba(225,29,72,.25);
+    background:linear-gradient(180deg,#fff,#fff7f8);
+    cursor:pointer;
+    box-shadow:0 12px 22px rgba(225,29,72,.10);
+    text-align:left;
+  }
+  .bigBtn:hover{transform:translateY(-1px)}
+  .bigBtn .t{font-weight:1000;color:#111827}
+  .bigBtn .m{margin-top:3px;font-size:.82rem;color:var(--muted)}
+  .bigBtn .tag{
+    margin-top:10px;
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    font-size:.75rem;
+    font-weight:900;
+    color:var(--vino);
+    padding:4px 10px;
+    border-radius:999px;
+    background:rgba(215,181,109,.20);
+    border:1px solid rgba(215,181,109,.35);
+  }
+
+  .pdaGrid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+    margin-top:10px;
+  }
+  @media(max-width:680px){ .pdaGrid{grid-template-columns:1fr} }
+  .pdaBtn{
+    border-radius:18px;
+    padding:12px 12px;
+    border:1px solid rgba(225,29,72,.25);
+    background:linear-gradient(180deg,#fff,#fff7f8);
+    cursor:pointer;
+    text-align:left;
+    box-shadow:0 12px 22px rgba(225,29,72,.10);
+    display:flex;
+    justify-content:space-between;
+    gap:10px;
+    align-items:flex-start;
+  }
+  .pdaBtn:hover{transform:translateY(-1px)}
+  .pdaBtn .left .k{
+    font-weight:1000;
+    color:#111827;
+    margin-bottom:2px;
+  }
+  .pdaBtn .left .d{
+    font-size:.82rem;
+    color:var(--muted);
+    line-height:1.35;
+  }
+  .pdaBtn .pill{
+    border-radius:999px;
+    padding:4px 10px;
+    font-size:.74rem;
+    font-weight:1000;
+    border:1px solid rgba(225,29,72,.25);
+    background:rgba(225,29,72,.10);
+    color:var(--vino);
+    white-space:nowrap;
+  }
+
+  .activityTabs{
+    margin-top:10px;
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+  }
+  .tab{
+    border-radius:999px;
+    padding:8px 12px;
+    font-weight:1000;
+    font-size:.80rem;
+    cursor:pointer;
+    border:1px solid rgba(225,29,72,.25);
+    background:#fff;
+    color:var(--vino);
+  }
+  .tab.active{
+    background:linear-gradient(90deg,var(--vino),var(--rojo));
+    color:#fff;
+    border-color:transparent;
+    box-shadow:0 12px 22px rgba(122,11,31,.18);
+  }
+
+  .notice{
+    margin-top:10px;
+    border-radius:16px;
+    padding:10px 12px;
+    border:1px solid rgba(14,165,233,.25);
+    background:rgba(14,165,233,.08);
+    color:#075985;
+    font-size:.84rem;
+    line-height:1.35;
+  }
+
+  .question{
+    border:1px solid #ffe0e5;
+    border-radius:16px;
+    padding:10px 10px;
+    background:linear-gradient(180deg,#fff,#fff);
+    margin-top:10px;
+    box-shadow:0 10px 18px rgba(225,29,72,.06);
+  }
+  .question .qTitle{
+    font-weight:1000;
+    color:#111827;
+    margin-bottom:6px;
+  }
+  .opts{
+    display:grid;
+    gap:6px;
+    margin-top:6px;
+  }
+  .opt{
+    display:flex;
+    gap:8px;
+    align-items:flex-start;
+    border:1px solid #ffe0e5;
+    border-radius:14px;
+    padding:8px 9px;
+    background:#fff;
+    cursor:pointer;
+  }
+  .opt input{margin-top:2px}
+  .opt:hover{box-shadow:0 10px 20px rgba(225,29,72,.08)}
+  .miniRow{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    margin-top:10px;
+    align-items:center;
+  }
+
+  .status{
+    margin-top:10px;
+    border-radius:16px;
+    padding:10px 12px;
+    border:1px solid #ffe0e5;
+    background:#fff7f8;
+    color:#111827;
+    font-size:.84rem;
+    line-height:1.35;
+  }
+  .status.good{border-color:rgba(22,163,74,.25); background:rgba(22,163,74,.08); color:#14532d}
+  .status.bad{border-color:rgba(185,28,28,.25); background:rgba(185,28,28,.08); color:#7f1d1d}
+
+  /* Match columns */
+  .matchGrid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+    margin-top:8px;
+  }
+  @media(max-width:640px){ .matchGrid{grid-template-columns:1fr} }
+  .matchCol{
+    border:1px solid #ffe0e5;
+    border-radius:16px;
+    padding:10px;
+    background:#fff;
+  }
+  .matchItem{
+    border:1px solid #ffe0e5;
+    border-radius:14px;
+    padding:8px 9px;
+    margin-bottom:8px;
+    background:linear-gradient(180deg,#fff,#fff7f8);
+  }
+  .matchItem label{
+    display:block;
+    font-weight:900;
+    color:#111827;
+    font-size:.84rem;
+    margin-bottom:6px;
+  }
+  .matchItem select{
+    width:100%;
+    border-radius:999px;
+    border:1px solid #ffd1d8;
+    padding:8px 10px;
+    font-size:.86rem;
+    outline:none;
+    background:#fff;
+  }
+
+  /* Order/timeline */
+  .orderWrap{
+    margin-top:8px;
+    display:grid;
+    gap:8px;
+  }
+  .orderRow{
+    display:grid;
+    grid-template-columns: 90px 1fr;
+    gap:8px;
+    align-items:center;
+    border:1px solid #ffe0e5;
+    border-radius:14px;
+    padding:8px 9px;
+    background:#fff;
+  }
+  .orderRow select{
+    border-radius:999px;
+    border:1px solid #ffd1d8;
+    padding:8px 10px;
+    font-size:.86rem;
+    outline:none;
+    background:#fff;
+    width:100%;
+  }
+  .orderRow .tag{
+    font-size:.74rem;
+    font-weight:1000;
+    color:var(--vino);
+    padding:4px 10px;
+    border-radius:999px;
+    background:rgba(225,29,72,.10);
+    border:1px solid rgba(225,29,72,.20);
+    text-align:center;
+  }
+
+  /* Schema (dropdown blanks) */
+  .schema{
+    margin-top:8px;
+    border:1px solid #ffe0e5;
+    border-radius:16px;
+    padding:10px;
+    background:#fff;
+  }
+  .schemaLine{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    align-items:center;
+    margin-top:8px;
+    padding:8px 9px;
+    border-radius:14px;
+    border:1px solid #ffe0e5;
+    background:linear-gradient(180deg,#fff,#fff7f8);
+  }
+  .schemaLine .lbl{
+    font-weight:1000;
+    color:#111827;
+    min-width:110px;
+  }
+  .schemaLine select{
+    flex:1;
+    min-width:220px;
+    border-radius:999px;
+    border:1px solid #ffd1d8;
+    padding:8px 10px;
+    font-size:.86rem;
+    outline:none;
+    background:#fff;
+  }
+
+  /* Results */
+  .resultsTable{
+    width:100%;
+    border-collapse:separate;
+    border-spacing:0;
+    margin-top:10px;
+    font-size:.84rem;
+    overflow:hidden;
+    border-radius:16px;
+    border:1px solid #ffe0e5;
+  }
+  .resultsTable th{
+    text-align:left;
+    padding:10px;
+    background:linear-gradient(90deg, rgba(122,11,31,.10), rgba(225,29,72,.08));
+    color:#111827;
+    font-weight:1000;
+    border-bottom:1px solid #ffe0e5;
+  }
+  .resultsTable td{
+    padding:10px;
+    border-bottom:1px solid #ffe0e5;
+    background:#fff;
+  }
+  .pillScore{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    border-radius:999px;
+    padding:4px 10px;
+    font-weight:1000;
+    border:1px solid #ffe0e5;
+    background:#fff7f8;
+  }
+  .pillScore.ok{border-color:rgba(22,163,74,.25); background:rgba(22,163,74,.08); color:#14532d}
+  .pillScore.bad{border-color:rgba(185,28,28,.25); background:rgba(185,28,28,.08); color:#7f1d1d}
+
+  .badges{
+    margin-top:10px;
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+  }
+  .badgeCard{
+    border-radius:999px;
+    padding:8px 12px;
+    font-weight:1000;
+    font-size:.82rem;
+    border:1px solid rgba(215,181,109,.38);
+    background:rgba(215,181,109,.18);
+    color:#6b4a12;
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+  }
+  .badgeCard .star{
+    width:22px;height:22px;border-radius:999px;
+    background:linear-gradient(180deg,#fef3c7,#f59e0b);
+    display:flex;align-items:center;justify-content:center;
+    color:#111827;
+    box-shadow:0 10px 18px rgba(245,158,11,.25);
+  }
+
+  /* Diploma print */
+  .printArea{display:none}
+  @media print{
+    body{overflow:visible}
+    .app,.topbar,.main{display:none !important}
+    .printArea{display:block}
+  }
+  .diploma{
+    width:100%;
+    padding:28px;
+    font-family:system-ui,-apple-system,"Segoe UI",sans-serif;
+    color:#111827;
+  }
+  .dFrame{
+    border:10px solid rgba(215,181,109,.55);
+    border-radius:24px;
+    padding:22px;
+    background:
+      radial-gradient(circle at 20% 0, rgba(225,29,72,.10), transparent 55%),
+      radial-gradient(circle at 100% 5%, rgba(215,181,109,.18), transparent 55%),
+      linear-gradient(180deg,#fff7f8,#ffffff);
+  }
+  .dTop{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:10px;
+  }
+  .dTop img{height:64px}
+  .dTitle{
+    text-align:center;
+    margin-top:16px;
+  }
+  .dTitle h1{
+    margin:0;
+    font-size:2.0rem;
+    color:var(--vino);
+    letter-spacing:.5px;
+  }
+  .dTitle p{margin:6px 0 0;color:#374151}
+  .dBody{
+    margin-top:18px;
+    font-size:1.05rem;
+    line-height:1.6;
+  }
+  .dName{
+    margin-top:12px;
+    font-size:1.65rem;
+    font-weight:1000;
+    color:#111827;
+    text-align:center;
+    padding:10px 12px;
+    border-radius:18px;
+    border:2px dashed rgba(225,29,72,.35);
+    background:rgba(225,29,72,.06);
+  }
+  .dFooter{
+    margin-top:18px;
+    display:flex;
+    justify-content:space-between;
+    gap:10px;
+    font-size:.95rem;
+    color:#374151;
+  }
+  .credit{
+    margin-top:14px;
+    font-size:.9rem;
+    color:#6b7280;
+    text-align:center;
+  }
+
+  .copyright{
+    margin-top:10px;
+    text-align:center;
+    font-size:.78rem;
+    color:#6b7280;
+  }
+</style>
+</head>
+
+<body>
+<div class="app">
+  <div class="topbar">
+    <div class="top-left">
+      <img class="logo" src="../../img/sep_logo.png" alt="SEP">
+      <div class="title">
+        <h1>ODA de Lenguajes Estandar · Contenido 5</h1>
+        <div class="meta">Comprensión y producción de textos informativos (Fase 5) · 2 intentos por actividad</div>
+      </div>
+    </div>
+    <div class="top-right">
+      <div>
+        <strong>Autor: Mtro. Martín Reta</strong>
+        Escuela Primaria “Gral. Lázaro Cárdenas”
+      </div>
+      <img class="logo" src="../../img/escudo_escuela.png" alt="Escuela">
+    </div>
+  </div>
+
+  <div class="main">
+    <!-- SIDEBAR -->
+    <aside class="side">
+      <div class="block">
+        <div class="chip"><span class="dot"></span>Lenguajes · Fase 5 · Estándar</div>
+        <div style="margin-top:8px" class="student">
+          <div class="field">
+            <label>Nombre del alumno(a)</label>
+            <input id="studentName" type="text" placeholder="Escribe tu nombre">
+          </div>
+          <div class="field">
+            <label>Grado</label>
+            <select id="gradeSelect">
+              <option value="" selected disabled>Selecciona 5.º o 6.º</option>
+              <option value="5">5.º</option>
+              <option value="6">6.º</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Grupo (opcional)</label>
+            <input id="groupName" type="text" placeholder="Ej. 5° A">
+          </div>
+        </div>
+
+        <div class="sideBtns">
+          <button class="btn btnPrimary" id="btnStart">🚀 Iniciar ODA</button>
+          <button class="btn btnGhost" id="btnHome">🏠 Portada</button>
+          <button class="btn btnSoft" id="btnResults">📊 Resultados</button>
+          <button class="btn btnGhost" id="btnDiploma">🏅 Diploma</button>
+        </div>
+
+        <div class="notice" id="attemptNotice">
+          💡 <strong>Regla:</strong> cada actividad tiene <strong>2 intentos</strong>. Al terminar, se guarda tu calificación automáticamente.
+        </div>
+      </div>
+
+      <div class="block">
+        <div class="avatarCard">
+          <div class="avatarWrap">
+            <img src="../../img/avatar_guia.png" alt="Avatar guía">
+          </div>
+          <div class="avatarText">
+            <strong>Guía:</strong> “Explorador(a) de textos”
+            <div class="mini">
+              • Lee con calma<br>
+              • Resuelve 2 actividades por PDA<br>
+              • Junta insignias y gana tu diploma
+            </div>
+          </div>
+        </div>
+
+        <div class="sideBtns" style="margin-top:10px">
+          <button class="btn btnSoft" id="btnVoice">🔊 Leer instrucciones</button>
+          <button class="btn btnGhost" id="btnPrintResults">🖨️ Imprimir resultados</button>
+        </div>
+
+        <div class="status" id="sideStatus">
+          📌 Elige tu grado y pulsa <strong>Iniciar ODA</strong>.
+        </div>
+      </div>
+    </aside>
+
+    <!-- CONTENT -->
+    <section class="content">
+      <div class="view" id="view"></div>
+    </section>
+  </div>
+
+  <div class="copyright">
+    ODA creada por el Maestro Martín Reta · © Uso educativo · Prohibida su venta
+  </div>
+</div>
+
+<!-- PRINT DIPLOMA AREA -->
+<div class="printArea" id="printArea"></div>
+<script>
+/* ==========================
+   ODA LENGUAJES ESTANDAR
+   Contenido 5 · Fase 5
+   ========================== */
+
+const CONTENT_TITLE = "Comprensión y producción de textos informativos";
+const MAX_ATTEMPTS = 2;
+const REACTIVOS_MIN = 5;
+
+/* ---- Lecturas (300–400 palabras) ---- */
+const readings = {
+  5: {
+    title: "El canal del ejido: cuando la información ayuda a cuidar",
+    text: `En el ejido Santa María, el canal de riego ha sido parte de la vida cotidiana por generaciones. No solo permite que los cultivos reciban agua; también crea un espacio donde aparecen aves, ranas, insectos y plantas que dependen de la humedad. En los últimos meses, varias familias han notado que el canal trae menos agua y que, en algunos tramos, el cauce se ve casi seco.
+
+Una posible causa es la falta de lluvia. Cuando llueve poco, disminuye el agua disponible para el canal y para los pozos cercanos. Otra causa puede ser el uso excesivo del agua en ciertos horarios, especialmente cuando varias parcelas riegan al mismo tiempo. Además, si existen fugas en compuertas o tuberías, una parte importante del agua se pierde antes de llegar a donde se necesita.
+
+También hay un problema que empeora la situación: la basura. Botellas, bolsas y restos de plástico pueden atorarse y formar tapones, dificultando el paso del agua. Esto puede provocar que el agua se estanque en un punto y falte en otros. Cuando el canal se ensucia, los animales se van, las plantas se secan y el entorno cambia.
+
+Para mejorar, la comunidad puede organizar jornadas de limpieza, revisar fugas, acordar horarios de riego y reportar daños. Pero antes de actuar, conviene informarse: leer textos informativos, hacer preguntas para investigar, identificar el tema central y organizar la información ayuda a tomar mejores decisiones. Cuando la información se comparte con claridad, es más fácil que todos comprendan el problema y participen en soluciones.`
+  },
+  6: {
+    title: "Información confiable para cuidar el canal: causas, vínculos y soluciones",
+    text: `El canal del ejido sostiene parte de la economía local y, al mismo tiempo, influye en el equilibrio del ambiente. En años recientes, la disminución del agua y la presencia de residuos han generado preocupación. Para comprender lo que sucede, es importante leer textos informativos y analizar cómo están organizados: qué datos presentan, qué explicaciones ofrecen y qué vínculos establecen entre causas, consecuencias y posibles soluciones.
+
+Un factor que se menciona con frecuencia es la escasez de lluvia. Cuando las lluvias son insuficientes, baja el nivel de agua en presas, ríos y pozos, lo que reduce el caudal que llega al canal. A esto se suma el consumo en temporadas de riego intensivo. Si muchas parcelas usan el agua al mismo tiempo, el canal puede no abastecer a todos. En algunos casos, hay fugas o compuertas dañadas que provocan desperdicio. Estos elementos no actúan por separado: se combinan y agravan el problema.
+
+Además, el canal puede presentar basura y sedimentos que dificultan el flujo. La contaminación no solo afecta el riego: también altera el hábitat de especies pequeñas y modifica las condiciones para plantas y animales. Por eso, al leer textos informativos, conviene identificar conexiones: contraste (antes/ahora), complementariedad (varias causas juntas) y causa–consecuencia (acciones y efectos).
+
+Si se quiere comunicar el problema, es clave registrar de manera convencional las fuentes consultadas: autor, título, editorial, fecha y lugar de publicación, páginas, etcétera. Así se fortalece la credibilidad. Cuando la comunidad usa información clara y confiable, puede proponer acuerdos: limpieza periódica, mantenimiento, horarios de riego, campañas de no tirar basura y reportes a autoridades. Informarse bien es un paso esencial para cuidar el canal de forma responsable.`
+  }
+};
+
+/* ---- Banco de actividades por grado y PDA ----
+   Cada PDA => 2 actividades
+   Cada actividad => mínimo 5 reactivos
+   Tipos: mcq, truefalse, match, order, schema
+*/
+const bank = {
+  5: {
+    p1: {
+      name: "PDA 1 · Selecciona y lee textos informativos",
+      desc: "Reconocer qué es un texto informativo y cómo se identifica.",
+      a1: { // MCQ (5 reactivos)
+        title: "Actividad 1 (5 reactivos) · Identifico características",
+        type: "mcq",
+        items: [
+          {q:"¿Cuál opción describe mejor un texto informativo?", options:["Cuenta una historia con personajes","Da datos y explica un tema real","Rima para expresar sentimientos","Incluye magia y seres fantásticos"], answer:1},
+          {q:"En la lectura, ¿qué intención predomina?", options:["Asustar al lector","Explicar un problema de la comunidad","Vender un producto","Hacer reír"], answer:1},
+          {q:"¿Qué elemento es común en textos informativos?", options:["Datos, causas o explicaciones","Hechizos","Diálogos teatrales","Rimas obligatorias"], answer:0},
+          {q:"Una pista de que es informativo es que…", options:["presenta hechos y posibles soluciones","siempre tiene final sorpresa","está escrito en versos","tiene moraleja de fábula"], answer:0},
+          {q:"El mejor título informativo para la lectura sería:", options:["La aventura del canal mágico","El canal del ejido: problemas y cuidados","Un poema para el agua","Leyenda del río escondido"], answer:1}
+        ]
+      },
+      a2: { // Schema (5 reactivos)
+        title: "Actividad 2 (5 reactivos) · Esquema rápido del texto",
+        type: "schema",
+        prompt: "Completa el esquema eligiendo la opción correcta en cada línea.",
+        items: [
+          {label:"Tema central", options:["Juegos en el canal","Cuidado y problemas del canal","Viaje a la ciudad","Fiesta del ejido"], answer:"Cuidado y problemas del canal"},
+          {label:"Problema principal", options:["Faltan árboles","Hay menos agua en el canal","Hay más peces","Hay más lluvia"], answer:"Hay menos agua en el canal"},
+          {label:"Causa posible", options:["Falta de lluvias","Hay más deporte","Hay más libros","Hay más fiestas"], answer:"Falta de lluvias"},
+          {label:"Otro factor", options:["Basura que obstruye","Más flores","Más música","Más pintura"], answer:"Basura que obstruye"},
+          {label:"Acción sugerida", options:["Tirar más bolsas","No tirar basura y reparar fugas","Cerrar el canal para siempre","Ignorar el problema"], answer:"No tirar basura y reparar fugas"}
+        ]
+      }
+    },
+    p2: {
+      name: "PDA 2 · Preguntas para buscar información",
+      desc: "Formular preguntas y usar signos de interrogación para investigar.",
+      a1: { // True/False (5)
+        title: "Actividad 1 (5 reactivos) · ¿Está bien escrita la pregunta?",
+        type: "truefalse",
+        items: [
+          {q:"¿Por qué el canal trae menos agua?", answer:true},
+          {q:"Como se está secando el canal?", answer:false},
+          {q:"¿Qué acciones puede hacer la comunidad para cuidarlo?", answer:true},
+          {q:"El canal se está secando.", answer:false},
+          {q:"¿Cómo afecta la basura al paso del agua?", answer:true}
+        ]
+      },
+      a2: { // Match (5 pares)
+        title: "Actividad 2 (5 reactivos) · Relación: pregunta ↔ respuesta del texto",
+        type: "match",
+        leftTitle:"Pregunta",
+        rightTitle:"Respuesta que aparece o se deduce del texto",
+        pairs: [
+          {left:"¿Una causa de menos agua?", right:"Falta de lluvias"},
+          {left:"¿Qué empeora el problema?", right:"Basura que obstruye"},
+          {left:"¿Qué se puede hacer?", right:"Jornadas de limpieza"},
+          {left:"¿Qué provoca una fuga?", right:"Se desperdicia agua"},
+          {left:"¿Por qué informarse?", right:"Ayuda a tomar decisiones"}
+        ]
+      }
+    },
+    p3: {
+      name: "PDA 3 · Reconoce el tema central",
+      desc: "Distinguir idea principal y relaciones simples del texto.",
+      a1: { // Order / timeline (5)
+        title: "Actividad 1 (5 reactivos) · Línea de tiempo del texto",
+        type: "order",
+        prompt: "Elige el número correcto (1–5) para ordenar la secuencia lógica.",
+        items: [
+          {text:"La comunidad nota menos agua en el canal", correct:2},
+          {text:"Se proponen acciones: limpieza, reparar fugas, acuerdos", correct:5},
+          {text:"Se explica que informarse ayuda a decidir mejor", correct:4},
+          {text:"Se mencionan causas: falta de lluvia, uso excesivo, fugas", correct:3},
+          {text:"El canal es importante para cultivos y seres vivos", correct:1}
+        ]
+      },
+      a2: { // Match cause→effect (5)
+        title: "Actividad 2 (5 reactivos) · Relación: causa ↔ consecuencia",
+        type: "match",
+        leftTitle:"Causa",
+        rightTitle:"Consecuencia",
+        pairs: [
+          {left:"Falta de lluvias", right:"Disminuye el agua disponible"},
+          {left:"Uso excesivo del agua", right:"No alcanza para todos"},
+          {left:"Fugas en compuertas", right:"Se pierde agua antes de llegar"},
+          {left:"Basura en el canal", right:"Se obstruye el paso del agua"},
+          {left:"Canal sucio", right:"Animales y plantas se afectan"}
+        ]
+      }
+    },
+    p4: {
+      name: "PDA 4 · Escribe textos informativos con puntuación",
+      desc: "Elegir puntuación adecuada y organizar ideas (sin escritura larga).",
+      a1: { // MCQ punctuation (5)
+        title: "Actividad 1 (5 reactivos) · Puntuación correcta",
+        type: "mcq",
+        items: [
+          {q:"Elige la oración mejor puntuada:", options:["El canal es importante por eso debemos cuidarlo","El canal es importante, por eso debemos cuidarlo.","El canal es importante por eso, debemos cuidarlo","El canal es importante; por eso debemos cuidarlo"], answer:1},
+          {q:"Elige la opción correcta:", options:["Primero limpiamos el canal después revisamos fugas","Primero limpiamos el canal, después revisamos fugas.","Primero limpiamos el canal después, revisamos fugas.","Primero, limpiamos el canal después revisamos fugas."], answer:1},
+          {q:"Elige la mejor:", options:["Hay basura, y por eso se obstruye.","Hay basura por eso se obstruye.","Hay basura; por eso se obstruye.","Hay basura por eso, se obstruye"], answer:2},
+          {q:"¿Cuál usa coma correctamente?", options:["En el ejido, el canal es importante.","En el ejido el canal, es importante.","En el ejido el canal es, importante.","En el ejido el, canal es importante."], answer:0},
+          {q:"¿Cuál tiene punto final correcto?", options:["Debemos cuidar el canal","Debemos cuidar el canal.","Debemos cuidar el canal,","Debemos cuidar el canal;"], answer:1}
+        ]
+      },
+      a2: { // Order ideas into paragraph (5)
+        title: "Actividad 2 (5 reactivos) · Ordeno ideas para un texto informativo",
+        type: "order",
+        prompt: "Ordena (1–5) para que el párrafo quede lógico.",
+        items: [
+          {text:"Por eso, conviene no tirar basura y reportar daños.", correct:5},
+          {text:"El canal del ejido ayuda a regar los cultivos.", correct:1},
+          {text:"Cuando hay fugas, se desperdicia agua.", correct:3},
+          {text:"Además, la basura puede obstruir el paso del agua.", correct:4},
+          {text:"Si llueve poco, el canal recibe menos agua.", correct:2}
+        ]
+      }
+    }
+  },
+
+  6: {
+    p1: {
+      name: "PDA 1 · Lee textos informativos y reflexiona sobre su organización",
+      desc: "Identificar partes del texto y su función (introducción, desarrollo, cierre).",
+      a1: { // Schema structure (5)
+        title: "Actividad 1 (5 reactivos) · Estructura del texto informativo",
+        type: "schema",
+        prompt: "Elige la opción correcta en cada línea.",
+        items: [
+          {label:"Introducción suele…", options:["presentar el tema","contar chistes","vender un producto","poner rimas"], answer:"presentar el tema"},
+          {label:"Desarrollo suele…", options:["dar datos y explicaciones","solo despedirse","solo preguntar","solo rimar"], answer:"dar datos y explicaciones"},
+          {label:"Cierre suele…", options:["proponer conclusiones o acciones","presentar personajes","inventar magia","cambiar el tema"], answer:"proponer conclusiones o acciones"},
+          {label:"En la lectura, un ejemplo de vínculo causa–consecuencia es:", options:["Menos lluvia → menos caudal","Más música → más peces","Más juegos → más riego","Más poesía → más agua"], answer:"Menos lluvia → menos caudal"},
+          {label:"La organización ayuda a…", options:["comprender mejor y tomar decisiones","confundir al lector","ocultar información","evitar el tema"], answer:"comprender mejor y tomar decisiones"}
+        ]
+      },
+      a2: { // Match fragment->función (5)
+        title: "Actividad 2 (5 reactivos) · Relación: idea ↔ función en el texto",
+        type: "match",
+        leftTitle:"Idea del texto",
+        rightTitle:"Función",
+        pairs: [
+          {left:"Presenta preocupación por disminución de agua y residuos", right:"Introduce el tema"},
+          {left:"Explica lluvia, consumo y fugas como factores", right:"Desarrolla causas"},
+          {left:"Describe contaminación y efectos en hábitat", right:"Explica consecuencias"},
+          {left:"Menciona contraste, complementariedad y causa–consecuencia", right:"Organiza relaciones"},
+          {left:"Propone acuerdos comunitarios", right:"Cierra con soluciones"}
+        ],
+        rightOptions: ["Introduce el tema","Desarrolla causas","Explica consecuencias","Organiza relaciones","Cierra con soluciones"]
+      }
+    },
+    p2: {
+      name: "PDA 2 · Identifica información específica y tema central",
+      desc: "Localizar datos puntuales y comprender el tema central del texto.",
+      a1: { // MCQ info específica (5)
+        title: "Actividad 1 (5 reactivos) · Encuentro información específica",
+        type: "mcq",
+        items: [
+          {q:"Según la lectura, ¿qué se debe registrar para dar credibilidad?", options:["Chistes y canciones","Fuentes: autor, título, editorial, fecha…","Solo dibujos","Solo opiniones"], answer:1},
+          {q:"Un ejemplo de complementariedad es:", options:["Varias causas juntas agravan el problema","El canal se vuelve un cuento","Rimar sobre el agua","Cambiar de tema"], answer:0},
+          {q:"¿Qué afecta además del riego?", options:["La biodiversidad del hábitat","La moda","Los videojuegos","Los deportes"], answer:0},
+          {q:"¿Qué acción comunitaria se propone?", options:["Tirar más basura","Mantenimiento y limpieza periódica","Cerrar la escuela","Ignorar reportes"], answer:1},
+          {q:"El tema central es:", options:["Un viaje al mar","Cuidar el canal usando información confiable","La historia de un héroe","Un poema de lluvia"], answer:1}
+        ]
+      },
+      a2: { // True/False inferencial (5)
+        title: "Actividad 2 (5 reactivos) · Verdadero o falso (nivel 6.º)",
+        type: "truefalse",
+        items: [
+          {q:"La lectura afirma que los factores del problema pueden combinarse.", answer:true},
+          {q:"La lectura dice que la contaminación solo afecta a los cultivos.", answer:false},
+          {q:"Registrar fuentes aumenta la credibilidad del texto informativo.", answer:true},
+          {q:"El texto sugiere ignorar los daños para evitar conflictos.", answer:false},
+          {q:"Causa–consecuencia ayuda a entender acciones y efectos.", answer:true}
+        ]
+      }
+    },
+    p3: {
+      name: "PDA 3 · Reconoce vínculos: contraste, complementariedad y causa–consecuencia",
+      desc: "Distinguir relaciones lógicas dentro del contenido informativo.",
+      a1: { // Match vínculo (5)
+        title: "Actividad 1 (5 reactivos) · Relación: vínculo ↔ ejemplo",
+        type: "match",
+        leftTitle:"Tipo de vínculo",
+        rightTitle:"Ejemplo",
+        pairs: [
+          {left:"Contraste", right:"Antes/ahora: menos agua y más residuos"},
+          {left:"Complementariedad", right:"Lluvia + consumo + fugas agravan"},
+          {left:"Causa–consecuencia", right:"Menos lluvia → menos caudal"},
+          {left:"Complementariedad", right:"Basura + sedimentos dificultan flujo"},
+          {left:"Causa–consecuencia", right:"Contaminación → cambia hábitat"}
+        ]
+      },
+      a2: { // Order (5) proceso lógico
+        title: "Actividad 2 (5 reactivos) · Ordeno el proceso para informar",
+        type: "order",
+        prompt: "Ordena (1–5) el proceso lógico de comunicar con información confiable.",
+        items: [
+          {text:"Leer un texto informativo y entender su organización", correct:1},
+          {text:"Identificar tema central y datos relevantes", correct:2},
+          {text:"Reconocer vínculos: contraste, complementariedad, causa–consecuencia", correct:3},
+          {text:"Registrar las fuentes consultadas de forma convencional", correct:4},
+          {text:"Proponer acciones comunitarias basadas en la información", correct:5}
+        ]
+      }
+    },
+    p4: {
+      name: "PDA 4 · Escribe textos informativos registrando fuentes (sin escritura larga)",
+      desc: "Elegir registro correcto de fuentes y organizar datos bibliográficos.",
+      a1: { // MCQ fuentes (5)
+        title: "Actividad 1 (5 reactivos) · ¿Qué registro de fuente está completo?",
+        type: "mcq",
+        items: [
+          {q:"¿Qué conjunto de datos es el más completo?", options:[
+            "Título y ya",
+            "Autor, título, editorial, fecha y lugar, páginas consultadas",
+            "Solo editorial",
+            "Solo fecha"
+          ], answer:1},
+          {q:"Si falta el autor en una fuente, el registro queda…", options:["Completo","Incompleto","Mejor","Más divertido"], answer:1},
+          {q:"Registrar páginas consultadas sirve para…", options:["Dibujar mejor","Ubicar la información exacta","Cambiar el tema","Hacer rimas"], answer:1},
+          {q:"En un texto informativo escolar, citar fuentes ayuda a…", options:["Confundir","Dar credibilidad","Ocultar datos","Evitar el análisis"], answer:1},
+          {q:"¿Cuál NO es un dato de fuente?", options:["Editorial","Lugar de publicación","Personaje principal de un cuento","Fecha"], answer:2}
+        ]
+      },
+      a2: { // Schema ordenar bibliografía (5)
+        title: "Actividad 2 (5 reactivos) · Orden correcto del registro bibliográfico",
+        type: "schema",
+        prompt: "Elige el orden correcto para registrar una fuente.",
+        items: [
+          {label:"Orden correcto", options:[
+            "Autor → Título → Editorial → Lugar/Fecha → Páginas",
+            "Título → Autor → Páginas → Editorial → Fecha",
+            "Editorial → Autor → Lugar → Título → Páginas",
+            "Fecha → Páginas → Autor → Título → Editorial"
+          ], answer:"Autor → Título → Editorial → Lugar/Fecha → Páginas"},
+          {label:"Dato que NO puede faltar", options:["Autor","Color favorito","Edad del lector","Apodo"], answer:"Autor"},
+          {label:"Dato útil para ubicar el libro", options:["Editorial","Chiste","Rima","Canción"], answer:"Editorial"},
+          {label:"Dato para saber cuándo se publicó", options:["Fecha","Género musical","Clima","Equipo"], answer:"Fecha"},
+          {label:"Dato para localizar la parte consultada", options:["Páginas","Gritos","Saltos","Emoji"], answer:"Páginas"}
+        ]
+      }
+    }
+  }
+};
+
+/* ==========================
+   Estado y utilidades
+   ========================== */
+const state = {
+  studentName: "",
+  groupName: "",
+  grade: null,
+  currentPDA: null,      // 'p1'...'p4'
+  currentAct: null,      // 'a1' or 'a2'
+  attempts: {},          // key: grade_pda_act => number
+  scores: {}             // key: grade_pda_act => {score, total, percent, locked}
+};
+
+const $ = (id)=>document.getElementById(id);
+
+function keyOf(grade,pda,act){ return `${grade}_${pda}_${act}`; }
+
+function clamp(n,min,max){ return Math.max(min,Math.min(max,n)); }
+
+function speak(text){
+  if(!('speechSynthesis' in window)) return;
+  window.speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = 'es-MX';
+  u.rate = 1.02;
+  window.speechSynthesis.speak(u);
+}
+
+function badgeSet(overall){
+  const badges = [];
+  if(overall>=90) badges.push({icon:"🏆", name:"Maestro(a) informativo(a) (90%+)"});
+  if(overall>=75) badges.push({icon:"⭐", name:"Lector(a) atento(a) (75%+)"});
+  if(overall>=60) badges.push({icon:"🧠", name:"Detective de ideas (60%+)"});
+  if(overall<60) badges.push({icon:"💪", name:"Sigo practicando (¡vas bien!)"});
+  // Constancia por completar intentos
+  const completedActs = Object.keys(state.scores).filter(k=>state.scores[k]?.locked).length;
+  if(completedActs>=8) badges.push({icon:"🎖️", name:"Constancia: completé todas las actividades"});
+  return badges;
+}
+
+/* ==========================
+   Renderizado de vistas
+   ========================== */
+function renderHome(){
+  state.currentPDA=null; state.currentAct=null;
+  const view = $("view");
+  view.innerHTML = `
+    <div class="hero">
+      <h2>🎯 ${CONTENT_TITLE}</h2>
+      <p>
+        En esta ODA practicarás cómo <strong>leer</strong>, <strong>comprender</strong> y <strong>producir</strong> información.
+        Selecciona tu grado y avanza por los <strong>4 PDA</strong>. Cada PDA tiene <strong>2 actividades</strong> (mínimo <strong>${REACTIVOS_MIN} reactivos</strong> cada una).
+      </p>
+      <div class="bigChoice">
+        <div class="bigBtn" onclick="quickGrade(5)">
+          <div class="t">📘 Entrar a 5.º</div>
+          <div class="m">Lectura + PDA 1–4 · Actividades variadas</div>
+          <div class="tag">2 intentos por actividad</div>
+        </div>
+        <div class="bigBtn" onclick="quickGrade(6)">
+          <div class="t">📕 Entrar a 6.º</div>
+          <div class="m">Más análisis: vínculos y registro de fuentes</div>
+          <div class="tag">Insignias + Diploma</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid2">
+      <div class="card">
+        <h3>🧭 Cómo jugar</h3>
+        <p class="sub">
+          1) Elige grado · 2) Lee la lectura · 3) Entra al PDA · 4) Resuelve Actividad 1 y 2 · 5) Revisa resultados.
+        </p>
+        <div class="notice">
+          🔒 Cuando agotes tus <strong>${MAX_ATTEMPTS} intentos</strong> en una actividad, se bloquea y se guarda tu calificación.
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>🏅 Logros</h3>
+        <p class="sub">Gana insignias por tu desempeño. Al final imprime tu <strong>diploma</strong> moderno.</p>
+        <div class="badges">
+          <div class="badgeCard"><span class="star">★</span> 90%+ = Trofeo</div>
+          <div class="badgeCard"><span class="star">★</span> 75%+ = Estrella</div>
+          <div class="badgeCard"><span class="star">★</span> 60%+ = Cerebro</div>
+        </div>
+      </div>
+    </div>
+  `;
+  setSideStatus("📌 Elige tu grado y pulsa Iniciar ODA (o entra rápido con los botones).");
+}
+
+function renderGradeHub(){
+  const g = state.grade;
+  const view = $("view");
+  const r = readings[g];
+  view.innerHTML = `
+    <div class="hero">
+      <h2>${g==5?"📘":"📕"} ${g}.º grado · Lectura inicial</h2>
+      <p><strong>${r.title}</strong></p>
+      <div class="notice">
+        💡 Lee y luego entra al PDA. Si quieres, pulsa <strong>“Leer instrucciones”</strong> para que el guía te acompañe con voz.
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:12px">
+      <h3>📖 ${r.title}</h3>
+      <p class="sub" style="white-space:pre-line">${r.text}</p>
+    </div>
+
+    <div class="card">
+      <h3>🧩 Menú de PDA</h3>
+      <p class="sub">Elige un PDA para comenzar. Cada uno tiene 2 actividades (mínimo 5 reactivos).</p>
+      <div class="pdaGrid">
+        ${renderPDABtn("p1")}
+        ${renderPDABtn("p2")}
+        ${renderPDABtn("p3")}
+        ${renderPDABtn("p4")}
+      </div>
+    </div>
+  `;
+  setSideStatus(`✅ Estás en ${g}.º. Entra a un PDA y resuelve sus 2 actividades.`);
+}
+
+function renderPDABtn(pda){
+  const g = state.grade;
+  const pd = bank[g][pda];
+  // progreso
+  const k1 = keyOf(g,pda,"a1");
+  const k2 = keyOf(g,pda,"a2");
+  const s1 = state.scores[k1]?.percent;
+  const s2 = state.scores[k2]?.percent;
+  const done = (state.scores[k1]?.locked && state.scores[k2]?.locked);
+  const pill = done ? "Completado ✅" : "Pendiente ⏳";
+  return `
+    <div class="pdaBtn" onclick="openPDA('${pda}')">
+      <div class="left">
+        <div class="k">${pd.name}</div>
+        <div class="d">${pd.desc}</div>
+        <div class="d" style="margin-top:6px">
+          Act.1: <strong>${s1!=null? s1+"%":"—"}</strong> · Act.2: <strong>${s2!=null? s2+"%":"—"}</strong>
+        </div>
+      </div>
+      <div class="pill">${pill}</div>
+    </div>
+  `;
+}
+
+function openPDA(pda){
+  state.currentPDA = pda;
+  state.currentAct = "a1";
+  renderPDA();
+}
+
+function renderPDA(){
+  const g = state.grade;
+  const pda = state.currentPDA;
+  const pd = bank[g][pda];
+  const view = $("view");
+
+  view.innerHTML = `
+    <div class="hero">
+      <h2>${g==5?"📘":"📕"} ${g}.º · ${pd.name}</h2>
+      <p>${pd.desc}</p>
+      <div class="activityTabs">
+        <div class="tab ${state.currentAct==="a1"?"active":""}" onclick="switchAct('a1')">Actividad 1</div>
+        <div class="tab ${state.currentAct==="a2"?"active":""}" onclick="switchAct('a2')">Actividad 2</div>
+        <div class="tab" onclick="renderGradeHub()">📚 Volver al menú PDA</div>
+      </div>
+      <div class="notice">
+        🎯 Recuerda: <strong>${MAX_ATTEMPTS} intentos</strong> por actividad. Cada actividad tiene <strong>${REACTIVOS_MIN} reactivos</strong> o más.
+      </div>
+    </div>
+
+    <div class="card" id="activityCard"></div>
+  `;
+
+  renderActivity();
+  setSideStatus(`🧩 ${pd.name} · ${state.currentAct.toUpperCase()} lista.`);
+}
+
+function switchAct(act){
+  state.currentAct = act;
+  renderActivity();
+}
+
+function renderActivity(){
+  const g = state.grade;
+  const pda = state.currentPDA;
+  const act = state.currentAct;
+  const actObj = bank[g][pda][act];
+  const k = keyOf(g,pda,act);
+
+  const attempts = state.attempts[k] ?? 0;
+  const locked = state.scores[k]?.locked ?? false;
+
+  const header = `
+    <h3>${actObj.title}</h3>
+    <p class="sub">${actObj.prompt?actObj.prompt:"Resuelve los reactivos. Luego pulsa Calificar."}</p>
+    <div class="miniRow">
+      <span class="pillScore ${locked?"ok":""}">🎟️ Intentos: <strong>${attempts}/${MAX_ATTEMPTS}</strong></span>
+      <span class="pillScore">📌 Estado: <strong>${locked?"Bloqueado":"Disponible"}</strong></span>
+      <button class="btn btnPrimary" ${locked?"disabled style='opacity:.55;cursor:not-allowed'":""} onclick="gradeCurrent()">✅ Calificar</button>
+      <button class="btn btnGhost" ${locked?"disabled style='opacity:.55;cursor:not-allowed'":""} onclick="resetCurrent()">🧹 Limpiar</button>
+    </div>
+    <div id="actStatus" class="status">${locked?"🔒 Esta actividad ya está bloqueada (2 intentos).":"💡 Resuelve y califica. Si fallas, puedes intentar otra vez (hasta 2 intentos)."}</div>
+  `;
+
+  const body = renderByType(actObj, k, locked);
+
+  $("activityCard").innerHTML = header + body;
+}
+
+/* ==========================
+   Renderers por tipo
+   ========================== */
+function renderByType(actObj, key, locked){
+  const dis = locked ? "disabled" : "";
+  const typ = actObj.type;
+
+  if(typ==="mcq"){
+    return actObj.items.map((it,idx)=>`
+      <div class="question">
+        <div class="qTitle">${idx+1}. ${escapeHtml(it.q)}</div>
+        <div class="opts">
+          ${it.options.map((op,j)=>`
+            <label class="opt">
+              <input ${dis} type="radio" name="${key}_q${idx}" value="${j}">
+              <span>${escapeHtml(op)}</span>
+            </label>
+          `).join("")}
+        </div>
+      </div>
+    `).join("");
+  }
+
+  if(typ==="truefalse"){
+    return actObj.items.map((it,idx)=>`
+      <div class="question">
+        <div class="qTitle">${idx+1}. ${escapeHtml(it.q)}</div>
+        <div class="opts" style="grid-template-columns:repeat(2,minmax(0,1fr));gap:8px">
+          <label class="opt">
+            <input ${dis} type="radio" name="${key}_q${idx}" value="true">
+            <span>Verdadero</span>
+          </label>
+          <label class="opt">
+            <input ${dis} type="radio" name="${key}_q${idx}" value="false">
+            <span>Falso</span>
+          </label>
+        </div>
+      </div>
+    `).join("");
+  }
+
+  if(typ==="match"){
+    // opciones derecha (si no vienen, las calculamos)
+    const rights = actObj.rightOptions ? actObj.rightOptions : [...new Set(actObj.pairs.map(p=>p.right))];
+    const shuffled = shuffle([...rights]);
+    const opts = shuffled.map(r=>`<option value="${escapeAttr(r)}">${escapeHtml(r)}</option>`).join("");
+    return `
+      <div class="matchGrid">
+        <div class="matchCol">
+          <div class="chip"><span class="dot"></span>${actObj.leftTitle || "Columna A"}</div>
+          <div style="margin-top:10px">
+            ${actObj.pairs.map((p,idx)=>`
+              <div class="matchItem">
+                <label>${idx+1}. ${escapeHtml(p.left)}</label>
+                <select ${dis} data-match="${key}_m${idx}">
+                  <option value="" selected disabled>Elige una opción…</option>
+                  ${opts}
+                </select>
+              </div>
+            `).join("")}
+          </div>
+        </div>
+        <div class="matchCol">
+          <div class="chip"><span class="dot"></span>${actObj.rightTitle || "Columna B"}</div>
+          <div class="notice" style="margin-top:10px">
+            💡 Selecciona la opción correcta para cada elemento de la columna A.
+          </div>
+          <div class="status">
+            ✅ Tip: No repitas opciones a menos que el texto lo permita.
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  if(typ==="order"){
+    // Cada ítem debe elegir posición 1..N
+    const n = actObj.items.length;
+    const options = Array.from({length:n},(_,i)=>`<option value="${i+1}">${i+1}</option>`).join("");
+    return `
+      <div class="orderWrap">
+        ${actObj.items.map((it,idx)=>`
+          <div class="orderRow">
+            <div class="tag">Paso</div>
+            <div style="display:grid; gap:6px">
+              <div style="font-weight:1000">${idx+1}. ${escapeHtml(it.text)}</div>
+              <select ${dis} data-order="${key}_o${idx}">
+                <option value="" selected disabled>Elige 1–${n}…</option>
+                ${options}
+              </select>
+            </div>
+          </div>
+        `).join("")}
+        <div class="notice">
+          💡 Consejo: no repitas números. Cada oración ocupa un lugar diferente.
+        </div>
+      </div>
+    `;
+  }
+
+  if(typ==="schema"){
+    return `
+      <div class="schema">
+        <div class="notice">${escapeHtml(actObj.prompt || "Completa el esquema eligiendo la opción correcta.")}</div>
+        ${actObj.items.map((it,idx)=>`
+          <div class="schemaLine">
+            <div class="lbl">${idx+1}. ${escapeHtml(it.label)}</div>
+            <select ${dis} data-schema="${key}_s${idx}">
+              <option value="" selected disabled>Elige…</option>
+              ${it.options.map(op=>`<option value="${escapeAttr(op)}">${escapeHtml(op)}</option>`).join("")}
+            </select>
+          </div>
+        `).join("")}
+      </div>
+    `;
+  }
+
+  return `<div class="status bad">Tipo de actividad no reconocido.</div>`;
+}
+
+/* ==========================
+   Calificar / Intentos
+   ========================== */
+function gradeCurrent(){
+  const g = state.grade, pda = state.currentPDA, act = state.currentAct;
+  const actObj = bank[g][pda][act];
+  const k = keyOf(g,pda,act);
+
+  if(state.scores[k]?.locked){
+    setActStatus("🔒 Esta actividad ya está bloqueada.", "bad");
+    return;
+  }
+
+  const result = computeScore(actObj, k);
+  // si no respondieron todo, igual se califica (pero avisamos)
+  state.attempts[k] = (state.attempts[k] ?? 0) + 1;
+
+  const percent = Math.round((result.score / result.total) * 100);
+  const locked = state.attempts[k] >= MAX_ATTEMPTS;
+
+  state.scores[k] = { score: result.score, total: result.total, percent, locked };
+
+  const msg = `✅ Calificación: ${result.score}/${result.total} (${percent}%). ` + (locked ? "🔒 Se agotaron intentos, actividad bloqueada." : `Te queda(n) ${MAX_ATTEMPTS - state.attempts[k]} intento(s).`);
+  setActStatus(msg, percent>=60 ? "good" : "bad");
+
+  // actualizar el panel para reflejar bloqueo/contadores
+  renderActivity();
+
+  // Si completó ambas actividades del PDA, sugerir resultados
+  const k1 = keyOf(g,pda,"a1"), k2 = keyOf(g,pda,"a2");
+  if(state.scores[k1]?.locked && state.scores[k2]?.locked){
+    setSideStatus(`🎉 ¡PDA completado! Puedes ir a Resultados o pasar al siguiente PDA.`);
+  }
+}
+
+function resetCurrent(){
+  const g = state.grade, pda = state.currentPDA, act = state.currentAct;
+  const k = keyOf(g,pda,act);
+  if(state.scores[k]?.locked){
+    setActStatus("🔒 No se puede limpiar: actividad bloqueada.", "bad");
+    return;
+  }
+  // limpiar inputs de la actividad actual
+  const area = $("activityCard");
+  area.querySelectorAll("input[type=radio]").forEach(i=>i.checked=false);
+  area.querySelectorAll("select").forEach(s=>s.value="");
+  setActStatus("🧹 Listo: respuestas limpiadas.", "");
+}
+
+function computeScore(actObj, key){
+  const typ = actObj.type;
+  let score = 0;
+  let total = 0;
+
+  if(typ==="mcq"){
+    total = actObj.items.length;
+    actObj.items.forEach((it,idx)=>{
+      const chosen = document.querySelector(`input[name="${key}_q${idx}"]:checked`);
+      if(chosen && Number(chosen.value)===it.answer) score++;
+    });
+  }
+
+  if(typ==="truefalse"){
+    total = actObj.items.length;
+    actObj.items.forEach((it,idx)=>{
+      const chosen = document.querySelector(`input[name="${key}_q${idx}"]:checked`);
+      if(chosen && (chosen.value==="true")===it.answer) score++;
+    });
+  }
+
+  if(typ==="match"){
+    total = actObj.pairs.length;
+    actObj.pairs.forEach((p,idx)=>{
+      const sel = document.querySelector(`select[data-match="${key}_m${idx}"]`);
+      if(sel && sel.value===p.right) score++;
+    });
+  }
+
+  if(typ==="order"){
+    total = actObj.items.length;
+    actObj.items.forEach((it,idx)=>{
+      const sel = document.querySelector(`select[data-order="${key}_o${idx}"]`);
+      if(sel && Number(sel.value)===it.correct) score++;
+    });
+  }
+
+  if(typ==="schema"){
+    total = actObj.items.length;
+    actObj.items.forEach((it,idx)=>{
+      const sel = document.querySelector(`select[data-schema="${key}_s${idx}"]`);
+      if(sel && sel.value===it.answer) score++;
+    });
+  }
+
+  return {score,total};
+}
+
+/* ==========================
+   Resultados + impresión
+   ========================== */
+function renderResults(){
+  if(!state.grade){
+    renderHome();
+    setSideStatus("⚠️ Selecciona un grado para ver resultados.");
+    return;
+  }
+  const g = state.grade;
+  const view = $("view");
+
+  const rows = ["p1","p2","p3","p4"].flatMap(p=>{
+    const pd = bank[g][p];
+    return ["a1","a2"].map(a=>{
+      const k = keyOf(g,p,a);
+      const s = state.scores[k];
+      const attempts = state.attempts[k] ?? 0;
+      return {
+        pda: pd.name,
+        act: a.toUpperCase(),
+        scoreText: s ? `${s.score}/${s.total}` : "—",
+        percent: s ? s.percent : null,
+        locked: s ? s.locked : false,
+        attempts
+      };
+    });
+  });
+
+  const completed = rows.filter(r=>r.locked).length;
+  const percents = rows.filter(r=>r.percent!=null).map(r=>r.percent);
+  const overall = percents.length ? Math.round(percents.reduce((a,b)=>a+b,0)/percents.length) : 0;
+
+  const badges = badgeSet(overall);
+
+  view.innerHTML = `
+    <div class="hero">
+      <h2>📊 Resultados · ${g}.º grado</h2>
+      <p>
+        Alumno(a): <strong>${escapeHtml(state.studentName||"—")}</strong>
+        ${state.groupName?`· Grupo: <strong>${escapeHtml(state.groupName)}</strong>`:""}
+        · Actividades bloqueadas: <strong>${completed}/8</strong>
+      </p>
+      <div class="notice">
+        🧾 Promedio (solo actividades calificadas): <strong>${overall}%</strong> · Insignias: <strong>${badges.length}</strong>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>📌 Detalle por PDA y actividad</h3>
+      <table class="resultsTable">
+        <thead>
+          <tr>
+            <th>PDA</th>
+            <th>Actividad</th>
+            <th>Intentos</th>
+            <th>Calificación</th>
+            <th>%</th>
+            <th>Estado</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${rows.map(r=>`
+            <tr>
+              <td>${escapeHtml(r.pda)}</td>
+              <td><strong>${r.act}</strong></td>
+              <td>${r.attempts}/${MAX_ATTEMPTS}</td>
+              <td>${r.scoreText}</td>
+              <td>${r.percent!=null? `<span class="pillScore ${r.percent>=60?"ok":"bad"}">${r.percent}%</span>` : "—"}</td>
+              <td>${r.locked? "🔒 Bloqueado" : "⏳ En curso"}</td>
+            </tr>
+          `).join("")}
+        </tbody>
+      </table>
+
+      <div class="badges">
+        ${badges.map(b=>`
+          <div class="badgeCard"><span class="star">${b.icon}</span>${escapeHtml(b.name)}</div>
+        `).join("")}
+      </div>
+
+      <div class="miniRow" style="margin-top:12px">
+        <button class="btn btnPrimary" onclick="renderDiploma()">🏅 Ver diploma</button>
+        <button class="btn btnGhost" onclick="window.print()">🖨️ Imprimir (usa Diploma o Resultados)</button>
+      </div>
+    </div>
+  `;
+
+  setSideStatus(`📊 Resultados listos: promedio ${overall}%.`);
+}
+
+function renderDiploma(){
+  if(!state.grade){
+    renderHome();
+    setSideStatus("⚠️ Selecciona un grado para generar diploma.");
+    return;
+  }
+  // Calcular overall
+  const g = state.grade;
+  const rows = ["p1","p2","p3","p4"].flatMap(p=>["a1","a2"].map(a=>{
+    const k = keyOf(g,p,a);
+    return state.scores[k]?.percent ?? null;
+  })).filter(x=>x!=null);
+
+  const overall = rows.length ? Math.round(rows.reduce((a,b)=>a+b,0)/rows.length) : 0;
+
+  const name = state.studentName || "________________________";
+  const group = state.groupName ? ` (${state.groupName})` : "";
+  const gradeText = `${g}.º grado`;
+  const today = new Date();
+  const dateStr = today.toLocaleDateString('es-MX', {year:'numeric',month:'long',day:'numeric'});
+
+  // Preparar área imprimible
+  const printArea = $("printArea");
+  printArea.innerHTML = `
+    <div class="diploma">
+      <div class="dFrame">
+        <div class="dTop">
+          <img src="../../img/sep_logo.png" alt="SEP">
+          <img src="../../img/escudo_escuela.png" alt="Escuela">
+        </div>
+        <div class="dTitle">
+          <h1>DIPLOMA</h1>
+          <p>ODA de Lenguajes Estandar · ${escapeHtml(CONTENT_TITLE)} · Fase 5</p>
+        </div>
+        <div class="dBody">
+          Se otorga el presente reconocimiento a:
+          <div class="dName">${escapeHtml(name)}${escapeHtml(group)}</div>
+          por su participación y desempeño en las actividades de comprensión y producción de textos informativos,
+          demostrando avance en el análisis, organización y uso de información confiable.
+          <div style="margin-top:10px;text-align:center">
+            <span class="pillScore ${overall>=60?"ok":"bad"}">Promedio: <strong>${overall}%</strong></span>
+            <span class="pillScore">Grado: <strong>${escapeHtml(gradeText)}</strong></span>
+          </div>
+        </div>
+        <div class="dFooter">
+          <div><strong>Fecha:</strong> ${escapeHtml(dateStr)}</div>
+          <div><strong>Docente:</strong> Mtro. Martín Reta</div>
+        </div>
+        <div class="credit">
+          ODA creada por el Maestro Martín Reta · © Uso educativo · Prohibida su venta
+        </div>
+      </div>
+    </div>
+  `;
+
+  // Mostrar una vista dentro del panel (no imprimible) + botón imprimir
+  const view = $("view");
+  view.innerHTML = `
+    <div class="hero">
+      <h2>🏅 Diploma · ${g}.º grado</h2>
+      <p>Revisa tu diploma. Si quieres, imprímelo.</p>
+      <div class="notice">🖨️ Para imprimir el diploma, pulsa <strong>Imprimir diploma</strong>.</div>
+      <div class="miniRow">
+        <button class="btn btnPrimary" onclick="printDiploma()">🖨️ Imprimir diploma</button>
+        <button class="btn btnGhost" onclick="renderResults()">📊 Volver a resultados</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Vista previa</h3>
+      <div style="border:1px solid #ffe0e5;border-radius:18px;overflow:hidden">
+        ${printArea.innerHTML}
+      </div>
+    </div>
+  `;
+  setSideStatus("🏅 Diploma generado.");
+}
+
+function printDiploma(){
+  // window.print usará @media print para mostrar printArea
+  window.print();
+}
+
+function printResultsOnly(){
+  // imprime la pantalla actual (resultados) tal cual
+  window.print();
+}
+
+/* ==========================
+   Navegación / Inicio
+   ========================== */
+function startODA(){
+  state.studentName = $("studentName").value.trim();
+  state.groupName = $("groupName").value.trim();
+  const g = $("gradeSelect").value;
+  if(!g){
+    setSideStatus("⚠️ Selecciona un grado para iniciar.", true);
+    return;
+  }
+  state.grade = Number(g);
+  renderGradeHub();
+}
+
+function quickGrade(g){
+  $("gradeSelect").value = String(g);
+  state.grade = g;
+  // guardar nombre/grupo si ya están
+  state.studentName = $("studentName").value.trim();
+  state.groupName = $("groupName").value.trim();
+  renderGradeHub();
+}
+
+function setSideStatus(text, warn=false){
+  const el = $("sideStatus");
+  el.className = "status" + (warn ? " bad" : "");
+  el.innerHTML = text;
+}
+
+function setActStatus(text, kind){
+  const el = $("actStatus");
+  if(!el) return;
+  el.className = "status" + (kind==="good" ? " good" : kind==="bad" ? " bad" : "");
+  el.innerHTML = text;
+}
+
+/* ==========================
+   Utilidades
+   ========================== */
+function shuffle(arr){
+  for(let i=arr.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [arr[i],arr[j]]=[arr[j],arr[i]];
+  }
+  return arr;
+}
+function escapeHtml(str){
+  return String(str)
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+}
+function escapeAttr(str){
+  return escapeHtml(str).replaceAll('"',"&quot;");
+}
+
+/* ==========================
+   Eventos UI
+   ========================== */
+$("btnStart").addEventListener("click", startODA);
+$("btnHome").addEventListener("click", renderHome);
+$("btnResults").addEventListener("click", renderResults);
+$("btnDiploma").addEventListener("click", renderDiploma);
+$("btnPrintResults").addEventListener("click", printResultsOnly);
+
+$("btnVoice").addEventListener("click", ()=>{
+  const name = $("studentName").value.trim();
+  const g = $("gradeSelect").value;
+  const gradeTxt = g ? `${g}º` : "tu grado";
+  const msg = `Hola ${name?name:"explorador o exploradora"}. Bienvenido a la ODA de Lenguajes. Selecciona ${gradeTxt}, lee la lectura inicial y entra al PDA. Recuerda: cada actividad tiene dos intentos. Lee con calma, responde y califica. ¡Vamos por tus insignias y tu diploma!`;
+  speak(msg);
+});
+
+/* Init */
+renderHome();
+</script>
+
+</body>
+</html>
+
