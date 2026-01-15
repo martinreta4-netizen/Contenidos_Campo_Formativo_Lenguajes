@@ -1,0 +1,1930 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ODA Lenguajes Estandar – Contenido 8: Reglamentos y convivencia (Fase 5)</title>
+
+  <style>
+    :root{
+      --vino:#6b0f1a;
+      --vino2:#8c1624;
+      --dorado:#d7b56d;
+      --dorado2:#f2d8a3;
+
+      --bg1:#fff7f8;
+      --bg2:#ffffff;
+
+      --ink:#1f2937;
+      --muted:#6b7280;
+
+      --card:#ffffff;
+      --border:#e5e7eb;
+
+      --ok:#16a34a;
+      --bad:#b91c1c;
+      --warn:#f59e0b;
+
+      --shadow:0 18px 45px rgba(17,24,39,.14);
+      --shadow2:0 10px 22px rgba(17,24,39,.10);
+      --radius:22px;
+    }
+
+    *{box-sizing:border-box;}
+    html,body{margin:0;padding:0;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--ink);background:radial-gradient(circle at top,var(--bg1) 0,var(--bg2) 45%,#fff 100%);}
+
+    /* App full screen feel */
+    .app{
+      min-height:100vh;
+      display:flex;
+      flex-direction:column;
+    }
+
+    /* Header */
+    .topbar{
+      position:sticky; top:0; z-index:50;
+      background:linear-gradient(90deg,#3b0a12,var(--vino),#3b0a12);
+      color:#fff;
+      border-bottom:3px solid rgba(215,181,109,.55);
+    }
+    .topbar-inner{
+      max-width:1280px;
+      margin:auto;
+      padding:10px 14px;
+      display:flex;
+      align-items:center;
+      gap:12px;
+    }
+    .logos{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      flex-shrink:0;
+    }
+    .logos img{
+      height:44px; width:auto;
+      background:#fff;
+      border-radius:10px;
+      padding:4px 8px;
+      box-shadow:0 8px 18px rgba(0,0,0,.18);
+    }
+    .titleblock{
+      min-width:0;
+      flex:1;
+    }
+    .titleblock h1{
+      margin:0;
+      font-size:1.05rem;
+      display:flex;
+      gap:8px;
+      align-items:center;
+      flex-wrap:wrap;
+      color:#fff;
+      letter-spacing:.2px;
+    }
+    .titleblock .meta{
+      margin-top:3px;
+      font-size:.85rem;
+      color:rgba(255,255,255,.86);
+    }
+    .titleblock .meta strong{color:var(--dorado2);}
+    .authorchip{
+      font-size:.8rem;
+      text-align:right;
+      color:rgba(255,255,255,.86);
+      flex-shrink:0;
+    }
+    .authorchip strong{display:block;color:#fff;font-size:.86rem;}
+
+    /* Main layout */
+    .main{
+      max-width:1280px;
+      width:100%;
+      margin:auto;
+      padding:14px;
+      display:grid;
+      grid-template-columns:320px 1fr;
+      gap:12px;
+    }
+    @media (max-width:980px){
+      .main{grid-template-columns:1fr;}
+    }
+
+    /* Sidebar */
+    .side{
+      position:relative;
+      background:linear-gradient(180deg,#fff,var(--bg1));
+      border:1px solid var(--border);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow2);
+      overflow:hidden;
+    }
+    .side::before{
+      content:"";
+      position:absolute; inset:-60px -60px auto auto;
+      width:170px;height:170px;
+      background:radial-gradient(circle at 30% 30%, rgba(215,181,109,.35), transparent 60%);
+      transform:rotate(15deg);
+      pointer-events:none;
+    }
+    .side-header{
+      padding:12px 12px 10px;
+      border-bottom:1px solid var(--border);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+    }
+    .badge-field{
+      display:inline-flex;
+      gap:8px;
+      align-items:center;
+      background:rgba(107,15,26,.08);
+      border:1px solid rgba(107,15,26,.18);
+      padding:6px 10px;
+      border-radius:999px;
+      font-size:.82rem;
+      font-weight:700;
+      color:var(--vino);
+      white-space:nowrap;
+    }
+    .badge-field .dot{
+      width:10px;height:10px;border-radius:999px;
+      background:linear-gradient(135deg,var(--vino),var(--vino2));
+      box-shadow:0 0 0 4px rgba(107,15,26,.12);
+    }
+
+    .avatarbox{
+      padding:10px 12px 12px;
+      display:flex;
+      gap:10px;
+      align-items:center;
+    }
+    .avatar{
+      width:64px;height:64px;border-radius:999px;
+      background:radial-gradient(circle at 30% 20%, var(--dorado2), var(--dorado) 35%, var(--vino) 95%);
+      border:2px solid rgba(215,181,109,.6);
+      overflow:hidden;
+      box-shadow:0 10px 24px rgba(0,0,0,.14);
+      flex-shrink:0;
+    }
+    .avatar img{width:100%;height:100%;object-fit:contain;}
+    .avatartext{
+      font-size:.86rem;
+      color:#111827;
+      line-height:1.2;
+    }
+    .avatartext strong{color:var(--vino);}
+
+    .side-body{
+      padding:10px 12px 12px;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+
+    .student-card{
+      background:#fff;
+      border:1px solid var(--border);
+      border-radius:16px;
+      padding:10px 10px;
+      box-shadow:0 10px 18px rgba(17,24,39,.06);
+    }
+    .row{
+      display:flex;
+      gap:8px;
+      align-items:center;
+      margin-bottom:8px;
+      font-size:.84rem;
+    }
+    .row label{width:82px;color:#374151;font-weight:650;}
+    .row input, .row select{
+      flex:1;
+      border-radius:999px;
+      border:1px solid #e5e7eb;
+      padding:8px 10px;
+      font-size:.84rem;
+      outline:none;
+      background:#fff;
+    }
+    .row input:focus, .row select:focus{
+      border-color:rgba(107,15,26,.55);
+      box-shadow:0 0 0 3px rgba(107,15,26,.12);
+    }
+
+    .nav-card{
+      background:#fff;
+      border:1px solid var(--border);
+      border-radius:16px;
+      padding:10px;
+      box-shadow:0 10px 18px rgba(17,24,39,.06);
+    }
+    .nav-title{
+      font-weight:800;
+      color:var(--vino);
+      margin-bottom:8px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+    }
+    .pill{
+      display:inline-flex;
+      gap:6px;
+      align-items:center;
+      padding:4px 8px;
+      border-radius:999px;
+      font-size:.78rem;
+      border:1px solid rgba(107,15,26,.18);
+      background:rgba(107,15,26,.06);
+      color:var(--vino);
+      white-space:nowrap;
+      font-weight:700;
+    }
+    .navlist{
+      display:grid;
+      grid-template-columns:1fr;
+      gap:7px;
+    }
+    .navbtn{
+      border:1px solid rgba(107,15,26,.22);
+      background:linear-gradient(180deg,#fff,#fff7f8);
+      border-radius:14px;
+      padding:10px 10px;
+      text-align:left;
+      cursor:pointer;
+      transition:transform .12s ease, box-shadow .12s ease, border-color .12s ease;
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      align-items:center;
+      font-size:.88rem;
+    }
+    .navbtn:hover{
+      transform:translateY(-1px);
+      box-shadow:0 12px 20px rgba(107,15,26,.12);
+      border-color:rgba(107,15,26,.38);
+    }
+    .navbtn.active{
+      border-color:rgba(215,181,109,.75);
+      box-shadow:0 14px 24px rgba(215,181,109,.16);
+      background:linear-gradient(180deg,#fff, rgba(215,181,109,.10));
+    }
+    .navbtn small{color:#6b7280;font-weight:650;}
+    .lock{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      width:26px;height:26px;
+      border-radius:999px;
+      background:rgba(185,28,28,.10);
+      border:1px solid rgba(185,28,28,.25);
+      color:var(--bad);
+      font-weight:900;
+      flex-shrink:0;
+    }
+    .go{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      width:26px;height:26px;
+      border-radius:999px;
+      background:rgba(22,163,74,.10);
+      border:1px solid rgba(22,163,74,.25);
+      color:var(--ok);
+      font-weight:900;
+      flex-shrink:0;
+    }
+
+    .side-actions{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+    }
+    .btn{
+      border:none;
+      cursor:pointer;
+      border-radius:999px;
+      padding:10px 12px;
+      font-weight:800;
+      font-size:.85rem;
+      display:inline-flex;
+      gap:8px;
+      align-items:center;
+      transition:transform .12s ease, box-shadow .12s ease, filter .12s ease;
+      user-select:none;
+    }
+    .btn:active{transform:translateY(1px);}
+    .btn-primary{
+      background:linear-gradient(135deg,var(--vino),var(--vino2));
+      color:#fff;
+      box-shadow:0 12px 22px rgba(107,15,26,.22);
+    }
+    .btn-primary:hover{filter:brightness(1.03); box-shadow:0 16px 26px rgba(107,15,26,.26);}
+    .btn-ghost{
+      background:#fff;
+      color:var(--vino);
+      border:1px solid rgba(107,15,26,.25);
+    }
+    .btn-ghost:hover{box-shadow:0 14px 22px rgba(107,15,26,.10);}
+    .btn-gold{
+      background:linear-gradient(135deg,var(--dorado),var(--dorado2));
+      color:#3b0a12;
+      box-shadow:0 12px 22px rgba(215,181,109,.18);
+    }
+
+    /* Content area */
+    .content{
+      background:linear-gradient(180deg,#fff, #fffdf9);
+      border:1px solid var(--border);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+      position:relative;
+    }
+
+    /* screen transitions */
+    .screen{
+      display:none;
+      padding:16px 16px 18px;
+      animation: fadeSlide .22s ease both;
+    }
+    .screen.active{display:block;}
+    @keyframes fadeSlide{
+      from{opacity:0; transform:translateY(10px);}
+      to{opacity:1; transform:translateY(0);}
+    }
+
+    .hero{
+      background:radial-gradient(circle at 20% 0, rgba(215,181,109,.20), transparent 55%),
+                 radial-gradient(circle at 80% 0, rgba(107,15,26,.16), transparent 55%),
+                 linear-gradient(180deg,#fff,#fff7f8);
+      border-bottom:1px solid var(--border);
+      padding:16px;
+    }
+    .hero h2{margin:0;color:var(--vino);font-size:1.25rem;}
+    .hero p{margin:6px 0 0;color:var(--muted);font-size:.92rem;line-height:1.35;}
+    .kpi{
+      display:flex; flex-wrap:wrap; gap:8px; margin-top:10px;
+    }
+    .chip{
+      display:inline-flex; align-items:center; gap:8px;
+      border-radius:999px;
+      padding:7px 10px;
+      background:#fff;
+      border:1px solid rgba(107,15,26,.18);
+      font-size:.84rem;
+      color:#111827;
+      box-shadow:0 10px 18px rgba(17,24,39,.06);
+      font-weight:750;
+    }
+    .chip .tag{
+      font-size:.78rem;
+      padding:3px 7px;
+      border-radius:999px;
+      background:rgba(107,15,26,.08);
+      color:var(--vino);
+      border:1px solid rgba(107,15,26,.16);
+      font-weight:800;
+    }
+
+    .panel{
+      padding:16px;
+    }
+
+    .two-cols{
+      display:grid;
+      grid-template-columns:1.2fr .8fr;
+      gap:12px;
+    }
+    @media(max-width:980px){ .two-cols{grid-template-columns:1fr;} }
+
+    .card{
+      background:#fff;
+      border:1px solid var(--border);
+      border-radius:18px;
+      padding:12px;
+      box-shadow:0 12px 20px rgba(17,24,39,.06);
+    }
+    .card h3{
+      margin:0 0 8px;
+      color:var(--vino);
+      font-size:1rem;
+    }
+    .card p{margin:0;color:#374151;font-size:.92rem;line-height:1.38;}
+
+    .video{
+      border-radius:18px;
+      overflow:hidden;
+      border:2px solid rgba(107,15,26,.18);
+      box-shadow:0 14px 24px rgba(107,15,26,.10);
+    }
+    .video iframe{
+      width:100%;
+      height:320px;
+      border:0;
+      display:block;
+    }
+
+    /* Activities */
+    .activity-head{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:10px;
+      margin-bottom:10px;
+    }
+    .activity-title{
+      display:flex; flex-direction:column; gap:2px;
+    }
+    .activity-title h3{margin:0;color:var(--vino);}
+    .activity-title .sub{color:var(--muted);font-size:.86rem;font-weight:650;}
+    .attempts{
+      display:inline-flex;
+      gap:6px;
+      align-items:center;
+      border-radius:999px;
+      padding:6px 10px;
+      background:rgba(107,15,26,.06);
+      border:1px solid rgba(107,15,26,.18);
+      font-size:.82rem;
+      font-weight:800;
+      color:var(--vino);
+      white-space:nowrap;
+    }
+
+    .q{
+      margin:10px 0;
+      padding:10px;
+      border-radius:14px;
+      border:1px solid rgba(107,15,26,.14);
+      background:linear-gradient(180deg,#fff,#fff7f8);
+    }
+    .q .stem{font-weight:800;color:#111827;font-size:.92rem;margin-bottom:8px;}
+    .opts{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(190px,1fr));
+      gap:8px;
+    }
+    .opt{
+      border:1px solid rgba(107,15,26,.20);
+      background:#fff;
+      border-radius:14px;
+      padding:10px 10px;
+      cursor:pointer;
+      font-weight:750;
+      font-size:.9rem;
+      transition:transform .10s ease, box-shadow .10s ease, border-color .10s ease;
+      user-select:none;
+      display:flex; gap:8px; align-items:flex-start;
+    }
+    .opt:hover{transform:translateY(-1px); box-shadow:0 12px 18px rgba(107,15,26,.10); border-color:rgba(107,15,26,.35);}
+    .opt .bullet{
+      width:22px;height:22px;border-radius:999px;
+      display:inline-flex;align-items:center;justify-content:center;
+      background:rgba(107,15,26,.08);
+      border:1px solid rgba(107,15,26,.18);
+      color:var(--vino);
+      font-weight:900;
+      flex-shrink:0;
+      margin-top:1px;
+    }
+    .opt.correct{
+      border-color:rgba(22,163,74,.55);
+      background:rgba(22,163,74,.08);
+    }
+    .opt.wrong{
+      border-color:rgba(185,28,28,.55);
+      background:rgba(185,28,28,.08);
+    }
+    .locked{
+      pointer-events:none;
+      opacity:.72;
+      filter:grayscale(.15);
+    }
+
+    .status{
+      margin-top:10px;
+      border-radius:14px;
+      padding:10px 10px;
+      border:1px solid var(--border);
+      font-size:.9rem;
+      font-weight:750;
+    }
+    .status.ok{border-color:rgba(22,163,74,.45); background:rgba(22,163,74,.08);}
+    .status.bad{border-color:rgba(185,28,28,.45); background:rgba(185,28,28,.08);}
+    .status.warn{border-color:rgba(245,158,11,.45); background:rgba(245,158,11,.12);}
+
+    /* Matching / ordering mini games */
+    .match-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
+      margin-top:10px;
+    }
+    @media(max-width:860px){ .match-grid{grid-template-columns:1fr;} }
+    .match-col{
+      border:1px solid rgba(107,15,26,.14);
+      border-radius:16px;
+      padding:10px;
+      background:linear-gradient(180deg,#fff,#fff7f8);
+    }
+    .match-item{
+      border:1px solid rgba(107,15,26,.18);
+      border-radius:14px;
+      padding:10px;
+      background:#fff;
+      margin:8px 0;
+      cursor:grab;
+      font-weight:750;
+    }
+    .dropzone{
+      border:2px dashed rgba(107,15,26,.35);
+      border-radius:14px;
+      padding:10px;
+      background:rgba(107,15,26,.03);
+      margin:8px 0;
+      min-height:44px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      font-weight:750;
+    }
+    .dropzone .slot{
+      flex:1;
+      padding:8px 10px;
+      border-radius:12px;
+      border:1px solid rgba(107,15,26,.14);
+      background:#fff;
+      min-height:40px;
+      display:flex;
+      align-items:center;
+    }
+    .dropzone.ok{border-color:rgba(22,163,74,.55); background:rgba(22,163,74,.08);}
+    .dropzone.bad{border-color:rgba(185,28,28,.55); background:rgba(185,28,28,.08);}
+
+    .order-list{
+      margin-top:10px;
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+    }
+    .order-item{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      border:1px solid rgba(107,15,26,.18);
+      border-radius:14px;
+      background:#fff;
+      padding:10px;
+    }
+    .order-item .move{
+      display:flex; flex-direction:column; gap:6px;
+    }
+    .mini{
+      border:none;
+      cursor:pointer;
+      border-radius:10px;
+      padding:6px 8px;
+      font-weight:900;
+      background:rgba(107,15,26,.08);
+      border:1px solid rgba(107,15,26,.18);
+      color:var(--vino);
+    }
+    .mini:hover{filter:brightness(1.03);}
+    .order-item .txt{font-weight:800;}
+
+    /* Results + Diploma */
+    .results-grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+      gap:10px;
+      margin-top:12px;
+    }
+    .rbox{
+      border-radius:18px;
+      border:1px solid rgba(107,15,26,.18);
+      background:linear-gradient(180deg,#fff,#fff7f8);
+      padding:12px;
+      box-shadow:0 10px 18px rgba(17,24,39,.06);
+    }
+    .rbox h4{margin:0 0 8px;color:var(--vino);}
+    .bigscore{
+      font-size:1.8rem;
+      font-weight:1000;
+      color:#111827;
+      display:flex;
+      gap:10px;
+      align-items:baseline;
+    }
+    .bigscore small{font-size:.9rem;color:var(--muted);font-weight:800;}
+
+    .badges{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      margin-top:10px;
+    }
+    .badge{
+      display:inline-flex;
+      gap:8px;
+      align-items:center;
+      border-radius:999px;
+      padding:8px 10px;
+      border:1px solid rgba(215,181,109,.55);
+      background:rgba(215,181,109,.14);
+      color:#3b0a12;
+      font-weight:900;
+      font-size:.86rem;
+    }
+
+    .diploma{
+      margin-top:12px;
+      border-radius:22px;
+      border:2px solid rgba(215,181,109,.75);
+      padding:14px;
+      background:radial-gradient(circle at 20% 0, rgba(215,181,109,.22), transparent 55%),
+                 radial-gradient(circle at 80% 0, rgba(107,15,26,.16), transparent 55%),
+                 linear-gradient(180deg,#fff,#fffdf7);
+    }
+    .diploma-top{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+    .diploma-top img{height:44px;background:#fff;border-radius:12px;padding:4px 8px;border:1px solid rgba(107,15,26,.12);}
+    .diploma h3{margin:10px 0 6px;color:var(--vino);font-size:1.3rem;}
+    .diploma p{margin:6px 0;color:#374151;font-weight:650;}
+    .sig{
+      margin-top:10px;
+      display:flex;
+      justify-content:space-between;
+      gap:14px;
+      flex-wrap:wrap;
+      color:#6b7280;
+      font-size:.9rem;
+    }
+    .line{
+      border-top:1px solid rgba(107,15,26,.25);
+      width:240px;
+      margin-top:26px;
+    }
+
+    /* Print */
+    @media print{
+      .topbar, .side, .no-print{display:none!important;}
+      .main{grid-template-columns:1fr; padding:0;}
+      .content{box-shadow:none;border:none;border-radius:0;}
+      body{background:#fff;}
+      .screen{display:block!important; animation:none!important;}
+    }
+  </style>
+</head>
+
+<body>
+<div class="app">
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div class="topbar-inner">
+      <div class="logos">
+        <img src="../../img/sep_logo.png" alt="SEP">
+        <img src="../../img/escudo_escuela.png" alt="Escuela">
+      </div>
+      <div class="titleblock">
+        <h1>📌 ODA Lenguajes Estandar · Contenido 8</h1>
+        <div class="meta">
+          <strong>Comparación y producción de documentos que regulan la convivencia</strong> · Fase 5 · 5.º y 6.º
+        </div>
+      </div>
+      <div class="authorchip">
+        <strong>ODA creada por el Maestro Martín Reta</strong>
+        © Uso educativo
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <div class="main">
+
+    <!-- SIDEBAR -->
+    <aside class="side">
+      <div class="side-header">
+        <div class="badge-field"><span class="dot"></span> Lenguajes</div>
+        <div class="pill" id="pillMode">Modo: Portada</div>
+      </div>
+
+      <div class="avatarbox">
+        <div class="avatar"><img src="../../img/avatar_guia.png" alt="Guía"></div>
+        <div class="avatartext">
+          <strong>¡Hola!</strong><br>
+          Hoy serás detective de reglas: claras, breves y justas.
+        </div>
+      </div>
+
+      <div class="side-body">
+        <div class="student-card">
+          <div class="row">
+            <label>Nombre</label>
+            <input id="studentName" type="text" placeholder="Escribe tu nombre">
+          </div>
+          <div class="row">
+            <label>Grado</label>
+            <select id="gradeSel">
+              <option value="">Elige…</option>
+              <option value="5">5.º</option>
+              <option value="6">6.º</option>
+            </select>
+          </div>
+          <div class="row" style="margin-bottom:0;">
+            <label>PDA</label>
+            <input id="pdaNow" type="text" value="—" readonly>
+          </div>
+        </div>
+
+        <div class="nav-card">
+          <div class="nav-title">
+            <span>🧭 Navegación</span>
+            <span class="pill" id="pillProgress">0%</span>
+          </div>
+          <div class="navlist" id="navList">
+            <!-- Se llena con JS según grado -->
+          </div>
+        </div>
+
+        <div class="side-actions no-print">
+          <button class="btn btn-primary" id="btnHome">🏠 Portada</button>
+          <button class="btn btn-ghost" id="btnInfo">📚 Hoja informativa</button>
+          <button class="btn btn-gold" id="btnResults">📄 Resultados</button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- CONTENT -->
+    <section class="content">
+
+      <!-- SCREEN: COVER -->
+      <div class="screen active" id="screenCover">
+        <div class="hero">
+          <h2>Bienvenida / Portada</h2>
+          <p>
+            En esta ODA aprenderás a <strong>comparar reglamentos</strong> y a <strong>producir reglas claras</strong>
+            para una convivencia respetuosa. Elige tu grado para comenzar.
+          </p>
+          <div class="kpi">
+            <div class="chip"><span class="tag">Reglas</span> Claras y concisas</div>
+            <div class="chip"><span class="tag">Verbos</span> Modo de mandato</div>
+            <div class="chip"><span class="tag">2 intentos</span> por actividad</div>
+            <div class="chip"><span class="tag">Auto</span> evaluable</div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="two-cols">
+            <div class="card">
+              <h3>🧑‍🎓 ¿Qué harás?</h3>
+              <p>
+                • Verás una hoja informativa y un video corto.<br>
+                • Resolverás <strong>2 actividades por PDA</strong>.<br>
+                • Cada actividad tiene <strong>mínimo 5 reactivos</strong>.<br>
+                • Al final obtendrás <strong>resultados, insignias y diploma</strong>.
+              </p>
+              <div style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap;" class="no-print">
+                <button class="btn btn-primary" id="btnStart5">Entrar a 5.º</button>
+                <button class="btn btn-primary" id="btnStart6">Entrar a 6.º</button>
+              </div>
+              <p style="margin-top:12px;color:var(--muted);font-size:.88rem;">
+                * Tip: primero escribe tu nombre en la barra lateral.
+              </p>
+            </div>
+
+            <div class="card">
+              <h3>🎯 Contenido 8</h3>
+              <p>
+                <strong>Comparación y producción de documentos que regulan la convivencia.</strong><br>
+                Trabajaremos reglamentos del aula y de la escuela, su función, concisión, verbos, numerales y revisión ortográfica.
+              </p>
+              <div style="margin-top:10px;">
+                <div class="pill">Campo formativo: Lenguajes</div>
+                <div class="pill" style="margin-left:6px;">Fase 5</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SCREEN: INFO (Grade intro + video) -->
+      <div class="screen" id="screenInfo">
+        <div class="hero">
+          <h2 id="infoTitle">Hoja informativa</h2>
+          <p id="infoSub">
+            Lee la situación inicial y mira el video. De aquí saldrán ideas para actividades de los PDA 1 y 2.
+          </p>
+          <div class="kpi">
+            <div class="chip"><span class="tag">Clave</span> reglas breves</div>
+            <div class="chip"><span class="tag">Clave</span> verbos + numerales</div>
+            <div class="chip"><span class="tag">Clave</span> convivencia justa</div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="two-cols">
+            <div class="card">
+              <h3>📖 Situación inicial</h3>
+              <p id="storyText">Selecciona grado para ver el texto.</p>
+
+              <div style="margin-top:12px;" class="no-print">
+                <button class="btn btn-primary" id="btnGoPDA1">🚀 Ir a PDA 1</button>
+              </div>
+              <p style="margin-top:10px;color:var(--muted);font-size:.88rem;">
+                Consejo: fíjate en palabras como <strong>respetar</strong>, <strong>evitar</strong>, <strong>cuidar</strong> y en numerales como <strong>1, 2, 3…</strong>
+              </p>
+            </div>
+
+            <div class="card">
+              <h3>🎬 Video de entrada</h3>
+              <div class="video">
+                <iframe
+                  src="https://www.youtube.com/embed/NwxQLwK1E8s"
+                  title="Video – Reglamentos y convivencia"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  allowfullscreen></iframe>
+              </div>
+              <p style="margin-top:10px;color:var(--muted);font-size:.88rem;">
+                Después del video, empieza las actividades del PDA 1.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SCREEN: PDA / ACTIVITY -->
+      <div class="screen" id="screenActivity">
+        <div class="hero">
+          <h2 id="actTitle">PDA — Actividad</h2>
+          <p id="actSub">Resuelve los reactivos. Cada actividad tiene 2 intentos.</p>
+          <div class="kpi">
+            <div class="chip"><span class="tag">Actividad</span> <span id="actTag">—</span></div>
+            <div class="chip"><span class="tag">Intentos</span> <span id="actAttempts">0/2</span></div>
+            <div class="chip"><span class="tag">Reactivos</span> <span id="actCount">5</span></div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="card">
+            <div class="activity-head">
+              <div class="activity-title">
+                <h3 id="actName">—</h3>
+                <div class="sub" id="actHint">—</div>
+              </div>
+              <div class="attempts" id="attemptChip">Intentos: 0/2</div>
+            </div>
+
+            <div id="activityArea">
+              <!-- Se renderiza con JS -->
+            </div>
+
+            <div id="statusBox" class="status" style="display:none;"></div>
+
+            <div style="margin-top:12px; display:flex; gap:10px; flex-wrap:wrap;" class="no-print">
+              <button class="btn btn-primary" id="btnCheck">✅ Revisar actividad</button>
+              <button class="btn btn-ghost" id="btnRetry">🔁 Reintentar</button>
+              <button class="btn btn-gold" id="btnNext">➡️ Siguiente</button>
+            </div>
+
+            <p style="margin-top:10px;color:var(--muted);font-size:.88rem;">
+              * Al revisar, se registra 1 intento. Si agotas 2 intentos, la actividad se bloquea.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- SCREEN: RESULTS -->
+      <div class="screen" id="screenResults">
+        <div class="hero">
+          <h2>Resultados</h2>
+          <p>
+            Aquí se muestran tus calificaciones, insignias y tu diploma imprimible.
+          </p>
+          <div class="kpi">
+            <div class="chip"><span class="tag">Nombre</span> <span id="rName">—</span></div>
+            <div class="chip"><span class="tag">Grado</span> <span id="rGrade">—</span></div>
+            <div class="chip"><span class="tag">Puntaje</span> <span id="rScore">—</span></div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="results-grid">
+            <div class="rbox">
+              <h4>📊 Resumen</h4>
+              <div class="bigscore">
+                <span id="rBig">0</span>
+                <small>/ <span id="rTotal">0</span> aciertos</small>
+              </div>
+              <p style="margin:8px 0 0;color:var(--muted);font-weight:750;">
+                Progreso: <span id="rProg">0%</span>
+              </p>
+
+              <div class="badges" id="badgeArea"></div>
+
+              <div style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap;" class="no-print">
+                <button class="btn btn-primary" onclick="window.print()">🖨️ Imprimir</button>
+                <button class="btn btn-ghost" id="btnReset">🧹 Reiniciar</button>
+              </div>
+            </div>
+
+            <div class="rbox">
+              <h4>🧾 Detalle por PDA</h4>
+              <div id="detailArea" style="display:grid;gap:8px;"></div>
+              <p style="margin:10px 0 0;color:var(--muted);font-size:.88rem;">
+                Cada PDA tiene 2 actividades y cada actividad tiene 5 reactivos.
+              </p>
+            </div>
+          </div>
+
+          <div class="diploma" id="diplomaBox">
+            <div class="diploma-top">
+              <img src="../../img/sep_logo.png" alt="SEP">
+              <img src="../../img/escudo_escuela.png" alt="Escuela">
+            </div>
+            <h3>🏅 Diploma de participación</h3>
+            <p>
+              Se otorga el presente diploma a:<br>
+              <span style="font-size:1.2rem;font-weight:1000;color:#111827;" id="dipName">—</span><br>
+              por completar la ODA de Lenguajes (Contenido 8) y fortalecer su convivencia escolar.
+            </p>
+            <p>
+              <strong>Grado:</strong> <span id="dipGrade">—</span> ·
+              <strong>Campo:</strong> Lenguajes ·
+              <strong>Fase:</strong> 5
+            </p>
+
+            <div class="sig">
+              <div>
+                <div class="line"></div>
+                <div>Firma del docente</div>
+              </div>
+              <div style="text-align:right;">
+                <div class="line"></div>
+                <div>Dirección escolar</div>
+              </div>
+            </div>
+
+            <p style="margin-top:10px;color:var(--muted);font-size:.88rem;">
+              ODA creada por el <strong>Maestro Martín Reta</strong> · © Derechos reservados · Uso educativo
+            </p>
+          </div>
+        </div>
+      </div>
+
+    </section>
+  </div>
+</div>
+<script>
+/* =========================================================
+   ODA Lenguajes Estandar – Contenido 8
+   - 5º: 4 PDA (2 actividades c/u) = 8 actividades
+   - 6º: 5 PDA (2 actividades c/u) = 10 actividades
+   - Cada actividad: 5 reactivos
+   - 2 intentos por actividad
+   - Actividades: MCQ, V/F, Ordenar, Relación (drag & drop simple)
+========================================================= */
+
+/* ---------- Utilidades UI ---------- */
+const $ = (sel)=>document.querySelector(sel);
+const $$ = (sel)=>Array.from(document.querySelectorAll(sel));
+
+function setPill(text){ $("#pillMode").textContent = "Modo: " + text; }
+function setNowPDA(text){ $("#pdaNow").value = text; }
+
+function showScreen(id){
+  ["screenCover","screenInfo","screenActivity","screenResults"].forEach(s=>{
+    const el = document.getElementById(s);
+    el.classList.toggle("active", s===id);
+  });
+}
+
+/* ---------- Historias por grado ---------- */
+const stories = {
+  "5": `En 5.º grado empezaron problemas: interrupciones, discusiones en recreo y algunos no respetaban turnos.
+La maestra propuso revisar el reglamento del salón. Descubrieron que las reglas buenas son:
+• Breves y claras
+• Usan verbos (respetar, cuidar, evitar)
+• A veces usan numerales (1, 2, 3) para ordenar.
+El reto: elegir, mejorar y crear reglas que ayuden a convivir mejor.`,
+  "6": `En 6.º grado la directora lanzó un reto final: escribir un reglamento escolar que promueva una convivencia respetuosa, incluyente, equitativa e igualitaria.
+El grupo notó que muchas reglas fallan por ser largas o confusas. Las mejores:
+• Son concisas
+• Usan verbos en forma de mandato (respetar, evitar, cumplir)
+• Ordenan con numerales o viñetas
+El reto: seleccionar, mejorar y revisar hasta obtener una versión final.`
+};
+
+/* ---------- Banco de actividades ----------
+   activity = { id, grade, pda, name, hint, type, items:[...] }
+   type:
+    - "mcq": items = [{stem, opts:[...], ans:index}]
+    - "tf":  items = [{stem, ans:true/false}]
+    - "order": items = { prompt, list:[...], correct:[...] }
+    - "match": items = { prompt, pairs:[{left,right}...] }
+*/
+const activities = {
+  "5": [
+    // PDA 1
+    {id:"5-1-A", pda:"1", name:"Detective de reglamentos (MCQ)", hint:"Elige la opción que sí parece regla de un reglamento.", type:"mcq",
+      items:[
+        {stem:"¿Cuál enunciado es una regla clara y breve?", opts:["Ser buena persona siempre.","Levantar la mano para participar.","Hablar cuando quieras."], ans:1},
+        {stem:"¿Cuál usa un verbo adecuado para reglamento?", opts:["Respetar el turno al hablar.","Respetamos el turno al hablar.","Respetábamos el turno al hablar."], ans:0},
+        {stem:"¿Cuál incluye numerales de forma útil?", opts:["Traer 2 lápices y 1 borrador.","Traer cosas para trabajar.","Traer lo que sea."], ans:0},
+        {stem:"¿Cuál suena más concisa?", opts:["Guardar silencio cuando alguien expone.","Sería bueno que pudiéramos tratar de no hacer ruido cuando una persona esté hablando.","No."], ans:0},
+        {stem:"¿Cuál es más propia de un reglamento escolar?", opts:["Evitar empujar en las filas.","Ganar siempre en el juego.","Correr sin mirar."], ans:0}
+      ]
+    },
+    {id:"5-1-B", pda:"1", name:"Verdadero/Falso: características", hint:"Selecciona verdadero o falso (5 reactivos).", type:"tf",
+      items:[
+        {stem:"Un reglamento ayuda a organizar la convivencia.", ans:true},
+        {stem:"Las reglas deben ser lo más largas posible.", ans:false},
+        {stem:"En reglamentos se usan verbos para indicar acciones.", ans:true},
+        {stem:"Los numerales pueden ayudar a ordenar reglas.", ans:true},
+        {stem:"Un reglamento solo sirve para castigar.", ans:false}
+      ]
+    },
+
+    // PDA 2
+    {id:"5-2-A", pda:"2", name:"¿Para qué sirve? (MCQ)", hint:"Elige la respuesta que mejor explica la función del reglamento.", type:"mcq",
+      items:[
+        {stem:"La función principal del reglamento del aula es:", opts:["Quitar derechos.","Mejorar la convivencia y el orden.","Hacer que todos tengan miedo."], ans:1},
+        {stem:"Si una regla dice “Respetar turnos”, sirve para:", opts:["Que nadie participe.","Que todos tengan oportunidad.","Que solo hablen algunos."], ans:1},
+        {stem:"Cuando hay conflictos en recreo, el reglamento ayuda a:", opts:["Aumentarlos.","Resolverlos con acuerdos.","Ignorarlos."], ans:1},
+        {stem:"Una regla clara evita:", opts:["Malentendidos.","Que se lea rápido.","Que exista convivencia."], ans:0},
+        {stem:"El reglamento se elabora para:", opts:["Una sola persona.","Todo el grupo/escuela.","Solo los maestros."], ans:1}
+      ]
+    },
+    {id:"5-2-B", pda:"2", name:"Elige la mejor redacción (MCQ)", hint:"Selecciona la versión más clara y breve.", type:"mcq",
+      items:[
+        {stem:"¿Cuál regla está mejor redactada?", opts:["No hacer ruido porque sí.","Guardar silencio cuando alguien explica.","Portarse bien en general."], ans:1},
+        {stem:"¿Cuál es más concisa?", opts:["Respetar materiales del aula.","Sería importante considerar el cuidado de las cosas del salón.","Cuida."], ans:0},
+        {stem:"¿Cuál es más específica?", opts:["No correr en el pasillo.","No hacer cosas peligrosas.","No."], ans:0},
+        {stem:"¿Cuál usa verbo en forma adecuada?", opts:["Evitar tirar basura.","Evitábamos tirar basura.","Evitaremos tirar basura."], ans:0},
+        {stem:"¿Cuál aclara mejor el comportamiento?", opts:["Levantar la mano para participar.","Participar de algún modo.","No sé."], ans:0}
+      ]
+    },
+
+    // PDA 3
+    {id:"5-3-A", pda:"3", name:"Ordena para formar un mini-reglamento (Ordenar)", hint:"Ordena 5 reglas en un orden lógico (1 a 5).", type:"order",
+      items:{
+        prompt:"Orden sugerido: inicia con respeto, luego participación, trabajo, cuidado y cierre.",
+        list:[
+          "Cuidar el material del aula.",
+          "Respetar a todas las personas.",
+          "Levantar la mano para participar.",
+          "Trabajar en silencio durante actividades.",
+          "Mantener el salón limpio."
+        ],
+        correct:[
+          "Respetar a todas las personas.",
+          "Levantar la mano para participar.",
+          "Trabajar en silencio durante actividades.",
+          "Cuidar el material del aula.",
+          "Mantener el salón limpio."
+        ]
+      }
+    },
+    {id:"5-3-B", pda:"3", name:"Relación: verbo y propósito (Relacionar)", hint:"Arrastra el verbo hacia el propósito correcto (5 pares).", type:"match",
+      items:{
+        prompt:"Une cada verbo con lo que busca lograr en la convivencia.",
+        pairs:[
+          {left:"Respetar", right:"Escuchar y valorar a los demás"},
+          {left:"Cuidar", right:"Mantener materiales en buen estado"},
+          {left:"Evitar", right:"Prevenir accidentes o conflictos"},
+          {left:"Compartir", right:"Dar oportunidad a todos"},
+          {left:"Cumplir", right:"Seguir acuerdos del grupo"}
+        ]
+      }
+    },
+
+    // PDA 4
+    {id:"5-4-A", pda:"4", name:"Cazaerrores (MCQ)", hint:"Elige la oración correctamente escrita.", type:"mcq",
+      items:[
+        {stem:"¿Cuál está correcta?", opts:["Los alumno respetan el turno.","Los alumnos respetan el turno.","Los alumnoss respetan el turno."], ans:1},
+        {stem:"¿Cuál está correcta?", opts:["No tirar basurra en el patio.","No tirar basura en el patio.","No tirrar basura en el patio."], ans:1},
+        {stem:"¿Cuál está correcta?", opts:["Las reglas es para todos.","Las reglas son para todos.","Las reglas ser para todos."], ans:1},
+        {stem:"¿Cuál está correcta?", opts:["Respetar turnos al hablar.","Respetar turno al hablar.","Respetar turnos al ablar."], ans:0},
+        {stem:"¿Cuál está correcta?", opts:["Cuidar los materiales del salón.","Cuidad los materiales del salón.","Cuidar los material del salón."], ans:0}
+      ]
+    },
+    {id:"5-4-B", pda:"4", name:"Verdadero/Falso: concordancia y ortografía", hint:"5 reactivos para revisar reglas.", type:"tf",
+      items:[
+        {stem:"“Las normas son importantes” tiene concordancia correcta.", ans:true},
+        {stem:"“Los reglas del salón” está bien escrito.", ans:false},
+        {stem:"“Evitar empujar en la fila” es una regla clara.", ans:true},
+        {stem:"“Basurra” es una escritura correcta de “basura”.", ans:false},
+        {stem:"Revisar un texto ayuda a mejorar su versión final.", ans:true}
+      ]
+    }
+  ],
+
+  "6": [
+    // PDA 1
+    {id:"6-1-A", pda:"1", name:"Consecuencias de no cumplir normas (MCQ)", hint:"Elige la respuesta más lógica.", type:"mcq",
+      items:[
+        {stem:"Si nadie respeta turnos en recreo, lo más probable es:", opts:["Conflictos y exclusión.","Más orden sin reglas.","Nada cambia."], ans:0},
+        {stem:"Cumplir normas ayuda a:", opts:["Crear miedo.","Tener convivencia justa.","Evitar aprender."], ans:1},
+        {stem:"Una norma escolar busca principalmente:", opts:["Regular convivencia.","Castigar siempre.","Ganar competencias."], ans:0},
+        {stem:"Cuando se cumple un reglamento, se favorece:", opts:["Respeto y seguridad.","Desorden.","Silencio total siempre."], ans:0},
+        {stem:"Las normas son importantes porque:", opts:["Organizan acuerdos comunes.","Solo sirven a una persona.","Son decorativas."], ans:0}
+      ]
+    },
+    {id:"6-1-B", pda:"1", name:"Verdadero/Falso: importancia", hint:"5 reactivos.", type:"tf",
+      items:[
+        {stem:"Las normas ayudan a que todos sepan qué se espera.", ans:true},
+        {stem:"Si una norma no se cumple, no afecta la convivencia.", ans:false},
+        {stem:"Un reglamento puede prevenir conflictos.", ans:true},
+        {stem:"Cumplir normas es lo mismo que perder derechos.", ans:false},
+        {stem:"Las normas deben cuidar a todas las personas.", ans:true}
+      ]
+    },
+
+    // PDA 2
+    {id:"6-2-A", pda:"2", name:"Regla más concisa (MCQ)", hint:"Elige la versión breve, clara y completa.", type:"mcq",
+      items:[
+        {stem:"¿Cuál es más concisa y clara?", opts:["Guardar silencio cuando alguien habla.","Sería bueno que intentáramos no hablar cuando otra persona esté hablando.","Silencio."], ans:0},
+        {stem:"¿Cuál usa verbo en modo adecuado para reglamento?", opts:["Respetar a todas las personas.","Respetamos a todas las personas.","Respetábamos a todas las personas."], ans:0},
+        {stem:"¿Cuál usa numerales correctamente?", opts:["1) Formarse 2) Esperar turno 3) Avanzar sin empujar","Formarse y ya.","Hacerlo cuando se pueda."], ans:0},
+        {stem:"¿Cuál regla evita ambigüedad?", opts:["No correr en el pasillo.","No portarse mal.","No."], ans:0},
+        {stem:"¿Cuál mantiene tono formal?", opts:["Evitar gritos durante clase.","No grites nunca, ¿ok?","No seas así."], ans:0}
+      ]
+    },
+    {id:"6-2-B", pda:"2", name:"Detective de verbos (MCQ)", hint:"Identifica el verbo mejor para una regla.", type:"mcq",
+      items:[
+        {stem:"Para una regla de participación, el mejor verbo es:", opts:["Levantar","Ganando","Sabiendo"], ans:0},
+        {stem:"Para cuidado del salón, el mejor verbo es:", opts:["Cuidar","Soñar","Pasear"], ans:0},
+        {stem:"Para evitar conflictos, el mejor verbo es:", opts:["Evitar","Volver","Dormir"], ans:0},
+        {stem:"Para convivencia incluyente, el mejor verbo es:", opts:["Respetar","Callar","Presumir"], ans:0},
+        {stem:"Para seguir acuerdos, el mejor verbo es:", opts:["Cumplir","Olvidar","Romper"], ans:0}
+      ]
+    },
+
+    // PDA 3
+    {id:"6-3-A", pda:"3", name:"Reglas incluyentes (MCQ)", hint:"Elige la regla que promueve inclusión, equidad e igualdad.", type:"mcq",
+      items:[
+        {stem:"¿Cuál regla es incluyente?", opts:["Permitir que todos participen por turnos.","Solo participan los mejores.","Los nuevos no opinan."], ans:0},
+        {stem:"¿Cuál regla promueve equidad?", opts:["Dar oportunidades a quien le cuesta más, con apoyo.","Solo ayudar a amigos.","No ayudar a nadie."], ans:0},
+        {stem:"¿Cuál evita discriminación?", opts:["Respetar diferencias y lenguaje amable.","Burlarse si alguien se equivoca.","Ignorar a quien es distinto."], ans:0},
+        {stem:"¿Cuál fomenta igualdad?", opts:["Mismas reglas para todos, sin favoritismos.","Reglas distintas según el grupo.","Solo unos pueden."], ans:0},
+        {stem:"¿Cuál es convivencia respetuosa?", opts:["Escuchar sin interrumpir.","Interrumpir para ganar.","Gritar para que te oigan."], ans:0}
+      ]
+    },
+    {id:"6-3-B", pda:"3", name:"Verdadero/Falso: convivencia justa", hint:"5 reactivos.", type:"tf",
+      items:[
+        {stem:"La inclusión significa que todos tengan lugar y participación.", ans:true},
+        {stem:"La equidad es tratar a todos exactamente igual siempre.", ans:false},
+        {stem:"Una regla puede prevenir exclusión y burlas.", ans:true},
+        {stem:"La convivencia respetuosa no necesita reglas.", ans:false},
+        {stem:"Las experiencias de primaria ayudan a escribir mejores reglas.", ans:true}
+      ]
+    },
+
+    // PDA 4
+    {id:"6-4-A", pda:"4", name:"Formato ideal (MCQ)", hint:"Elige la opción que mejora lectura del reglamento.", type:"mcq",
+      items:[
+        {stem:"Para muchas reglas, conviene:", opts:["Viñetas o numerales.","Un solo párrafo largo.","Sin puntos ni comas."], ans:0},
+        {stem:"Si hay secciones (aula, recreo), conviene usar:", opts:["Subtítulos.","Texto sin separar.","Solo emojis."], ans:0},
+        {stem:"Las oraciones breves ayudan a:", opts:["Comprender rápido.","Confundir.","Hacerlo más largo."], ans:0},
+        {stem:"Los incisos sirven para:", opts:["Aclarar partes de una regla.","Quitar claridad.","Desordenar."], ans:0},
+        {stem:"Un reglamento claro suele:", opts:["Tener estructura visible.","Mezclar todo.","No tener títulos."], ans:0}
+      ]
+    },
+    {id:"6-4-B", pda:"4", name:"Ordena una sección con viñetas (Ordenar)", hint:"Ordena 5 viñetas para una sección de recreo.", type:"order",
+      items:{
+        prompt:"Orden sugerido: seguridad → turnos → respeto → limpieza → cierre.",
+        list:[
+          "Tirar basura solo en botes.",
+          "Formarse para usar juegos.",
+          "Evitar empujar o aventar.",
+          "Respetar turnos y acuerdos.",
+          "Regresar material a su lugar."
+        ],
+        correct:[
+          "Evitar empujar o aventar.",
+          "Formarse para usar juegos.",
+          "Respetar turnos y acuerdos.",
+          "Tirar basura solo en botes.",
+          "Regresar material a su lugar."
+        ]
+      }
+    },
+
+    // PDA 5
+    {id:"6-5-A", pda:"5", name:"Versión final sin errores (MCQ)", hint:"Elige la regla mejor revisada.", type:"mcq",
+      items:[
+        {stem:"¿Cuál está mejor escrita?", opts:["No tirar basuras en el patio.","No tirar basura en el patio.","No tirar basurra en el patio."], ans:1},
+        {stem:"¿Cuál tiene concordancia?", opts:["Las normas es para todos.","Las normas son para todos.","Las normas ser para todos."], ans:1},
+        {stem:"¿Cuál está correcta?", opts:["Respetar los espacios comunes.","Respetar los espasios comunes.","Respetar los espacios comúnes."], ans:0},
+        {stem:"¿Cuál está correcta?", opts:["Cuidar el material compartido.","Cuidad el material compartido.","Cuidar el materiales compartido."], ans:0},
+        {stem:"¿Cuál está correcta?", opts:["Evitar gritar durante clase.","Evitar gritar durantte clase.","Evitar gritar durate clase."], ans:0}
+      ]
+    },
+    {id:"6-5-B", pda:"5", name:"Relación: error → corrección (Relacionar)", hint:"Arrastra la corrección correcta (5 pares).", type:"match",
+      items:{
+        prompt:"Une el error con su corrección (concordancia u ortografía).",
+        pairs:[
+          {left:"Los alumno", right:"Los alumnos"},
+          {left:"Basurra", right:"Basura"},
+          {left:"Las reglas es", right:"Las reglas son"},
+          {left:"Espasios", right:"Espacios"},
+          {left:"Durantte", right:"Durante"}
+        ]
+      }
+    }
+  ]
+};
+
+/* ---------- Estado: intentos, bloqueos, puntajes ---------- */
+const MAX_ATTEMPTS = 2;
+
+// grade -> activityId -> {attempts, locked, bestScore (0..5), lastScore}
+const state = { "5":{}, "6":{} };
+
+function getStudent(){
+  const name = ($("#studentName").value || "").trim();
+  const grade = $("#gradeSel").value;
+  return { name: name || "Sin nombre", grade };
+}
+
+function getGradeActivities(grade){ return activities[grade] || []; }
+
+/* ---------- Navegación (menú por PDA) ---------- */
+function buildNavForGrade(grade){
+  const list = $("#navList");
+  list.innerHTML = "";
+
+  const acts = getGradeActivities(grade);
+  if(!grade || acts.length===0){
+    list.innerHTML = `<div style="color:var(--muted);font-weight:750;font-size:.9rem;">
+      Elige 5.º o 6.º para ver los PDAs.
+    </div>`;
+    return;
+  }
+
+  // agrupar por PDA
+  const byPDA = {};
+  acts.forEach(a=>{
+    if(!byPDA[a.pda]) byPDA[a.pda]=[];
+    byPDA[a.pda].push(a);
+  });
+
+  const pdaKeys = Object.keys(byPDA).sort((a,b)=>Number(a)-Number(b));
+  pdaKeys.forEach(pda=>{
+    // botón PDA abre la actividad A del PDA
+    const aA = byPDA[pda][0];
+    const done = isPDAComplete(grade, pda);
+    const icon = done ? `<span class="go">✓</span>` : `<span class="lock">!</span>`;
+
+    const btn = document.createElement("button");
+    btn.className = "navbtn";
+    btn.innerHTML = `
+      <div>
+        <div style="font-weight:950;color:var(--vino);">PDA ${pda}</div>
+        <small>${done ? "Completado" : "2 actividades"}</small>
+      </div>
+      ${icon}
+    `;
+    btn.onclick = ()=> openActivity(aA.id);
+    list.appendChild(btn);
+  });
+}
+
+function setActiveNav(pda){
+  $$("#navList .navbtn").forEach(b=>b.classList.remove("active"));
+  // marca el que coincide con PDA visible
+  const grade = $("#gradeSel").value;
+  if(!grade) return;
+
+  const acts = getGradeActivities(grade);
+  const pdas = [...new Set(acts.map(a=>a.pda))].sort((a,b)=>Number(a)-Number(b));
+  const idx = pdas.indexOf(String(pda));
+  if(idx>=0){
+    const btn = $$("#navList .navbtn")[idx];
+    if(btn) btn.classList.add("active");
+  }
+}
+
+function isPDAComplete(grade,pda){
+  const acts = getGradeActivities(grade).filter(a=>a.pda===String(pda));
+  if(acts.length<2) return false;
+  return acts.every(a=>{
+    const st = state[grade][a.id];
+    return st && st.locked === true; // bloqueada por terminar (ya revisada 2/2 o éxito)
+  });
+}
+
+/* ---------- Pantalla info ---------- */
+function openInfo(){
+  const {grade} = getStudent();
+  if(!grade){
+    alert("Elige 5.º o 6.º en la barra lateral.");
+    return;
+  }
+  setPill("Hoja informativa");
+  $("#infoTitle").textContent = `Hoja informativa · ${grade==="5" ? "5.º" : "6.º"} grado`;
+  $("#storyText").textContent = stories[grade];
+  showScreen("screenInfo");
+}
+
+/* ---------- Abrir actividad ---------- */
+let current = { grade:"", activityId:"" };
+let workingAnswers = null; // guarda selecciones antes de revisar
+
+function openActivity(activityId){
+  const {grade} = getStudent();
+  if(!grade){
+    alert("Elige 5.º o 6.º en la barra lateral.");
+    return;
+  }
+  const act = getGradeActivities(grade).find(a=>a.id===activityId);
+  if(!act){
+    alert("Actividad no encontrada para este grado.");
+    return;
+  }
+
+  current.grade = grade;
+  current.activityId = activityId;
+
+  setPill("Actividades");
+  setNowPDA(`PDA ${act.pda}`);
+  $("#actTitle").textContent = `PDA ${act.pda} · Actividad`;
+  $("#actName").textContent = act.name;
+  $("#actHint").textContent = act.hint;
+  $("#actTag").textContent = act.id.split("-").slice(2).join("-");
+  setActiveNav(act.pda);
+
+  // init state
+  if(!state[grade][activityId]){
+    state[grade][activityId] = {attempts:0, locked:false, bestScore:0, lastScore:0};
+  }
+
+  renderActivity(act);
+  updateAttemptsUI();
+  $("#statusBox").style.display = "none";
+  $("#btnRetry").disabled = false;
+  $("#btnCheck").disabled = false;
+
+  // si locked, deshabilitar
+  if(state[grade][activityId].locked){
+    lockActivityUI("⛔ Actividad bloqueada (intentada 2/2 o finalizada). Puedes revisar resultados o avanzar.");
+  }
+
+  showScreen("screenActivity");
+  updateProgress();
+}
+
+/* ---------- Render por tipo ---------- */
+function renderActivity(act){
+  const area = $("#activityArea");
+  area.innerHTML = "";
+  workingAnswers = null;
+
+  $("#actCount").textContent = "5";
+
+  if(act.type==="mcq"){
+    workingAnswers = act.items.map(()=>null);
+    act.items.forEach((q,i)=>{
+      const box = document.createElement("div");
+      box.className = "q";
+      box.innerHTML = `
+        <div class="stem">${i+1}. ${escapeHTML(q.stem)}</div>
+        <div class="opts" id="opts-${i}"></div>
+      `;
+      area.appendChild(box);
+
+      const opts = box.querySelector(`#opts-${i}`);
+      q.opts.forEach((t,j)=>{
+        const b = document.createElement("div");
+        b.className = "opt";
+        b.innerHTML = `<span class="bullet">${String.fromCharCode(65+j)}</span> <div>${escapeHTML(t)}</div>`;
+        b.onclick = ()=>{
+          if(isLocked()) return;
+          // deselect siblings
+          opts.querySelectorAll(".opt").forEach(o=>o.style.outline="none");
+          b.style.outline = "3px solid rgba(215,181,109,.75)";
+          workingAnswers[i] = j;
+        };
+        opts.appendChild(b);
+      });
+    });
+  }
+
+  if(act.type==="tf"){
+    workingAnswers = act.items.map(()=>null);
+    act.items.forEach((q,i)=>{
+      const box = document.createElement("div");
+      box.className = "q";
+      box.innerHTML = `
+        <div class="stem">${i+1}. ${escapeHTML(q.stem)}</div>
+        <div class="opts" style="grid-template-columns:repeat(auto-fit,minmax(160px,1fr));">
+          <div class="opt" id="t-${i}"><span class="bullet">V</span><div>Verdadero</div></div>
+          <div class="opt" id="f-${i}"><span class="bullet">F</span><div>Falso</div></div>
+        </div>
+      `;
+      area.appendChild(box);
+
+      const t = box.querySelector(`#t-${i}`);
+      const f = box.querySelector(`#f-${i}`);
+
+      t.onclick = ()=>{
+        if(isLocked()) return;
+        t.style.outline = "3px solid rgba(215,181,109,.75)";
+        f.style.outline = "none";
+        workingAnswers[i] = true;
+      };
+      f.onclick = ()=>{
+        if(isLocked()) return;
+        f.style.outline = "3px solid rgba(215,181,109,.75)";
+        t.style.outline = "none";
+        workingAnswers[i] = false;
+      };
+    });
+  }
+
+  if(act.type==="order"){
+    // lista con botones arriba/abajo
+    const obj = act.items;
+    const list = [...obj.list];
+    workingAnswers = list;
+
+    const box = document.createElement("div");
+    box.className = "q";
+    box.innerHTML = `
+      <div class="stem">Ordena las 5 reglas</div>
+      <div style="color:var(--muted);font-weight:750;margin-top:6px;">${escapeHTML(obj.prompt)}</div>
+      <div class="order-list" id="orderList"></div>
+    `;
+    area.appendChild(box);
+
+    const ol = box.querySelector("#orderList");
+    const render = ()=>{
+      ol.innerHTML = "";
+      workingAnswers.forEach((t,idx)=>{
+        const row = document.createElement("div");
+        row.className = "order-item";
+        row.innerHTML = `
+          <div class="move">
+            <button class="mini" title="Subir">▲</button>
+            <button class="mini" title="Bajar">▼</button>
+          </div>
+          <div class="txt">${idx+1}. ${escapeHTML(t)}</div>
+        `;
+        const up = row.querySelectorAll(".mini")[0];
+        const dn = row.querySelectorAll(".mini")[1];
+
+        up.onclick = ()=>{
+          if(isLocked()) return;
+          if(idx===0) return;
+          const tmp = workingAnswers[idx-1];
+          workingAnswers[idx-1]=workingAnswers[idx];
+          workingAnswers[idx]=tmp;
+          render();
+        };
+        dn.onclick = ()=>{
+          if(isLocked()) return;
+          if(idx===workingAnswers.length-1) return;
+          const tmp = workingAnswers[idx+1];
+          workingAnswers[idx+1]=workingAnswers[idx];
+          workingAnswers[idx]=tmp;
+          render();
+        };
+        ol.appendChild(row);
+      });
+    };
+    render();
+  }
+
+  if(act.type==="match"){
+    // drag simple: arrastras item izquierdo a dropzone
+    const obj = act.items;
+    $("#actCount").textContent = "5";
+
+    // shuffle right options
+    const rights = shuffle(obj.pairs.map(p=>p.right));
+    workingAnswers = {}; // left -> chosen right
+
+    const box = document.createElement("div");
+    box.className = "q";
+    box.innerHTML = `
+      <div class="stem">Relaciona (arrastrar y soltar)</div>
+      <div style="color:var(--muted);font-weight:750;margin-top:6px;">${escapeHTML(obj.prompt)}</div>
+      <div class="match-grid">
+        <div class="match-col">
+          <div style="font-weight:950;color:var(--vino);">A) Arrastra estas tarjetas</div>
+          <div id="dragCol"></div>
+        </div>
+        <div class="match-col">
+          <div style="font-weight:950;color:var(--vino);">B) Suelta en el espacio correcto</div>
+          <div id="dropCol"></div>
+        </div>
+      </div>
+    `;
+    area.appendChild(box);
+
+    const dragCol = box.querySelector("#dragCol");
+    const dropCol = box.querySelector("#dropCol");
+
+    // drag items = left
+    obj.pairs.forEach(p=>{
+      const d = document.createElement("div");
+      d.className = "match-item";
+      d.draggable = true;
+      d.textContent = p.left;
+      d.dataset.left = p.left;
+
+      d.addEventListener("dragstart",(e)=>{
+        if(isLocked()) { e.preventDefault(); return; }
+        e.dataTransfer.setData("text/plain", p.left);
+      });
+      dragCol.appendChild(d);
+    });
+
+    // dropzones = right
+    rights.forEach(r=>{
+      const dz = document.createElement("div");
+      dz.className = "dropzone";
+      dz.innerHTML = `
+        <div style="width:46%;font-weight:950;color:#111827;">${escapeHTML(r)}</div>
+        <div class="slot" data-right="${escapeHTML(r)}"><span style="color:var(--muted);font-weight:750;">Suelta aquí…</span></div>
+      `;
+      const slot = dz.querySelector(".slot");
+
+      dz.addEventListener("dragover",(e)=>{
+        if(isLocked()) return;
+        e.preventDefault();
+      });
+      dz.addEventListener("drop",(e)=>{
+        if(isLocked()) return;
+        e.preventDefault();
+        const left = e.dataTransfer.getData("text/plain");
+        if(!left) return;
+        // set chosen
+        workingAnswers[left] = r;
+        slot.textContent = left;
+      });
+
+      dropCol.appendChild(dz);
+    });
+  }
+}
+
+/* ---------- Evaluación ---------- */
+function isLocked(){
+  const st = state[current.grade][current.activityId];
+  return st && st.locked;
+}
+
+function evaluate(){
+  const grade = current.grade;
+  const activityId = current.activityId;
+  const act = getGradeActivities(grade).find(a=>a.id===activityId);
+  const st = state[grade][activityId];
+
+  if(st.locked){
+    showStatus("⛔ Actividad bloqueada. Ve a resultados o abre otra actividad.", "bad");
+    return;
+  }
+
+  st.attempts += 1;
+  let score = 0;
+
+  if(act.type==="mcq"){
+    act.items.forEach((q,i)=>{ if(workingAnswers[i]===q.ans) score++; });
+  }
+  if(act.type==="tf"){
+    act.items.forEach((q,i)=>{ if(workingAnswers[i]===q.ans) score++; });
+  }
+  if(act.type==="order"){
+    const corr = act.items.correct;
+    for(let i=0;i<5;i++){
+      if(workingAnswers[i]===corr[i]) score++;
+    }
+  }
+  if(act.type==="match"){
+    // left->right
+    act.items.pairs.forEach(p=>{
+      if(workingAnswers[p.left]===p.right) score++;
+    });
+  }
+
+  st.lastScore = score;
+  st.bestScore = Math.max(st.bestScore, score);
+
+  // feedback & locking rules
+  if(score===5){
+    st.locked = true;
+    paintAnswers(act, true);
+    showStatus(`✅ ¡Excelente! 5/5. Actividad finalizada y bloqueada.`, "ok");
+  }else{
+    paintAnswers(act, false, score);
+    if(st.attempts>=MAX_ATTEMPTS){
+      st.locked = true;
+      showStatus(`⛔ Intentos agotados (2/2). Puntaje: ${score}/5. Actividad bloqueada.`, "bad");
+    }else{
+      showStatus(`⚠️ Puntaje: ${score}/5. Te queda 1 intento (1/2 usado). Puedes reintentar.`, "warn");
+    }
+  }
+
+  updateAttemptsUI();
+  updateProgress();
+  buildNavForGrade(grade);
+}
+
+function paintAnswers(act, perfect=false){
+  // Marca solo en mcq/tf de forma visual básica
+  if(act.type==="mcq"){
+    // No sabemos cuál opción seleccionó el alumno en cada pregunta, solo marcamos correctas/incorrectas de la seleccionada si existe outline.
+    // Mantiene simple por rendimiento.
+    // (El puntaje ya se calculó.)
+  }
+  if(act.type==="tf"){
+    // idem
+  }
+  if(act.type==="order"){
+    // nada adicional
+  }
+  if(act.type==="match"){
+    // nada adicional
+  }
+}
+
+function showStatus(text, kind){
+  const box = $("#statusBox");
+  box.style.display = "block";
+  box.className = "status " + kind;
+  box.textContent = text;
+}
+
+function lockActivityUI(msg){
+  // bloquea inputs de la actividad actual
+  $("#activityArea").classList.add("locked");
+  $$("#activityArea .opt").forEach(x=>x.classList.add("locked"));
+  $$("#activityArea .mini").forEach(x=>x.classList.add("locked"));
+  $$("#activityArea .match-item").forEach(x=>x.classList.add("locked"));
+  showStatus(msg, "bad");
+  $("#btnCheck").disabled = true;
+  $("#btnRetry").disabled = true;
+}
+
+function updateAttemptsUI(){
+  const st = state[current.grade]?.[current.activityId];
+  if(!st){
+    $("#actAttempts").textContent = "0/2";
+    $("#attemptChip").textContent = "Intentos: 0/2";
+    $("#btnRetry").disabled = false;
+    $("#btnCheck").disabled = false;
+    return;
+  }
+  $("#actAttempts").textContent = `${st.attempts}/${MAX_ATTEMPTS}`;
+  $("#attemptChip").textContent = `Intentos: ${st.attempts}/${MAX_ATTEMPTS}`;
+
+  if(st.locked){
+    $("#btnRetry").disabled = true;
+    $("#btnCheck").disabled = true;
+    $("#activityArea").classList.add("locked");
+  }else{
+    $("#btnRetry").disabled = (st.attempts===0); // reintentar solo tras revisar al menos 1 vez
+    $("#btnCheck").disabled = false;
+    $("#activityArea").classList.remove("locked");
+  }
+}
+
+/* ---------- Reintentar ---------- */
+function retry(){
+  const grade = current.grade;
+  const activityId = current.activityId;
+  const act = getGradeActivities(grade).find(a=>a.id===activityId);
+  const st = state[grade][activityId];
+
+  if(!st || st.locked){
+    showStatus("⛔ No se puede reintentar: actividad bloqueada.", "bad");
+    return;
+  }
+  renderActivity(act);
+  $("#statusBox").style.display = "none";
+  updateAttemptsUI();
+}
+
+/* ---------- Siguiente actividad ---------- */
+function next(){
+  const grade = current.grade;
+  const actId = current.activityId;
+  const list = getGradeActivities(grade);
+  const idx = list.findIndex(a=>a.id===actId);
+  if(idx<0) return;
+
+  const nextAct = list[idx+1] || null;
+  if(nextAct){
+    openActivity(nextAct.id);
+  }else{
+    openResults();
+  }
+}
+
+/* ---------- Progreso y resultados ---------- */
+function updateProgress(){
+  const grade = $("#gradeSel").value;
+  if(!grade){
+    $("#pillProgress").textContent = "0%";
+    return;
+  }
+  const list = getGradeActivities(grade);
+  const totalActs = list.length;
+  const doneActs = list.filter(a=>state[grade][a.id]?.locked).length;
+  const pct = totalActs ? Math.round((doneActs/totalActs)*100) : 0;
+  $("#pillProgress").textContent = pct + "%";
+}
+
+function computeScore(grade){
+  const list = getGradeActivities(grade);
+  let total = list.length * 5; // 5 reactivos por actividad
+  let got = 0;
+
+  // se suma el bestScore de cada actividad (mejor intento)
+  list.forEach(a=>{
+    const st = state[grade][a.id];
+    if(st) got += (st.bestScore || 0);
+  });
+  return {got, total};
+}
+
+function buildDetail(grade){
+  const list = getGradeActivities(grade);
+  // agrupa por PDA
+  const by = {};
+  list.forEach(a=>{
+    if(!by[a.pda]) by[a.pda]=[];
+    by[a.pda].push(a);
+  });
+
+  const area = $("#detailArea");
+  area.innerHTML = "";
+
+  Object.keys(by).sort((a,b)=>Number(a)-Number(b)).forEach(pda=>{
+    const acts = by[pda];
+    const aSum = acts.reduce((s,a)=>s + (state[grade][a.id]?.bestScore || 0), 0);
+    const max = acts.length * 5;
+
+    const box = document.createElement("div");
+    box.className = "rbox";
+    const bg = aSum>=max*0.85 ? "rgba(22,163,74,.08)" : aSum>=max*0.55 ? "rgba(245,158,11,.12)" : "rgba(185,28,28,.08)";
+    const bd = aSum>=max*0.85 ? "rgba(22,163,74,.45)" : aSum>=max*0.55 ? "rgba(245,158,11,.45)" : "rgba(185,28,28,.45)";
+    box.style.background = `linear-gradient(180deg,#fff,${bg})`;
+    box.style.borderColor = bd;
+    box.innerHTML = `
+      <h4>PDA ${pda}</h4>
+      <div style="font-weight:950;">Aciertos: ${aSum} / ${max}</div>
+      <div style="margin-top:6px;color:var(--muted);font-weight:750;font-size:.88rem;">
+        ${acts.map(x=>`• ${escapeHTML(x.name)}: <strong>${state[grade][x.id]?.bestScore ?? 0}/5</strong>`).join("<br>")}
+      </div>
+    `;
+    area.appendChild(box);
+  });
+}
+
+function buildBadges(grade){
+  const {got,total} = computeScore(grade);
+  const pct = total ? (got/total) : 0;
+  const badges = [];
+
+  // logros simples
+  if(pct >= 0.90) badges.push("🥇 Maestro/a de Reglamentos");
+  if(pct >= 0.75) badges.push("⭐ Reglas Claras");
+  if(pct >= 0.60) badges.push("✅ Convivencia Responsable");
+  if(pct < 0.60)  badges.push("🧠 En entrenamiento: sigue practicando");
+
+  // completitud
+  const list = getGradeActivities(grade);
+  const doneActs = list.filter(a=>state[grade][a.id]?.locked).length;
+  if(doneActs === list.length) badges.push("🏁 ODA completada");
+
+  const area = $("#badgeArea");
+  area.innerHTML = "";
+  badges.forEach(b=>{
+    const el = document.createElement("div");
+    el.className = "badge";
+    el.textContent = b;
+    area.appendChild(el);
+  });
+}
+
+function openResults(){
+  const {name,grade} = getStudent();
+  if(!grade){
+    alert("Elige 5.º o 6.º para ver resultados.");
+    return;
+  }
+  setPill("Resultados");
+  setNowPDA("—");
+
+  const sc = computeScore(grade);
+  const pct = sc.total ? Math.round((sc.got/sc.total)*100) : 0;
+
+  $("#rName").textContent = name;
+  $("#rGrade").textContent = grade==="5" ? "5.º" : "6.º";
+  $("#rScore").textContent = `${sc.got}/${sc.total}`;
+
+  $("#rBig").textContent = sc.got;
+  $("#rTotal").textContent = sc.total;
+  $("#rProg").textContent = pct + "%";
+
+  $("#dipName").textContent = name;
+  $("#dipGrade").textContent = grade==="5" ? "5.º" : "6.º";
+
+  buildDetail(grade);
+  buildBadges(grade);
+
+  showScreen("screenResults");
+  updateProgress();
+}
+
+/* ---------- Escapar HTML ---------- */
+function escapeHTML(s){
+  return String(s)
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+}
+
+/* ---------- Shuffle ---------- */
+function shuffle(arr){
+  const a = [...arr];
+  for(let i=a.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [a[i],a[j]] = [a[j],a[i]];
+  }
+  return a;
+}
+
+/* ---------- Eventos globales ---------- */
+$("#btnStart5").addEventListener("click", ()=>{
+  $("#gradeSel").value = "5";
+  buildNavForGrade("5");
+  $("#storyText").textContent = stories["5"];
+  $("#pillMode").textContent = "Modo: Hoja informativa";
+  openInfo();
+});
+$("#btnStart6").addEventListener("click", ()=>{
+  $("#gradeSel").value = "6";
+  buildNavForGrade("6");
+  $("#storyText").textContent = stories["6"];
+  $("#pillMode").textContent = "Modo: Hoja informativa";
+  openInfo();
+});
+
+$("#gradeSel").addEventListener("change", ()=>{
+  const g = $("#gradeSel").value;
+  buildNavForGrade(g);
+  $("#storyText").textContent = g ? stories[g] : "Selecciona grado para ver el texto.";
+  updateProgress();
+});
+
+$("#btnHome").addEventListener("click", ()=>{
+  setPill("Portada");
+  setNowPDA("—");
+  showScreen("screenCover");
+});
+
+$("#btnInfo").addEventListener("click", ()=> openInfo());
+$("#btnResults").addEventListener("click", ()=> openResults());
+
+$("#btnGoPDA1").addEventListener("click", ()=>{
+  const g = $("#gradeSel").value;
+  if(!g){ alert("Elige 5.º o 6.º."); return; }
+  const first = getGradeActivities(g)[0];
+  openActivity(first.id);
+});
+
+$("#btnCheck").addEventListener("click", ()=> evaluate());
+$("#btnRetry").addEventListener("click", ()=> retry());
+$("#btnNext").addEventListener("click", ()=> next());
+
+$("#btnReset").addEventListener("click", ()=>{
+  const g = $("#gradeSel").value;
+  if(!g) return;
+  if(!confirm("¿Reiniciar progreso de este grado?")) return;
+  state[g] = {};
+  buildNavForGrade(g);
+  updateProgress();
+  openResults(); // mostrará 0
+});
+
+/* ---------- Inicial ---------- */
+buildNavForGrade("");
+updateProgress();
+</script>
+
+</body>
+</html>
