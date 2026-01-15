@@ -1,0 +1,1962 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>ODA Lenguajes • Fase 5 • Autobiografía</title>
+  <style>
+    :root{
+      --vino:#5b1b2c;
+      --vino2:#7a2540;
+      --dorado:#d7b46a;
+      --dorado2:#f1d59b;
+
+      --bg1:#fff7ea;
+      --bg2:#ffffff;
+
+      --text:#1c1c1c;
+      --muted:#6b6b6b;
+
+      --card: rgba(255,255,255,.86);
+      --stroke: rgba(0,0,0,.10);
+
+      --shadow: 0 18px 45px rgba(0,0,0,.14);
+      --shadow2: 0 10px 24px rgba(0,0,0,.10);
+
+      --r: 20px;
+      --ease: cubic-bezier(.2,.9,.2,1);
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      color:var(--text);
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background:
+        radial-gradient(1200px 700px at 18% 0%, rgba(215,180,106,.30), transparent 55%),
+        radial-gradient(1200px 800px at 90% 30%, rgba(91,27,44,.22), transparent 60%),
+        linear-gradient(180deg, var(--bg1), var(--bg2));
+      overflow-x:hidden;
+    }
+
+    body:before{
+      content:"";
+      position:fixed; inset:-40px;
+      background-image:
+        radial-gradient(circle at 1px 1px, rgba(91,27,44,.10) 1px, transparent 0);
+      background-size:22px 22px;
+      opacity:.22;
+      pointer-events:none;
+      z-index:-2;
+    }
+    body:after{
+      content:"";
+      position:fixed; inset:-80px;
+      background:
+        radial-gradient(900px 420px at 35% 10%, rgba(215,180,106,.22), transparent 60%),
+        radial-gradient(900px 480px at 75% 25%, rgba(91,27,44,.14), transparent 64%);
+      pointer-events:none;
+      z-index:-3;
+    }
+
+    .app{min-height:100%; display:flex; flex-direction:column}
+
+    .topbar{
+      position:sticky; top:0; z-index:20;
+      display:flex; align-items:center; justify-content:space-between; gap:16px;
+      padding:14px 18px;
+      color:#fff;
+      background: linear-gradient(90deg, rgba(91,27,44,.96), rgba(122,37,64,.86));
+      box-shadow: 0 10px 28px rgba(0,0,0,.22);
+      backdrop-filter: blur(10px);
+    }
+    .brand{display:flex; align-items:center; gap:14px; min-width: 0}
+    .logos{display:flex; align-items:center; gap:10px}
+    .logo{
+      height:44px; width:auto;
+      background:#fff; border-radius:12px; padding:5px 7px;
+      box-shadow: 0 8px 18px rgba(0,0,0,.15);
+    }
+    .titlebox{line-height:1.15; min-width:0}
+    .kicker{font-size:12px; opacity:.92; letter-spacing:.02em; white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+    .title{font-size:18px; font-weight:950; letter-spacing:.01em; white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+    .subtitle{font-size:12px; opacity:.92; margin-top:4px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+    .right{display:flex; align-items:center; gap:10px; flex-wrap:wrap; justify-content:flex-end}
+    .avatar{
+      height:56px; width:56px; border-radius:50%;
+      object-fit:cover; background:#fff;
+      border:2px solid rgba(255,255,255,.65);
+      box-shadow: 0 12px 22px rgba(0,0,0,.26);
+    }
+
+    .btn{
+      border:0; border-radius:14px;
+      padding:10px 14px;
+      font-weight:900;
+      cursor:pointer;
+      display:inline-flex; align-items:center; gap:10px;
+      transition: transform .10s var(--ease), filter .18s var(--ease), background .22s var(--ease), box-shadow .22s var(--ease);
+      user-select:none;
+      white-space:nowrap;
+    }
+    .btn:active{transform: translateY(1px) scale(.99)}
+    .btn.primary{
+      color:#2b1b05;
+      background: linear-gradient(135deg, var(--dorado), var(--dorado2));
+      box-shadow: 0 12px 24px rgba(215,180,106,.25);
+    }
+    .btn.primary:hover{filter:brightness(1.03)}
+    .btn.ghost{
+      background: rgba(255,255,255,.12);
+      color:#fff;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.14);
+    }
+    .btn.ghost:hover{background: rgba(255,255,255,.18)}
+    .btn.disabled{opacity:.55; cursor:not-allowed; filter:saturate(.7)}
+
+    .main{
+      padding:22px 18px 90px;
+      max-width:1150px; width:100%;
+      margin:0 auto;
+    }
+
+    .grid{display:grid; grid-template-columns:repeat(12,1fr); gap:16px}
+    .card{
+      grid-column:span 12;
+      background: var(--card);
+      border: 1px solid var(--stroke);
+      border-radius: var(--r);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+      backdrop-filter: blur(10px);
+    }
+    .card.soft{box-shadow: var(--shadow2)}
+    .card.hover:hover{
+      transform: translateY(-2px);
+      box-shadow: 0 22px 55px rgba(0,0,0,.16);
+      border-color: rgba(91,27,44,.18);
+    }
+    .head{
+      padding:16px 16px 12px;
+      border-bottom: 1px solid rgba(0,0,0,.08);
+      display:flex; justify-content:space-between; gap:12px; align-items:flex-start;
+    }
+    .head h2{margin:0; font-size:18px; letter-spacing:.01em}
+    .head p{margin:8px 0 0; font-size:13px; color:var(--muted)}
+    .body{padding:16px}
+    .row{display:flex; gap:10px; flex-wrap:wrap; align-items:center}
+
+    .badge{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:7px 10px;
+      border-radius:999px;
+      background: rgba(91,27,44,.06);
+      border: 1px solid rgba(91,27,44,.18);
+      font-weight:900;
+      color: var(--vino);
+      font-size:12px;
+    }
+    .badge.gray{
+      color:#2b2b2b;
+      background: rgba(0,0,0,.05);
+      border-color: rgba(0,0,0,.12);
+    }
+    .badge.good{
+      color:#0b5d1e;
+      background: rgba(0,128,0,.08);
+      border-color: rgba(0,128,0,.22);
+    }
+    .badge.warn{
+      color:#7a4a00;
+      background: rgba(215,180,106,.14);
+      border-color: rgba(215,180,106,.35);
+    }
+
+    .input{
+      padding:11px 12px;
+      border-radius:14px;
+      border:1px solid rgba(0,0,0,.14);
+      min-width:260px;
+      outline:none;
+      background: rgba(255,255,255,.9);
+      transition: box-shadow .18s var(--ease), border-color .18s var(--ease);
+    }
+    .input:focus{
+      border-color: rgba(91,27,44,.38);
+      box-shadow: 0 0 0 5px rgba(91,27,44,.10);
+    }
+
+    .hint{
+      background: linear-gradient(180deg, rgba(215,180,106,.18), rgba(215,180,106,.10));
+      border: 1px solid rgba(215,180,106,.30);
+      padding:14px;
+      border-radius: 16px;
+      font-size:13px;
+    }
+
+    hr.sep{border:0; border-top:1px dashed rgba(0,0,0,.16); margin:16px 0}
+
+    .kpi{display:flex; gap:10px; flex-wrap:wrap}
+    .chip{
+      padding:9px 11px;
+      border-radius:999px;
+      border:1px solid rgba(0,0,0,.12);
+      background: rgba(255,255,255,.9);
+      font-weight:950;
+    }
+
+    .hero{
+      display:grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap:16px;
+      align-items:stretch;
+    }
+    .hero .panel{
+      border-radius: var(--r);
+      padding:18px;
+      border:1px solid rgba(255,255,255,.22);
+      background:
+        radial-gradient(700px 420px at 20% 10%, rgba(215,180,106,.30), transparent 60%),
+        radial-gradient(700px 420px at 90% 30%, rgba(91,27,44,.18), transparent 64%),
+        linear-gradient(180deg, rgba(255,255,255,.78), rgba(255,255,255,.55));
+      box-shadow: var(--shadow2);
+      backdrop-filter: blur(12px);
+      overflow:hidden;
+      position:relative;
+    }
+    .hero h1{margin:0 0 8px; font-size:28px; letter-spacing:.01em}
+    .hero p{margin:0; color:rgba(0,0,0,.70); font-size:14px; line-height:1.35}
+    .hero .meta{margin-top:12px; display:flex; gap:10px; flex-wrap:wrap}
+    .hero .meta .badge{background: rgba(255,255,255,.65); border-color: rgba(0,0,0,.10)}
+    .hero .cta{display:flex; gap:10px; flex-wrap:wrap; margin-top:14px}
+
+    .pillbar{
+      display:flex; gap:10px; flex-wrap:wrap;
+      padding:10px;
+      background: rgba(255,255,255,.55);
+      border:1px solid rgba(0,0,0,.10);
+      border-radius: 16px;
+      box-shadow: var(--shadow2);
+    }
+    .pill{
+      border:1px solid rgba(0,0,0,.12);
+      padding:10px 12px;
+      border-radius:14px;
+      background: rgba(255,255,255,.92);
+      cursor:pointer;
+      font-weight:950;
+      transition: transform .10s var(--ease), box-shadow .18s var(--ease), border-color .18s var(--ease);
+    }
+    .pill:hover{transform: translateY(-1px); box-shadow: 0 10px 18px rgba(0,0,0,.10)}
+    .pill.active{
+      border-color: rgba(91,27,44,.30);
+      box-shadow: 0 0 0 5px rgba(91,27,44,.10);
+      background: linear-gradient(180deg, rgba(255,255,255,.98), rgba(255,255,255,.86));
+    }
+
+    .activity{display:none; margin-top:14px; animation: pop .18s var(--ease) both}
+    .activity.active{display:block}
+    @keyframes pop{from{opacity:0; transform: translateY(6px)} to{opacity:1; transform: translateY(0)}}
+
+    .question{
+      padding:14px;
+      border-radius:16px;
+      border:1px solid rgba(0,0,0,.12);
+      background: linear-gradient(180deg, rgba(255,255,255,.98), rgba(255,253,249,.88));
+      margin-bottom:12px;
+      box-shadow: 0 10px 18px rgba(0,0,0,.06);
+    }
+    .question h4{margin:0 0 8px; font-size:14px}
+    .qtext{margin:0 0 10px; font-size:13px; color:#2b2b2b}
+
+    .options{display:flex; gap:10px; flex-wrap:wrap}
+    .opt{
+      border:1px solid rgba(0,0,0,.12);
+      background: rgba(255,255,255,.92);
+      border-radius:14px;
+      padding:10px 12px;
+      cursor:pointer;
+      font-weight:950;
+      transition: transform .10s var(--ease), box-shadow .18s var(--ease), border-color .18s var(--ease), background .18s var(--ease);
+    }
+    .opt:hover{transform: translateY(-1px); box-shadow: 0 10px 18px rgba(0,0,0,.10)}
+    .opt.selected{
+      border-color: rgba(91,27,44,.30);
+      background: rgba(91,27,44,.06);
+      box-shadow: 0 0 0 5px rgba(91,27,44,.08);
+    }
+
+    select.select{
+      padding:10px 12px;
+      border-radius:14px;
+      border:1px solid rgba(0,0,0,.14);
+      background: rgba(255,255,255,.94);
+      outline:none;
+      min-width:220px;
+    }
+    select.select:focus{box-shadow: 0 0 0 5px rgba(91,27,44,.10); border-color: rgba(91,27,44,.35)}
+
+    .notice{
+      margin-top:10px;
+      padding:12px;
+      border-radius:16px;
+      border:1px solid rgba(91,27,44,.20);
+      background: rgba(91,27,44,.06);
+      font-size:13px;
+      box-shadow: 0 10px 18px rgba(0,0,0,.06);
+    }
+    .ok{border-color:rgba(0,128,0,.25)!important; background:rgba(0,128,0,.08)!important}
+    .bad{border-color:rgba(180,0,0,.22)!important; background:rgba(180,0,0,.08)!important}
+
+    .mini-btn{
+      border:1px solid rgba(0,0,0,.12);
+      background: rgba(255,255,255,.95);
+      border-radius:12px;
+      padding:8px 10px;
+      cursor:pointer;
+      font-weight:950;
+      transition: transform .10s var(--ease), box-shadow .18s var(--ease);
+    }
+    .mini-btn:hover{transform: translateY(-1px); box-shadow: 0 10px 18px rgba(0,0,0,.10)}
+    .mini-btn.disabled{opacity:.55; cursor:not-allowed}
+
+    .list{display:flex; flex-direction:column; gap:10px}
+    .listitem{
+      display:flex; align-items:center; justify-content:space-between; gap:10px;
+      padding:10px 12px;
+      border-radius:16px;
+      border:1px solid rgba(0,0,0,.12);
+      background: rgba(255,255,255,.94);
+      box-shadow: 0 10px 18px rgba(0,0,0,.06);
+    }
+
+    .reading{
+      white-space:pre-wrap;
+      line-height:1.45;
+      font-size:13px;
+      color:#2b2b2b;
+      background: rgba(255,255,255,.85);
+      border:1px solid rgba(0,0,0,.10);
+      border-radius:16px;
+      padding:14px;
+      box-shadow: 0 10px 18px rgba(0,0,0,.06);
+    }
+
+    /* Ahorcado */
+    .hangman{display:grid; grid-template-columns: 1fr; gap:12px}
+    .hm-word{
+      font-size:22px;
+      letter-spacing:.25em;
+      font-weight:950;
+      padding:10px 12px;
+      border-radius:16px;
+      border:1px solid rgba(0,0,0,.12);
+      background: rgba(255,255,255,.92);
+      box-shadow: 0 10px 18px rgba(0,0,0,.06);
+      text-align:center;
+    }
+    .hm-meta{display:flex; gap:10px; flex-wrap:wrap}
+    .hm-letters{display:flex; gap:8px; flex-wrap:wrap}
+    .hm-letters button{
+      width:40px; height:40px;
+      border-radius:12px;
+      border:1px solid rgba(0,0,0,.12);
+      background: rgba(255,255,255,.95);
+      cursor:pointer;
+      font-weight:950;
+      transition: transform .08s var(--ease), box-shadow .18s var(--ease);
+    }
+    .hm-letters button:hover{transform: translateY(-1px); box-shadow: 0 10px 18px rgba(0,0,0,.10)}
+    .hm-letters button:disabled{opacity:.45; cursor:not-allowed; transform:none; box-shadow:none}
+    .hm-bar{
+      height:10px; border-radius:999px;
+      background: rgba(0,0,0,.08);
+      overflow:hidden;
+      border:1px solid rgba(0,0,0,.10);
+    }
+    .hm-bar > div{
+      height:100%;
+      width:0%;
+      background: linear-gradient(90deg, rgba(91,27,44,.85), rgba(215,180,106,.95));
+      transition: width .2s var(--ease);
+    }
+
+    /* Resultados */
+    .result-grid{display:grid; grid-template-columns: repeat(12,1fr); gap:12px}
+    .result-card{
+      grid-column: span 12;
+      border-radius: 18px;
+      border:1px solid rgba(0,0,0,.10);
+      background: rgba(255,255,255,.92);
+      box-shadow: var(--shadow2);
+      padding:14px;
+    }
+    .result-card.half{grid-column: span 6;}
+    .result-title{font-size:18px; font-weight:950; margin:0 0 6px}
+    .result-sub{margin:0; font-size:13px; color:var(--muted)}
+    .rowline{display:flex; align-items:center; justify-content:space-between; gap:10px; padding:10px 0; border-bottom:1px dashed rgba(0,0,0,.14)}
+    .rowline:last-child{border-bottom:0}
+    .score-pill{
+      padding:8px 10px;
+      border-radius:999px;
+      border:1px solid rgba(0,0,0,.12);
+      background: rgba(255,255,255,.95);
+      font-weight:950;
+      min-width:86px;
+      text-align:center;
+    }
+    .score-pill.good{border-color: rgba(0,128,0,.28); background: rgba(0,128,0,.08); color:#0b5d1e}
+    .score-pill.mid{border-color: rgba(215,180,106,.38); background: rgba(215,180,106,.16); color:#7a4a00}
+    .score-pill.low{border-color: rgba(180,0,0,.22); background: rgba(180,0,0,.08); color:#7a0000}
+
+    /* Diploma moderno */
+    .diploma-wrap{
+      background: #fff;
+      border-radius: 22px;
+      overflow:hidden;
+      border:1px solid rgba(0,0,0,.10);
+      box-shadow: var(--shadow);
+    }
+    .diploma-top{
+      padding:14px 16px;
+      background: linear-gradient(90deg, rgba(91,27,44,.98), rgba(215,180,106,.92));
+      color:#fff;
+      display:flex; align-items:center; justify-content:space-between; gap:12px;
+    }
+    .diploma-top .logos{gap:12px}
+    .diploma-top .logo{height:48px; padding:6px 8px}
+    .diploma-body{
+      padding:18px 18px 14px;
+    }
+    .diploma-h1{
+      margin:0;
+      font-size:22px;
+      font-weight:950;
+      letter-spacing:.02em;
+      text-transform:uppercase;
+      color: var(--vino);
+    }
+    .diploma-school{margin:6px 0 0; font-size:14px; color:#333}
+    .diploma-name{
+      margin:12px 0 8px;
+      font-size:26px;
+      font-weight:950;
+      letter-spacing:.01em;
+      border-bottom: 2px solid rgba(91,27,44,.18);
+      padding-bottom:8px;
+    }
+    .diploma-text{margin:0; color:#333; font-size:14px; line-height:1.45}
+    .diploma-kpis{display:flex; gap:10px; flex-wrap:wrap; margin-top:12px}
+    .diploma-kpis .chip{background: rgba(255,255,255,.96)}
+    .diploma-badges{display:flex; gap:8px; flex-wrap:wrap; margin-top:10px}
+    .diploma-footer{
+      margin-top:14px;
+      padding-top:12px;
+      border-top:1px dashed rgba(0,0,0,.16);
+      display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap;
+      font-size:12px;
+      color:#444;
+    }
+    .sign{
+      margin-top:18px;
+      display:flex;
+      gap:14px;
+      flex-wrap:wrap;
+      align-items:flex-end;
+      justify-content:space-between;
+    }
+    .sign .line{
+      flex:1;
+      min-width:240px;
+      border-top:1px solid rgba(0,0,0,.35);
+      padding-top:8px;
+      font-size:12px;
+      color:#333;
+    }
+    .sign .line b{color:#000}
+
+    .footer{
+      position:fixed; bottom:0; left:0; right:0;
+      padding:10px 14px; font-size:12px;
+      background: linear-gradient(90deg, rgba(0,0,0,.78), rgba(0,0,0,.60));
+      color:rgba(255,255,255,.92);
+      display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap;
+      z-index:30;
+    }
+    .footer b{color:#fff}
+    .small{font-size:12px; color:var(--muted)}
+
+    @media (max-width:900px){ .hero{grid-template-columns:1fr} .result-card.half{grid-column:span 12;} }
+    @media (max-width:720px){
+      .logo{height:38px}
+      .avatar{height:50px;width:50px}
+      .title{font-size:16px}
+      .input{min-width:100%}
+      select.select{min-width:100%}
+      .diploma-top .logo{height:42px}
+    }
+
+    /* Impresión: solo imprime el bloque marcado */
+    @media print{
+      .topbar,.footer,.pillbar,.btn,.mini-btn,.hm-letters,.no-print{display:none!important}
+      body{background:#fff}
+      .card{box-shadow:none}
+      .main{padding:0}
+      .print-area{box-shadow:none!important; border:0!important}
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <div class="brand">
+        <div class="logos">
+          <img class="logo" src="img/sep_logo.png" alt="SEP" />
+          <img class="logo" src="img/escudo_escuela.png" alt="Escuela" />
+        </div>
+        <div class="titlebox">
+          <div class="kicker" id="kicker">Lenguajes • Fase 5</div>
+          <div class="title" id="pagetitle">ODA • Autobiografía</div>
+          <div class="subtitle" id="subtitle">Contenido: Narración de sucesos autobiográficos.</div>
+        </div>
+      </div>
+      <div class="right">
+        <button class="btn ghost" id="btnBack" style="display:none">⬅ Volver</button>
+        <button class="btn ghost" id="btnSpeak">🔊 Leer</button>
+        <button class="btn ghost" onclick="window.print()">🖨️ Imprimir</button>
+        <img class="avatar" src="img/avatar_guia.png" alt="Guía" />
+      </div>
+    </header>
+
+    <main class="main" id="app"></main>
+
+    <footer class="footer">
+      <div>
+        ✍️ ODA creada por el <b>Maestro Martín Reta</b> • © <b>Martín Reta</b> (Uso educativo. Prohibida su venta.)
+      </div>
+      <div>
+        Campo formativo: <b>Lenguajes</b> (Fase 5) • Contenido: <b>Narración de sucesos autobiográficos</b>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    // ===== Helpers =====
+    const $ = (s,r=document)=>r.querySelector(s);
+    const $$ = (s,r=document)=>Array.from(r.querySelectorAll(s));
+    const baseUrl = () => location.href.split("#")[0];
+    function openTab(hash){ window.open(baseUrl() + hash, "_blank", "noopener"); }
+
+    function speak(text){
+      try{
+        if(!("speechSynthesis" in window)) return;
+        speechSynthesis.cancel();
+        const u = new SpeechSynthesisUtterance(text);
+        u.lang = "es-MX";
+        speechSynthesis.speak(u);
+      }catch(e){}
+    }
+
+    function escapeHtml(s){
+      return (s||"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;");
+    }
+
+    function setStudentName(name){
+      try{ localStorage.setItem("oda_student_name", name || ""); }catch(e){}
+    }
+    function getStudentName(){
+      try{ return localStorage.getItem("oda_student_name") || ""; }catch(e){ return ""; }
+    }
+
+    // Intentos (2 por actividad)
+    function attemptsKey(key){ return `oda_attempts_${key}`; }
+    function getAttempts(key){
+      try{ return Number(localStorage.getItem(attemptsKey(key))||"0"); }catch(e){ return 0; }
+    }
+    function incAttempts(key){
+      const n = getAttempts(key) + 1;
+      try{ localStorage.setItem(attemptsKey(key), String(n)); }catch(e){}
+      return n;
+    }
+
+    // Puntajes por actividad
+    function scoreKey(key){ return `oda_score_${key}`; }     // porcentaje 0..100
+    function doneKey(key){ return `oda_done_${key}`; }       // "1" si evaluó
+    function setScore(key, pct){
+      try{
+        localStorage.setItem(scoreKey(key), String(pct));
+        localStorage.setItem(doneKey(key), "1");
+      }catch(e){}
+    }
+    function getScore(key){
+      try{
+        const v = localStorage.getItem(scoreKey(key));
+        return v===null ? null : Number(v);
+      }catch(e){ return null; }
+    }
+    function isDone(key){
+      try{ return localStorage.getItem(doneKey(key))==="1"; }catch(e){ return false; }
+    }
+
+    function lockActivity(root){
+      root.dataset.locked = "1";
+      $$(".opt", root).forEach(o=>o.style.pointerEvents="none");
+      $$("select", root).forEach(s=>s.disabled=true);
+      $$("button.hm-letter", root).forEach(b=>b.disabled=true);
+      $$(".btnGrade", root).forEach(b=>{ b.classList.add("disabled"); b.disabled=true; });
+    }
+
+    function attemptBanner(key){
+      const a = getAttempts(key);
+      const left = Math.max(0, 2-a);
+      return `<span class="badge">🎯 Intentos: ${a}/2 • Restan: ${left}</span>`;
+    }
+
+    function gradeSummary(correct, total){
+      const pct = total ? Math.round((correct/total)*100) : 0;
+      return {pct, correct, total};
+    }
+
+    function evalGuard(root){
+      const key = root.dataset.activityKey;
+      const already = getAttempts(key);
+      if(already >= 2){
+        $(".result", root).innerHTML = `<b>Actividad bloqueada:</b> ya usaste los 2 intentos.`;
+        lockActivity(root);
+        return {blocked:true, attempt:already};
+      }
+      const attempt = incAttempts(key);
+      return {blocked:false, attempt};
+    }
+
+    function todayLong(){
+      const d = new Date();
+      return d.toLocaleDateString("es-MX", {year:"numeric", month:"long", day:"numeric"});
+    }
+
+    // ===== Contenido + Lecturas =====
+    const ESCUELA = "Escuela Primaria “Gral. Lázaro Cárdenas”";
+    const LUGAR = "Ejido Santa María, Pesquería, N. L.";
+    const CREADOR = "Maestro Martín Reta";
+    const COPYRIGHT = "© Martín Reta — Uso educativo. Prohibida su venta.";
+    const contenido = "Narración de sucesos autobiográficos.";
+
+    const READING_5_TITLE = "Mi historia: Daniel, un niño curioso de quinto";
+    const READING_5 = `Me llamo Daniel y tengo diez años. Vivo en un lugar tranquilo donde todos se conocen y se saludan cuando se cruzan en la calle. Voy a quinto grado y estudio en una escuela donde me gusta aprender, aunque a veces me cuesta trabajo concentrarme cuando hay mucho ruido. Me considero una persona curiosa, porque siempre quiero saber por qué pasan las cosas y cómo funcionan.
+En mi casa vivimos mi mamá, mi papá, mi hermana menor y yo. Mi hermana es muy inquieta y le encanta hacer preguntas, así que casi siempre estamos platicando o inventando juegos. A mí me gusta ayudar en lo que puedo: a veces barro el patio, otras veces lavo los trastes y, cuando mi mamá está ocupada, yo cuido que mi hermana no se meta en problemas. También tengo una mascota, un perro llamado Chispa, que me acompaña cuando hago la tarea o cuando salgo a caminar.
+Lo que más disfruto es jugar futbol con mis amigos. No siempre gano, pero me esfuerzo y trato de mejorar. He aprendido que la práctica sirve más que la suerte. Cuando no estoy jugando, me gusta dibujar y leer historias de aventuras. Mi libro favorito es uno donde los personajes viajan a lugares misteriosos y resuelven acertijos. Eso me inspira a imaginar mis propias historias.
+En la escuela tengo materias que me encantan, como Ciencias y Español. En Ciencias me emociona hacer experimentos sencillos, y en Español me gusta escribir cuentos. Sin embargo, Matemáticas me reta bastante. Antes me frustraba cuando no entendía un problema, pero ahora intento respirar, leer con calma y preguntar sin pena. Mis maestros dicen que preguntar es una forma de ser valiente.
+Sueño con ser alguien que ayude a los demás. Tal vez maestro, científico o entrenador. No estoy seguro todavía, pero sé que quiero seguir aprendiendo. Mi historia apenas empieza, y cada día trato de ser mejor que ayer, paso a paso.`;
+
+    const READING_6_TITLE = "Valeria en sexto: creciendo y preparándome para lo que viene";
+    const READING_6 = `Me llamo Valeria Hernández y tengo once años. Estoy en sexto grado y este es un año especial para mí, porque siento que ya estoy más cerca de la secundaria y de nuevas aventuras. Vivo con mi familia en un lugar donde puedo caminar con calma y donde a veces el atardecer pinta el cielo de colores que parecen de pintura. Soy una persona tranquila, pero cuando algo me emociona, hablo mucho y no dejo de sonreír.
+En mi casa vivimos mi mamá, mi papá, mi abuela y yo. Mi abuela me cuenta historias de cuando ella era niña y me gusta escucharlas porque me hacen imaginar cómo era la vida antes. En mi familia aprendí a ser responsable: hago mi cama, cuido mis cosas y ayudo con algunas tareas, como alimentar a nuestra gata, Luna, o acompañar a mi abuela cuando necesita algo. A veces no tengo ganas, como cualquier persona, pero sé que colaborar hace que todo sea más fácil.
+En la escuela me gusta sentir que avanzo. Mis materias favoritas son Historia y Formación Cívica y Ética, porque me hacen pensar en lo que está bien, en lo que se puede mejorar y en cómo somos parte de una comunidad. También disfruto hacer exposiciones, aunque antes me daba pena pasar al frente. Un día me tocó presentar un tema y mi voz temblaba, pero mis compañeros me escucharon con respeto. Desde entonces entendí que la confianza se construye poco a poco.
+En mi tiempo libre me gusta leer, escuchar música y hacer manualidades. A veces dibujo, otras veces hago pulseras o decoraciones para regalar. Cuando estoy estresada, ordenar mi cuarto o escribir lo que siento me ayuda a tranquilizarme. He aprendido que las emociones no se deben esconder, sino entender. Si estoy enojada o triste, trato de hablarlo con alguien de confianza.
+Este año quiero cerrar sexto con orgullo. Quiero mejorar en Matemáticas, participar más en clase y ser una buena compañera. Sueño con estudiar algo que me permita ayudar a otras personas, quizá psicología, medicina o docencia. Sé que todavía me falta mucho por vivir, pero también sé que cada esfuerzo cuenta. Esta es mi biografía: la historia de una estudiante que crece, aprende y se prepara para lo que viene.`;
+
+    // ===== DATA (mismo enfoque: lectura + actividades autoevaluables) =====
+    const DATA = {
+      5: {
+        reading:{title: READING_5_TITLE, text: READING_5},
+        pdas: [
+          { short:"Voz narrativa",
+            pda:"Lee textos autobiográficos y reflexiona sobre las razones por las que suelen estar narrados en primera persona del singular.",
+            acts:[
+              { title:"V/F del narrador", type:"tf",
+                intro:"Responde Verdadero o Falso según la lectura de Daniel.",
+                items:[
+                  {q:"La historia está narrada en primera persona.", right:"V"},
+                  {q:"Daniel tiene once años.", right:"F"},
+                  {q:"Daniel se considera una persona curiosa.", right:"V"},
+                  {q:"Daniel dice que nunca pregunta en clase.", right:"F"},
+                  {q:"Daniel quiere seguir aprendiendo.", right:"V"},
+                ]
+              },
+              { title:"¿Quién dice “yo”?", type:"mc", prompt:"Selecciona la opción correcta.",
+                items:[
+                  {q:"¿Cómo se llama el narrador?", options:[["Daniel","A"],["Chispa","B"],["Valeria","C"]], right:"A"},
+                  {q:"¿En qué grado está Daniel?", options:[["Cuarto","A"],["Quinto","B"],["Sexto","C"]], right:"B"},
+                  {q:"¿Por qué a veces le cuesta concentrarse?", options:[["Porque hay mucho ruido","A"],["Porque no le gusta aprender","B"],["Porque no va a la escuela","C"]], right:"A"},
+                ]
+              }
+            ]
+          },
+          { short:"Ordeno mi historia",
+            pda:"Determina los sucesos autobiográficos que desea narrar y los organiza lógicamente, resaltando los aspectos más significativos.",
+            acts:[
+              { title:"Línea del tiempo", type:"order",
+                intro:"Ordena sucesos de la lectura de Daniel. Usa ⬆⬇.",
+                items:[
+                  {id:"a", text:"Daniel vive en un lugar tranquilo donde todos se saludan."},
+                  {id:"b", text:"Cuenta con quién vive y cómo ayuda en casa."},
+                  {id:"c", text:"Habla de su perro Chispa y lo que hace con él."},
+                  {id:"d", text:"Habla de lo que le gusta: fútbol, dibujar y leer aventuras."},
+                  {id:"e", text:"Dice qué materias le gustan y qué le cuesta (Matemáticas)."},
+                ],
+                right:["a","b","c","d","e"]
+              },
+              { title:"Lo más significativo", type:"match",
+                intro:"Relaciona la idea con su ejemplo en la lectura (Daniel).",
+                leftLabel:"Idea", rightLabel:"Ejemplo",
+                pairs:[
+                  {L:"Responsabilidad", R:"Ayuda en casa (barre, lava trastes, cuida a su hermana)"},
+                  {L:"Esfuerzo", R:"Practica fútbol para mejorar"},
+                  {L:"Curiosidad", R:"Quiere saber por qué pasan las cosas"},
+                  {L:"Estrategia ante retos", R:"Respira, lee con calma y pregunta en Matemáticas"},
+                ]
+              }
+            ]
+          },
+          { short:"Puntuación clara",
+            pda:"Escribe la narración de los hechos autobiográficos, haciendo uso de comas, puntos y seguido, puntos y aparte y dos puntos, para dar claridad y orden a las ideas.",
+            acts:[
+              { title:"Completa con signo", type:"fill",
+                intro:"Completa con el signo adecuado para que la oración sea clara.",
+                wordBank:["coma","punto y seguido","dos puntos","punto y aparte"],
+                items:[
+                  {pre:"En mi casa vivimos", blank:"____", post:"mi mamá, mi papá, mi hermana menor y yo.", right:"dos puntos"},
+                  {pre:"Me gusta aprender", blank:"____", post:"a veces me cuesta concentrarme.", right:"punto y seguido"},
+                  {pre:"Juego futbol con mis amigos", blank:"____", post:"no siempre gano, pero me esfuerzo.", right:"punto y seguido"},
+                  {pre:"Antes me frustraba", blank:"____", post:"ahora intento respirar y preguntar.", right:"punto y seguido"},
+                ]
+              },
+              { title:"Opción múltiple de claridad", type:"mc", prompt:"Elige la mejor opción.",
+                items:[
+                  {q:"¿Cuál opción usa mejor un punto y aparte (cambio de idea)?",
+                   options:[
+                    ["A) Daniel vive en un lugar tranquilo y juega fútbol. También tiene un perro llamado Chispa y ayuda en casa, y le gustan Ciencias y Español.","A"],
+                    ["B) Daniel vive en un lugar tranquilo.\n\nEn su casa vive con su familia y ayuda en tareas.","B"],
+                    ["C) Daniel vive en un lugar tranquilo, y, y, y, y.","C"]
+                   ],
+                   right:"B"
+                  },
+                  {q:"¿Cuál opción presenta una lista correctamente?",
+                   options:[
+                    ["A) En mi casa vivimos, mi mamá mi papá mi hermana y yo.","A"],
+                    ["B) En mi casa vivimos: mi mamá, mi papá, mi hermana y yo.","B"],
+                    ["C) En mi casa vivimos. mi mamá: mi papá, mi hermana.","C"]
+                   ],
+                   right:"B"
+                  },
+                ]
+              }
+            ]
+          },
+          { short:"Describo mejor",
+            pda:"Describe personas, lugares y hechos a través del uso de reiteraciones, frases adjetivas, símiles e imágenes, y mantiene la referencia a los mismos en toda la narración por medio de pronombres y sinónimos.",
+            acts:[
+              { title:"Relación de columnas", type:"match",
+                intro:"Relaciona el elemento con el detalle correcto del texto (Daniel).",
+                leftLabel:"Elemento", rightLabel:"Detalle",
+                pairs:[
+                  {L:"Mascota", R:"Chispa"},
+                  {L:"Materia que le reta", R:"Matemáticas"},
+                  {L:"Materia que le gusta", R:"Ciencias y Español"},
+                  {L:"Hobby principal", R:"Jugar fútbol"},
+                ]
+              },
+              { title:"Completa la oración", type:"fill",
+                intro:"Completa con la palabra correcta según la lectura.",
+                wordBank:["curioso","tranquilo","aventuras","valiente","práctica"],
+                items:[
+                  {pre:"Daniel se considera una persona", blank:"____", post:"porque quiere saber cómo funcionan las cosas.", right:"curioso"},
+                  {pre:"Vive en un lugar", blank:"____", post:"donde todos se saludan.", right:"tranquilo"},
+                  {pre:"Le gusta leer historias de", blank:"____", post:"y resolver acertijos.", right:"aventuras"},
+                  {pre:"Sus maestros dicen que preguntar es una forma de ser", blank:"____", post:".", right:"valiente"},
+                  {pre:"Aprendió que la", blank:"____", post:"sirve más que la suerte.", right:"práctica"},
+                ]
+              }
+            ]
+          },
+          { short:"Taller y versión final",
+            pda:"Hace y recibe sugerencias sobre aspectos de mejora, y comparte con la comunidad educativa las versiones finales.",
+            acts:[
+              { title:"Rúbrica rápida (elige)", type:"mc", prompt:"Marca la mejor sugerencia de mejora.",
+                items:[
+                  {q:"Para que el texto sea más claro, conviene…",
+                   options:[["Usar párrafos cuando cambia la idea","A"],["Quitar todos los puntos","B"],["Repetir el mismo nombre en cada oración","C"]],
+                   right:"A"},
+                  {q:"Para que el lector imagine mejor, conviene…",
+                   options:[["Agregar detalles (qué, dónde, cómo se sintió)","A"],["Escribir solo listas","B"],["Quitar emociones","C"]],
+                   right:"A"},
+                  {q:"Para mejorar coherencia, conviene…",
+                   options:[["Ordenar sucesos (inicio, desarrollo, cierre)","A"],["Mezclar todo sin orden","B"],["Cambiar de tema cada oración","C"]],
+                   right:"A"},
+                ]
+              },
+              { title:"Ahorcado: palabra clave", type:"hangman",
+                intro:"Adivina una palabra clave de la lectura de Daniel. Máximo 6 errores.",
+                word:"CHISPA",
+                hint:"Es el nombre de su mascota."
+              }
+            ]
+          },
+        ]
+      },
+
+      6: {
+        reading:{title: READING_6_TITLE, text: READING_6},
+        pdas: [
+          { short:"Relaciones de tiempo",
+            pda:"Lee textos autobiográficos e identifica las relaciones temporales de secuencia, simultaneidad y duración.",
+            acts:[
+              { title:"V/F de Valeria", type:"tf",
+                intro:"Responde Verdadero o Falso según la lectura de Valeria.",
+                items:[
+                  {q:"Valeria tiene once años.", right:"V"},
+                  {q:"Valeria vive con su abuela.", right:"V"},
+                  {q:"Su mascota se llama Chispa.", right:"F"},
+                  {q:"Valeria dice que la confianza se construye poco a poco.", right:"V"},
+                  {q:"Valeria afirma que las emociones se deben esconder.", right:"F"},
+                ]
+              },
+              { title:"Secuencia (orden)", type:"order",
+                intro:"Ordena sucesos de la lectura de Valeria. Usa ⬆⬇.",
+                items:[
+                  {id:"a", text:"Valeria presenta un tema y su voz tiembla."},
+                  {id:"b", text:"Sus compañeros la escuchan con respeto."},
+                  {id:"c", text:"Valeria entiende que la confianza se construye poco a poco."},
+                  {id:"d", text:"Decide cerrar sexto con orgullo y participar más."},
+                ],
+                right:["a","b","c","d"]
+              }
+            ]
+          },
+          { short:"Estructura con sentido",
+            pda:"Analiza distintos sucesos de su vida para elegir los más significativos y organizarlos de manera coherente en una narración.",
+            acts:[
+              { title:"Relación de columnas", type:"match",
+                intro:"Relaciona el tema con el ejemplo correcto (Valeria).",
+                leftLabel:"Tema", rightLabel:"Ejemplo",
+                pairs:[
+                  {L:"Responsabilidad", R:"Hace su cama, cuida sus cosas, ayuda en casa"},
+                  {L:"Confianza", R:"Después de exponer, entiende que se construye poco a poco"},
+                  {L:"Manejo emocional", R:"Habla con alguien de confianza cuando está triste o enojada"},
+                  {L:"Proyecto de mejora", R:"Quiere mejorar en Matemáticas y participar más"},
+                ]
+              },
+              { title:"Completa oraciones", type:"fill",
+                intro:"Completa con la opción correcta según la lectura.",
+                wordBank:["Luna","Historia","Formación Cívica y Ética","secundaria","abuelita"],
+                items:[
+                  {pre:"Valeria está en sexto y se siente cerca de la", blank:"____", post:".", right:"secundaria"},
+                  {pre:"Vive con su mamá, su papá, su", blank:"____", post:"y ella.", right:"abuelita"},
+                  {pre:"Su gata se llama", blank:"____", post:".", right:"Luna"},
+                  {pre:"Una de sus materias favoritas es", blank:"____", post:".", right:"Historia"},
+                  {pre:"Otra materia que le gusta es", blank:"____", post:".", right:"Formación Cívica y Ética"},
+                ]
+              }
+            ]
+          },
+          { short:"Escribo para alguien",
+            pda:"Determina al destinatario y la forma en que desea narrar sucesos autobiográficos significativos, para causar efectos particulares.",
+            acts:[
+              { title:"Opción múltiple (efecto)", type:"mc", prompt:"Elige la mejor opción según el propósito.",
+                items:[
+                  {q:"Si Valeria quiere inspirar a alguien, lo mejor es mencionar…",
+                   options:[["Que quiere cerrar sexto con orgullo y cada esfuerzo cuenta","A"],["Solo el clima del atardecer","B"],["Que no le gusta pensar","C"]],
+                   right:"A"},
+                  {q:"Si Valeria quiere reflexionar sobre emociones, lo mejor es mencionar…",
+                   options:[["Que ordenar su cuarto o escribir la tranquiliza","A"],["Que nunca se enoja","B"],["Que no habla con nadie","C"]],
+                   right:"A"},
+                  {q:"Si Valeria quiere agradecer a su familia, lo mejor es mencionar…",
+                   options:[["Que aprendió responsabilidad en casa y su abuela le cuenta historias","A"],["Que no ayuda en nada","B"],["Que vive sola","C"]],
+                   right:"A"},
+                ]
+              },
+              { title:"V/F (intención)", type:"tf",
+                intro:"Verdadero o Falso según la lectura y su intención.",
+                items:[
+                  {q:"Valeria dice que colaborar en casa hace que todo sea más fácil.", right:"V"},
+                  {q:"Valeria evita las exposiciones porque siempre le salen mal.", right:"F"},
+                  {q:"Valeria cree que cada esfuerzo cuenta.", right:"V"},
+                  {q:"Valeria no tiene metas para mejorar.", right:"F"},
+                ]
+              }
+            ]
+          },
+          { short:"Conectores temporales",
+            pda:"Usa reflexivamente adverbios, frases adverbiales y nexos temporales, para indicar secuencia, simultaneidad y duración en los sucesos narrados.",
+            acts:[
+              { title:"Completa conectores", type:"fill",
+                intro:"Completa con el conector temporal correcto.",
+                wordBank:["Desde entonces","A veces","Este año","Cuando","Después","Mientras"],
+                items:[
+                  {pre:"", blank:"____", post:" entendí que la confianza se construye poco a poco.", right:"Desde entonces"},
+                  {pre:"", blank:"____", post:" me estreso, ordenar mi cuarto me ayuda.", right:"A veces"},
+                  {pre:"", blank:"____", post:" quiero cerrar sexto con orgullo.", right:"Este año"},
+                  {pre:"", blank:"____", post:" me tocó presentar un tema, mi voz temblaba.", right:"Cuando"},
+                ]
+              },
+              { title:"Secuencia (elige)", type:"mc", prompt:"Elige el mejor conector para la oración.",
+                items:[
+                  {q:"___ mis compañeros escucharon con respeto, me sentí más segura.",
+                   options:[["Después de que","A"],["Aunque","B"],["Jamás","C"]], right:"A"},
+                  {q:"___ estoy enojada, trato de hablar con alguien de confianza.",
+                   options:[["Si","A"],["Mientras","B"],["Finalmente","C"]], right:"A"},
+                  {q:"___ quiero mejorar, participaré más en clase.",
+                   options:[["Este año","A"],["Al mismo tiempo","B"],["Nunca","C"]], right:"A"},
+                ]
+              }
+            ]
+          },
+          { short:"Edito mi libro",
+            pda:"Colabora en la edición de un libro de textos autobiográficos, y sugiere formas de reproducirlo para que cada alumna y alumno tenga el suyo.",
+            acts:[
+              { title:"Cómo publicarlo", type:"mc", prompt:"Elige la mejor forma de reproducir el libro según el caso.",
+                items:[
+                  {q:"Caso: Hay internet y queremos ahorrar papel.",
+                   options:[["Impreso engargolado","A"],["PDF por QR","B"],["Solo leerlo una vez","C"]], right:"B"},
+                  {q:"Caso: No hay internet, pero sí impresora escolar.",
+                   options:[["PDF por QR","A"],["Impreso engargolado","B"],["No compartirlo","C"]], right:"B"},
+                  {q:"Caso: Queremos que la comunidad lo lea en un evento.",
+                   options:[["Mural/Periódico escolar","A"],["Guardarlo solo en la compu","B"],["No mostrarlo","C"]], right:"A"},
+                ]
+              },
+              { title:"Ahorcado: palabra clave", type:"hangman",
+                intro:"Adivina una palabra clave de la lectura de Valeria. Máximo 6 errores.",
+                word:"SECUNDARIA",
+                hint:"A donde siente que está más cerca."
+              }
+            ]
+          },
+        ]
+      }
+    };
+
+    // ===== Insignias / Logros =====
+    function computeBadges(gradeAvg, completedAll){
+      const badges = [];
+      if(completedAll) badges.push("🏅 Constancia lectora");
+      if(completedAll) badges.push("📖 Lector atento");
+      if(gradeAvg >= 80) badges.push("✍️ Narrador en formación");
+      if(gradeAvg >= 90) badges.push("🌟 Excelente autobiografía");
+      if(gradeAvg >= 100) badges.push("🏆 Dominio total");
+      return badges;
+    }
+
+    function scoreClass(pct){
+      if(pct >= 85) return "good";
+      if(pct >= 70) return "mid";
+      return "low";
+    }
+
+    // ===== Cálculo de resultados por grado =====
+    function activityKey(grade, pdaIndex1, actIndex1){
+      return `g${grade}_p${pdaIndex1}_a${actIndex1}`;
+    }
+
+    function getGradeReport(grade){
+      const pdas = DATA[grade].pdas;
+      const pdaScores = [];
+      let allActivitiesDone = true;
+
+      for(let p=1; p<=pdas.length; p++){
+        const a1 = activityKey(grade, p, 1);
+        const a2 = activityKey(grade, p, 2);
+
+        const s1 = isDone(a1) ? getScore(a1) : null;
+        const s2 = isDone(a2) ? getScore(a2) : null;
+
+        if(s1===null || s2===null) allActivitiesDone = false;
+
+        const avg = (s1===null || s2===null) ? null : Math.round((s1+s2)/2);
+        pdaScores.push({pda:p, title: DATA[grade].pdas[p-1].short, avg, a1:s1, a2:s2});
+      }
+
+      const valid = pdaScores.filter(x=>x.avg!==null).map(x=>x.avg);
+      const gradeAvg = valid.length ? Math.round(valid.reduce((a,b)=>a+b,0)/valid.length) : null;
+
+      const badges = computeBadges(gradeAvg ?? 0, allActivitiesDone && gradeAvg!==null);
+
+      return {
+        grade,
+        pdaScores,
+        gradeAvg,
+        allActivitiesDone: allActivitiesDone && gradeAvg!==null,
+        badges
+      };
+    }
+
+    // ===== Renderers actividades =====
+    function renderMC(act, key){
+      const qHtml = act.items.map((it,i)=>{
+        const opts = it.options.map(([lab,val])=>`<div class="opt" data-v="${val}">${escapeHtml(lab)}</div>`).join("");
+        return `
+          <div class="question" data-right="${it.right}">
+            <h4>${i+1}. ${escapeHtml(act.prompt)}</h4>
+            <div class="qtext">${escapeHtml(it.q)}</div>
+            <div class="options">${opts}</div>
+          </div>`;
+      }).join("");
+
+      return `
+        <div class="hint"><b>Instrucción:</b> Selecciona una opción en cada pregunta y luego presiona <b>Evaluar</b>.</div>
+        <hr class="sep" />
+        <div class="mc-root" data-activity-key="${key}">
+          <div class="row">${attemptBanner(key)} <span class="badge gray">💾 Calificación se guarda</span></div>
+          <hr class="sep" />
+          ${qHtml}
+          <div class="row">
+            <button class="btn primary btnGrade">✅ Evaluar</button>
+            <button class="btn ghost btnReset">🔄 Reiniciar</button>
+          </div>
+          <div class="notice result"></div>
+        </div>`;
+    }
+
+    function renderTF(act, key){
+      const qHtml = act.items.map((it,i)=>{
+        return `
+          <div class="question" data-right="${it.right}">
+            <h4>${i+1}. Verdadero / Falso</h4>
+            <div class="qtext">${escapeHtml(it.q)}</div>
+            <div class="options">
+              <div class="opt" data-v="V">Verdadero</div>
+              <div class="opt" data-v="F">Falso</div>
+            </div>
+          </div>`;
+      }).join("");
+
+      return `
+        <div class="hint"><b>Instrucción:</b> Responde V/F según la lectura y luego presiona <b>Evaluar</b>.</div>
+        <hr class="sep" />
+        <div class="tf-root" data-activity-key="${key}">
+          <div class="row">${attemptBanner(key)} <span class="badge gray">💾 Calificación se guarda</span></div>
+          <hr class="sep" />
+          ${qHtml}
+          <div class="row">
+            <button class="btn primary btnGrade">✅ Evaluar</button>
+            <button class="btn ghost btnReset">🔄 Reiniciar</button>
+          </div>
+          <div class="notice result"></div>
+        </div>`;
+    }
+
+    function renderOrder(act, key){
+      const list = act.items.map((it,idx)=>`
+        <div class="listitem" data-id="${it.id}" data-original="${idx}">
+          <div><b>${idx+1}.</b> ${escapeHtml(it.text)}</div>
+          <div class="row">
+            <button class="mini-btn btnUp">⬆</button>
+            <button class="mini-btn btnDown">⬇</button>
+          </div>
+        </div>`).join("");
+
+      return `
+        <div class="hint">${escapeHtml(act.intro)}</div>
+        <hr class="sep" />
+        <div class="ord-root" data-activity-key="${key}" data-right="${act.right.join("|")}">
+          <div class="row">${attemptBanner(key)} <span class="badge gray">💾 Calificación se guarda</span></div>
+          <hr class="sep" />
+          <div class="list">${list}</div>
+          <div class="row" style="margin-top:12px">
+            <button class="btn primary btnGrade">✅ Evaluar</button>
+            <button class="btn ghost btnReset">🔄 Reiniciar</button>
+          </div>
+          <div class="notice result"></div>
+        </div>`;
+    }
+
+    function renderFill(act, key){
+      const bank = [...(act.wordBank||[])];
+      const opts = `<option value="">— Selecciona —</option>` + bank.map(o=>`<option value="${escapeHtml(o)}">${escapeHtml(o)}</option>`).join("");
+
+      const rows = act.items.map((it,i)=>`
+        <div class="question" data-right="${escapeHtml(it.right)}">
+          <h4>${i+1}. Completar</h4>
+          <div class="qtext">${escapeHtml(it.pre)} <b style="color:var(--vino)">[ ${escapeHtml(it.blank)} ]</b> ${escapeHtml(it.post)}</div>
+          <select class="select">${opts}</select>
+        </div>`).join("");
+
+      return `
+        <div class="hint"><b>Instrucción:</b> Completa cada oración y presiona <b>Evaluar</b>.</div>
+        <hr class="sep" />
+        <div class="fill-root" data-activity-key="${key}">
+          <div class="row">${attemptBanner(key)} <span class="badge gray">💾 Calificación se guarda</span></div>
+          <hr class="sep" />
+          ${rows}
+          <div class="row">
+            <button class="btn primary btnGrade">✅ Evaluar</button>
+            <button class="btn ghost btnReset">🔄 Reiniciar</button>
+          </div>
+          <div class="notice result"></div>
+        </div>`;
+    }
+
+    function renderMatch(act, key){
+      const rights = act.pairs.map(p=>p.R);
+      const shuffled = rights.slice().sort(()=>Math.random()-.5);
+      const opts = `<option value="">— Selecciona —</option>` + shuffled.map(o=>`<option value="${escapeHtml(o)}">${escapeHtml(o)}</option>`).join("");
+
+      const rows = act.pairs.map((p,i)=>`
+        <div class="question" data-right="${escapeHtml(p.R)}">
+          <h4>${i+1}. Relación</h4>
+          <div class="qtext"><b>${escapeHtml(p.L)}</b></div>
+          <select class="select">${opts}</select>
+        </div>`).join("");
+
+      return `
+        <div class="hint"><b>Instrucción:</b> Relaciona cada elemento con su opción correcta y presiona <b>Evaluar</b>.</div>
+        <hr class="sep" />
+        <div class="match-root" data-activity-key="${key}">
+          <div class="row">${attemptBanner(key)} <span class="badge gray">💾 Calificación se guarda</span></div>
+          <hr class="sep" />
+          <div class="badge">📌 ${escapeHtml(act.leftLabel||"Columna A")} → ${escapeHtml(act.rightLabel||"Columna B")}</div>
+          <hr class="sep" />
+          ${rows}
+          <div class="row">
+            <button class="btn primary btnGrade">✅ Evaluar</button>
+            <button class="btn ghost btnReset">🔄 Reiniciar</button>
+          </div>
+          <div class="notice result"></div>
+        </div>`;
+    }
+
+    function renderHangman(act, key){
+      const word = (act.word||"").toUpperCase().replace(/[^A-ZÁÉÍÓÚÜÑ]/g,"");
+      return `
+        <div class="hint"><b>Instrucción:</b> Adivina la palabra. Tienes máximo <b>6</b> errores. Luego presiona <b>Evaluar</b>.</div>
+        <hr class="sep" />
+        <div class="hm-root hangman" data-activity-key="${key}" data-word="${escapeHtml(word)}" data-hint="${escapeHtml(act.hint||"")}" data-maxmiss="6">
+          <div class="row">${attemptBanner(key)} <span class="badge">💡 Pista: ${escapeHtml(act.hint||"")}</span></div>
+          <div class="hm-word" data-slot="word"></div>
+          <div class="hm-meta">
+            <span class="badge">❌ Errores: <span data-slot="miss">0</span>/6</span>
+            <span class="badge">✅ Aciertos: <span data-slot="hit">0</span></span>
+            <span class="badge gray">💾 Calificación se guarda</span>
+          </div>
+          <div class="hm-bar"><div data-slot="bar"></div></div>
+          <div class="hm-letters" data-slot="letters"></div>
+
+          <div class="row">
+            <button class="btn primary btnGrade">✅ Evaluar</button>
+            <button class="btn ghost btnReset">🔄 Reiniciar</button>
+          </div>
+          <div class="notice result"></div>
+        </div>`;
+    }
+
+    function renderActivity(act, key){
+      if(act.type==="mc") return renderMC(act,key);
+      if(act.type==="tf") return renderTF(act,key);
+      if(act.type==="order") return renderOrder(act,key);
+      if(act.type==="fill") return renderFill(act,key);
+      if(act.type==="match") return renderMatch(act,key);
+      if(act.type==="hangman") return renderHangman(act,key);
+      return `<div class="notice">Actividad no soportada.</div>`;
+    }
+
+    // ===== Init interactives =====
+    function initMC(root){
+      const questions = $$(".question", root);
+      questions.forEach(q=>{
+        const opts = $$(".opt", q);
+        opts.forEach(o=>{
+          o.addEventListener("click", ()=>{
+            if(root.dataset.locked==="1") return;
+            opts.forEach(x=>x.classList.remove("selected"));
+            o.classList.add("selected");
+            q.dataset.ans = o.dataset.v;
+          });
+        });
+      });
+
+      $(".btnGrade", root).addEventListener("click", ()=>{
+        const guard = evalGuard(root);
+        if(guard.blocked) return;
+
+        let correct=0, answered=0;
+        questions.forEach(q=>{
+          const ans = q.dataset.ans || "";
+          const right = q.dataset.right || "";
+          q.classList.remove("ok","bad");
+          if(ans){ answered++; }
+          if(ans && ans===right){ correct++; q.classList.add("ok"); }
+          else if(ans){ q.classList.add("bad"); }
+        });
+
+        const g = gradeSummary(correct, questions.length);
+        setScore(root.dataset.activityKey, g.pct);
+
+        $(".result", root).innerHTML =
+          `<b>Calificación:</b> ${g.pct}% • Aciertos: ${g.correct}/${g.total} • Respondidas: ${answered}/${g.total} • <b>Intento ${guard.attempt} de 2</b>`;
+
+        if(guard.attempt>=2){ lockActivity(root); }
+        root.querySelector(".row").innerHTML = attemptBanner(root.dataset.activityKey) + ` <span class="badge good">✅ Guardado</span>`;
+      });
+
+      $(".btnReset", root).addEventListener("click", ()=>{
+        if(root.dataset.locked==="1") return;
+        questions.forEach(q=>{
+          q.classList.remove("ok","bad"); delete q.dataset.ans;
+          $$(".opt", q).forEach(x=>x.classList.remove("selected"));
+        });
+        $(".result", root).textContent = "";
+      });
+
+      if(getAttempts(root.dataset.activityKey)>=2){ lockActivity(root); }
+    }
+
+    function initTF(root){ initMC(root); }
+
+    function initFill(root){
+      const qs = $$(".question", root);
+
+      $(".btnGrade", root).addEventListener("click", ()=>{
+        const guard = evalGuard(root);
+        if(guard.blocked) return;
+
+        let correct=0, answered=0;
+        qs.forEach(q=>{
+          const sel = $("select", q);
+          const ans = sel.value || "";
+          const right = q.dataset.right || "";
+          q.classList.remove("ok","bad");
+          if(ans) answered++;
+          if(ans && ans===right){ correct++; q.classList.add("ok"); }
+          else if(ans){ q.classList.add("bad"); }
+        });
+
+        const g = gradeSummary(correct, qs.length);
+        setScore(root.dataset.activityKey, g.pct);
+
+        $(".result", root).innerHTML =
+          `<b>Calificación:</b> ${g.pct}% • Aciertos: ${g.correct}/${g.total} • Respondidas: ${answered}/${g.total} • <b>Intento ${guard.attempt} de 2</b>`;
+
+        if(guard.attempt>=2){ lockActivity(root); }
+        root.querySelector(".row").innerHTML = attemptBanner(root.dataset.activityKey) + ` <span class="badge good">✅ Guardado</span>`;
+      });
+
+      $(".btnReset", root).addEventListener("click", ()=>{
+        if(root.dataset.locked==="1") return;
+        qs.forEach(q=>{ q.classList.remove("ok","bad"); $("select",q).value=""; });
+        $(".result", root).textContent="";
+      });
+
+      if(getAttempts(root.dataset.activityKey)>=2){ lockActivity(root); }
+    }
+
+    function initMatch(root){ initFill(root); }
+
+    function initOrder(root){
+      const list = $(".list", root);
+      const right = (root.dataset.right||"").split("|").filter(Boolean);
+
+      function wire(){
+        const items = $$(".listitem", list);
+        items.forEach((it,i)=>{
+          const up = $(".btnUp", it);
+          const down = $(".btnDown", it);
+
+          up.onclick = ()=>{ if(root.dataset.locked==="1") return; if(i>0) items[i-1].before(it); wire(); };
+          down.onclick = ()=>{ if(root.dataset.locked==="1") return; if(i<items.length-1) items[i+1].after(it); wire(); };
+
+          up.classList.toggle("disabled", root.dataset.locked==="1");
+          down.classList.toggle("disabled", root.dataset.locked==="1");
+        });
+      }
+      wire();
+
+      $(".btnGrade", root).addEventListener("click", ()=>{
+        const guard = evalGuard(root);
+        if(guard.blocked) return;
+
+        const items = $$(".listitem", list);
+        let correct=0;
+        items.forEach((it,i)=>{
+          it.classList.remove("ok","bad");
+          if(right[i] && right[i]===it.dataset.id){ correct++; it.classList.add("ok"); }
+          else it.classList.add("bad");
+        });
+
+        const g = gradeSummary(correct, right.length);
+        setScore(root.dataset.activityKey, g.pct);
+
+        $(".result", root).innerHTML =
+          `<b>Calificación:</b> ${g.pct}% • En posición correcta: ${g.correct}/${g.total} • <b>Intento ${guard.attempt} de 2</b>`;
+
+        if(guard.attempt>=2){ lockActivity(root); }
+        root.querySelector(".row").innerHTML = attemptBanner(root.dataset.activityKey) + ` <span class="badge good">✅ Guardado</span>`;
+        wire();
+      });
+
+      $(".btnReset", root).addEventListener("click", ()=>{
+        if(root.dataset.locked==="1") return;
+        const items = $$(".listitem", list).sort((a,b)=>Number(a.dataset.original)-Number(b.dataset.original));
+        items.forEach(it=>{ it.classList.remove("ok","bad"); list.appendChild(it); });
+        $(".result", root).textContent="";
+        wire();
+      });
+
+      if(getAttempts(root.dataset.activityKey)>=2){ lockActivity(root); wire(); }
+    }
+
+    function initHangman(root){
+      const word = (root.dataset.word||"").toUpperCase();
+      const maxMiss = Number(root.dataset.maxmiss||"6");
+      let guessed = new Set();
+      let miss = 0;
+
+      const slotWord = root.querySelector("[data-slot='word']");
+      const slotMiss = root.querySelector("[data-slot='miss']");
+      const slotHit = root.querySelector("[data-slot='hit']");
+      const bar = root.querySelector("[data-slot='bar']");
+      const letters = root.querySelector("[data-slot='letters']");
+      const result = root.querySelector(".result");
+
+      function renderWord(){
+        let hits=0;
+        const out = word.split("").map(ch=>{
+          if(ch===" "){ return " "; }
+          if(guessed.has(ch)){ hits++; return ch; }
+          return "_";
+        }).join(" ");
+        slotWord.textContent = out;
+        slotMiss.textContent = String(miss);
+        slotHit.textContent = String(hits);
+        const pct = Math.round((miss/maxMiss)*100);
+        bar.style.width = `${Math.min(100,pct)}%`;
+      }
+
+      function resetLetters(){
+        guessed = new Set();
+        miss = 0;
+        letters.innerHTML = "";
+        const abc = "ABCDEFGHIJKLMNÑOPQRSTUVWXYZ";
+        abc.split("").forEach(ch=>{
+          const b = document.createElement("button");
+          b.className = "hm-letter";
+          b.textContent = ch;
+          b.addEventListener("click", ()=>{
+            if(root.dataset.locked==="1") return;
+            b.disabled = true;
+            if(word.includes(ch)){
+              guessed.add(ch);
+            }else{
+              miss++;
+            }
+            renderWord();
+            if(miss>=maxMiss || isSolved()){
+              $$("button.hm-letter", letters).forEach(x=>x.disabled=true);
+            }
+          });
+          letters.appendChild(b);
+        });
+      }
+
+      function isSolved(){
+        for(const ch of word){
+          if(ch===" ") continue;
+          if(!guessed.has(ch)) return false;
+        }
+        return true;
+      }
+
+      resetLetters();
+      renderWord();
+
+      $(".btnGrade", root).addEventListener("click", ()=>{
+        const guard = evalGuard(root);
+        if(guard.blocked) return;
+
+        const solved = isSolved();
+        const pct = solved ? 100 : 0;
+        setScore(root.dataset.activityKey, pct);
+
+        result.innerHTML = `<b>Calificación:</b> ${pct}% • ${solved ? "¡Palabra correcta!" : "No se completó la palabra."} • <b>Intento ${guard.attempt} de 2</b>`;
+
+        if(guard.attempt>=2){ lockActivity(root); }
+        root.querySelector(".row").innerHTML = attemptBanner(root.dataset.activityKey) + ` <span class="badge good">✅ Guardado</span>`;
+      });
+
+      $(".btnReset", root).addEventListener("click", ()=>{
+        if(root.dataset.locked==="1") return;
+        result.textContent="";
+        resetLetters();
+        renderWord();
+      });
+
+      if(getAttempts(root.dataset.activityKey)>=2){ lockActivity(root); }
+    }
+
+    // ===== Views =====
+    function headerSet({kicker, title, subtitle, back=null, speakText=null}){
+      $("#kicker").textContent = kicker;
+      $("#pagetitle").textContent = title;
+      $("#subtitle").textContent = subtitle;
+
+      const btnBack = $("#btnBack");
+      if(back){
+        btnBack.style.display="";
+        btnBack.onclick = ()=>location.hash = back;
+      }else{
+        btnBack.style.display="none";
+      }
+
+      $("#btnSpeak").onclick = ()=> speak(speakText || `${title}. ${subtitle}`);
+    }
+
+    function viewPortada(){
+      headerSet({
+        kicker:"Lenguajes • Fase 5",
+        title:"ODA • Autobiografía",
+        subtitle:`Contenido: ${contenido}`,
+        back:null,
+        speakText:`Bienvenido a la ODA de Lenguajes. Contenido: ${contenido}. Elige quinto o sexto grado.`
+      });
+
+      const name = getStudentName();
+
+      $("#app").innerHTML = `
+        <div class="grid">
+          <section class="card soft">
+            <div class="body">
+              <div class="hero">
+                <div class="panel">
+                  <h1>Mi historia, mi voz, mi camino</h1>
+                  <p>
+                    Primero leerás una autobiografía y luego resolverás actividades autoevaluables
+                    (2 intentos por actividad). Al concluir todo el grado, obtendrás <b>Resultados</b> y <b>Diploma</b>.
+                  </p>
+
+                  <div class="meta">
+                    <span class="badge">🏫 ${escapeHtml(ESCUELA)}</span>
+                    <span class="badge">🎯 2 intentos</span>
+                    <span class="badge">🏆 Insignias</span>
+                    <span class="badge">📄 Resultados + Diploma</span>
+                  </div>
+
+                  <div class="cta">
+                    <button class="btn primary" id="go5">Entrar 5.º ➜</button>
+                    <button class="btn primary" id="go6">Entrar 6.º ➜</button>
+                    <button class="btn ghost" onclick="window.print()">🖨️ Imprimir</button>
+                  </div>
+
+                  <hr class="sep">
+
+                  <div class="hint">
+                    <b>Instrucción:</b> Escribe tu nombre (se guarda automáticamente).
+                    <div class="small">Si tu navegador bloquea ventanas emergentes, permite “pop-ups” para abrir nuevas pestañas.</div>
+                    <hr class="sep">
+                    <div class="row">
+                      <span class="badge">👤 Nombre:</span>
+                      <input id="studentName" class="input" placeholder="Escribe tu nombre completo" value="${escapeHtml(name)}" />
+                      <span class="badge">Alumno(a): <span id="studentTag">${escapeHtml(name||"Sin nombre")}</span></span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="panel">
+                  <h2 style="margin:0 0 8px; font-size:18px;">Resultados y Diploma</h2>
+                  <div class="hint" style="margin-top:10px;">
+                    ✅ La <b>Hoja de resultados</b> se genera al finalizar todas las actividades del grado.<br>
+                    ✅ El <b>Diploma moderno</b> se desbloquea al completar el grado.<br>
+                    <hr class="sep">
+                    <div class="row">
+                      <button class="btn ghost" onclick="openTab('#/results/5')">📄 Ver resultados 5.º</button>
+                      <button class="btn ghost" onclick="openTab('#/results/6')">📄 Ver resultados 6.º</button>
+                    </div>
+                    <div class="row" style="margin-top:8px">
+                      <button class="btn ghost" onclick="openTab('#/diploma/5')">🎓 Ver diploma 5.º</button>
+                      <button class="btn ghost" onclick="openTab('#/diploma/6')">🎓 Ver diploma 6.º</button>
+                    </div>
+                    <div class="small" style="margin-top:8px;">(Si aún no terminas el grado, te mostrará qué falta.)</div>
+                  </div>
+
+                  <hr class="sep">
+
+                  <div class="hint">
+                    <b>Créditos:</b><br>
+                    ODA creada por el <b>${escapeHtml(CREADOR)}</b><br>
+                    <span class="small">${escapeHtml(COPYRIGHT)}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+      `;
+
+      const input = $("#studentName");
+      const tag = $("#studentTag");
+      input.addEventListener("input", ()=>{
+        setStudentName(input.value);
+        tag.textContent = input.value.trim() || "Sin nombre";
+      });
+
+      $("#go5").onclick = ()=> openTab("#/grado/5");
+      $("#go6").onclick = ()=> openTab("#/grado/6");
+    }
+
+    function viewGrado(g){
+      const grade = Number(g);
+      const pdas = DATA[grade].pdas;
+
+      headerSet({
+        kicker:`Lenguajes • Fase 5 • Grado ${grade}°`,
+        title:"Menú del grado",
+        subtitle:`Contenido: ${contenido}`,
+        back:"#/",
+        speakText:`Estás en el menú de ${grade} grado. Elige un proceso de desarrollo de aprendizaje.`
+      });
+
+      const name = getStudentName();
+      const report = getGradeReport(grade);
+
+      const cards = pdas.map((p,i)=>`
+        <div class="card hover" style="grid-column:span 6;">
+          <div class="head">
+            <div>
+              <h2>🧩 PDA ${i+1} • ${escapeHtml(p.short)}</h2>
+              <p class="small">${escapeHtml(p.pda)}</p>
+            </div>
+            <button class="btn primary" data-p="${i+1}">Abrir ➜</button>
+          </div>
+          <div class="body">
+            <div class="kpi">
+              <div class="chip">🕹️ Act 1: <b>${escapeHtml(p.acts[0].title)}</b></div>
+              <div class="chip">🧠 Act 2: <b>${escapeHtml(p.acts[1].title)}</b></div>
+            </div>
+          </div>
+        </div>
+      `).join("");
+
+      const avgStr = report.gradeAvg===null ? "—" : `${report.gradeAvg}%`;
+      const unlocked = report.allActivitiesDone;
+
+      $("#app").innerHTML = `
+        <div class="grid">
+          <section class="card soft">
+            <div class="head">
+              <div>
+                <h2>Grado ${grade}°</h2>
+                <p>Selecciona un PDA (se abre en una nueva pestaña). Al finalizar todo el grado, se desbloquean Resultados y Diploma.</p>
+              </div>
+              <div class="row">
+                <button class="btn ghost" id="backHome">🏠 Portada</button>
+              </div>
+            </div>
+            <div class="body">
+              <div class="row">
+                <span class="badge">👤 Alumno(a): <span id="studentTag">${escapeHtml(name||"Sin nombre")}</span></span>
+                <input id="studentName" class="input" placeholder="Escribe tu nombre completo" value="${escapeHtml(name)}" />
+                <button class="btn ghost" id="saveName">💾 Guardar</button>
+                <span class="badge ${unlocked?"good":"warn"}">📊 Promedio: <b>${avgStr}</b></span>
+              </div>
+
+              <hr class="sep">
+
+              <div class="row">
+                <button class="btn ${unlocked?"primary":"ghost disabled"}" ${unlocked?"":"disabled"} id="btnResults">
+                  📄 Resultados ${grade}°
+                </button>
+                <button class="btn ${unlocked?"primary":"ghost disabled"}" ${unlocked?"":"disabled"} id="btnDiploma">
+                  🎓 Diploma ${grade}°
+                </button>
+                <span class="small">${unlocked ? "✅ Ya puedes imprimir evidencia." : "🔒 Completa todas las actividades del grado para desbloquear."}</span>
+              </div>
+
+              <hr class="sep">
+
+              <div class="grid">${cards}</div>
+            </div>
+          </section>
+        </div>
+      `;
+
+      $("#backHome").onclick = ()=> location.hash = "#/";
+      $("#btnResults").onclick = ()=> openTab(`#/results/${grade}`);
+      $("#btnDiploma").onclick = ()=> openTab(`#/diploma/${grade}`);
+
+      $("#saveName").onclick = ()=>{
+        setStudentName($("#studentName").value);
+        $("#studentTag").textContent = $("#studentName").value.trim() || "Sin nombre";
+        alert("Nombre guardado.");
+      };
+      $("#studentName").addEventListener("input", ()=>{
+        setStudentName($("#studentName").value);
+        $("#studentTag").textContent = $("#studentName").value.trim() || "Sin nombre";
+      });
+
+      $$("button[data-p]").forEach(b=>{
+        b.onclick = ()=> openTab(`#/pda/${grade}/${b.dataset.p}`);
+      });
+    }
+
+    function viewPDA(g, p){
+      const grade = Number(g);
+      const idx = Number(p)-1;
+      const pda = DATA[grade].pdas[idx];
+      const name = getStudentName();
+      const reading = DATA[grade].reading;
+
+      headerSet({
+        kicker:`Lenguajes • Fase 5 • ${grade}°`,
+        title:`PDA ${idx+1} • ${pda.short}`,
+        subtitle:`Contenido: ${contenido}`,
+        back:`#/grado/${grade}`,
+        speakText:`Primero lee: ${reading.title}. Luego realiza las actividades del PDA ${idx+1}. ${pda.short}.`
+      });
+
+      const pills = pda.acts.map((a,i)=>`
+        <div class="pill" data-i="${i}">${i===0?"🕹️":"🧠"} ${escapeHtml(a.title)}</div>
+      `).join("");
+
+      const sections = pda.acts.map((a,i)=>{
+        const key = activityKey(grade, idx+1, i+1);
+        const inner = renderActivity(a, key);
+        return `<div class="activity">${inner}</div>`;
+      }).join("");
+
+      $("#app").innerHTML = `
+        <div class="grid">
+          <section class="card soft">
+            <div class="head">
+              <div>
+                <h2>🧩 Grado ${grade}° • PDA ${idx+1} • ${escapeHtml(pda.short)}</h2>
+                <p>${escapeHtml(pda.pda)}</p>
+              </div>
+              <div class="row">
+                <button class="btn ghost" id="menuGrade">⬅ Menú ${grade}°</button>
+                <button class="btn ghost" onclick="openTab('#/grado/${grade}')">↗ Menú en pestaña</button>
+              </div>
+            </div>
+            <div class="body">
+              <div class="row">
+                <span class="badge">👤 Alumno(a): <span id="studentTag">${escapeHtml(name||"Sin nombre")}</span></span>
+                <input id="studentName" class="input" placeholder="Escribe tu nombre completo" value="${escapeHtml(name)}" />
+                <button class="btn ghost" id="saveName">💾 Guardar</button>
+                <button class="btn ghost" onclick="openTab('#/results/${grade}')">📄 Resultados</button>
+                <button class="btn ghost" onclick="openTab('#/diploma/${grade}')">🎓 Diploma</button>
+              </div>
+
+              <hr class="sep">
+
+              <div class="card soft" style="box-shadow:var(--shadow2);">
+                <div class="head">
+                  <div>
+                    <h2>📖 Lectura inicial</h2>
+                    <p><b>${escapeHtml(reading.title)}</b> (base de todas las actividades)</p>
+                  </div>
+                  <div class="row">
+                    <button class="btn primary" id="btnReadText">🔊 Leer lectura</button>
+                    <button class="btn ghost" id="btnToggleRead">👁️ Mostrar/Ocultar</button>
+                  </div>
+                </div>
+                <div class="body" id="readingBox">
+                  <div class="reading">${escapeHtml(reading.text)}</div>
+                </div>
+              </div>
+
+              <hr class="sep">
+
+              <div class="pillbar">${pills}</div>
+              <div style="height:12px"></div>
+
+              ${sections}
+
+              <hr class="sep">
+
+              <div class="hint">
+                <b>Recordatorio:</b> Cada actividad tiene 2 intentos. Al completar todas las actividades del grado, se desbloquea la Hoja de Resultados y el Diploma.
+              </div>
+            </div>
+          </section>
+        </div>
+      `;
+
+      $("#menuGrade").onclick = ()=> location.hash = `#/grado/${grade}`;
+      $("#saveName").onclick = ()=>{
+        setStudentName($("#studentName").value);
+        $("#studentTag").textContent = $("#studentName").value.trim() || "Sin nombre";
+        alert("Nombre guardado.");
+      };
+      $("#studentName").addEventListener("input", ()=>{
+        setStudentName($("#studentName").value);
+        $("#studentTag").textContent = $("#studentName").value.trim() || "Sin nombre";
+      });
+
+      $("#btnReadText").onclick = ()=> speak(`${reading.title}. ${reading.text}`);
+      $("#btnToggleRead").onclick = ()=>{
+        const box = $("#readingBox");
+        box.style.display = (box.style.display==="none") ? "" : "none";
+      };
+
+      const pillsEls = $$(".pill", $("#app"));
+      const sectionsEls = $$(".activity", $("#app"));
+      function show(i){
+        pillsEls.forEach(p=>p.classList.remove("active"));
+        sectionsEls.forEach(s=>s.classList.remove("active"));
+        pillsEls[i].classList.add("active");
+        sectionsEls[i].classList.add("active");
+        try{ window.scrollTo({top: 0, behavior:"smooth"}); }catch(e){}
+      }
+      pillsEls.forEach((pEl,i)=>pEl.addEventListener("click", ()=>show(i)));
+      show(0);
+
+      sectionsEls.forEach((sec,i)=>{
+        const root = sec.querySelector("[data-activity-key]");
+        if(!root) return;
+        const type = pda.acts[i].type;
+        if(type==="mc") initMC(root);
+        if(type==="tf") initTF(root);
+        if(type==="order") initOrder(root);
+        if(type==="fill") initFill(root);
+        if(type==="match") initMatch(root);
+        if(type==="hangman") initHangman(root);
+      });
+    }
+
+    // ===== Resultados (por grado) =====
+    function viewResults(g){
+      const grade = Number(g);
+      const name = getStudentName();
+      const report = getGradeReport(grade);
+
+      headerSet({
+        kicker:`Lenguajes • Fase 5 • Resultados`,
+        title:`Hoja de resultados — ${grade}°`,
+        subtitle:`${ESCUELA}`,
+        back:`#/grado/${grade}`,
+        speakText:`Hoja de resultados del grado ${grade}.`
+      });
+
+      const missing = report.pdaScores.filter(x=>x.avg===null).map(x=>x.pda);
+      const unlocked = report.allActivitiesDone;
+
+      const pdaLines = report.pdaScores.map(x=>{
+        const val = x.avg===null ? "—" : `${x.avg}%`;
+        const cls = x.avg===null ? "" : scoreClass(x.avg);
+        return `
+          <div class="rowline">
+            <div>
+              <b>PDA ${x.pda}:</b> ${escapeHtml(x.title)}
+              <div class="small">Act 1: ${x.a1===null?"—":x.a1+"%"} • Act 2: ${x.a2===null?"—":x.a2+"%"}</div>
+            </div>
+            <div class="score-pill ${x.avg===null?"":cls}">${val}</div>
+          </div>
+        `;
+      }).join("");
+
+      const avg = report.gradeAvg===null ? "—" : `${report.gradeAvg}%`;
+      const avgCls = report.gradeAvg===null ? "" : scoreClass(report.gradeAvg);
+
+      const badgesHtml = report.badges.length
+        ? report.badges.map(b=>`<span class="badge">${escapeHtml(b)}</span>`).join(" ")
+        : `<span class="badge warn">Aún no hay insignias (termina el grado).</span>`;
+
+      $("#app").innerHTML = `
+        <div class="grid">
+          <section class="card soft">
+            <div class="head">
+              <div>
+                <h2>📄 Hoja de resultados automática</h2>
+                <p>Incluye nombre, grado, PDAs, calificaciones e insignias. Lista para imprimir.</p>
+              </div>
+              <div class="row no-print">
+                <button class="btn ghost" onclick="openTab('#/grado/${grade}')">↗ Menú ${grade}°</button>
+                <button class="btn primary" onclick="window.print()">🖨️ Imprimir</button>
+                <button class="btn ${unlocked?"primary":"ghost disabled"}" ${unlocked?"":"disabled"} onclick="openTab('#/diploma/${grade}')">🎓 Ir al diploma</button>
+              </div>
+            </div>
+            <div class="body">
+
+              <div class="result-grid print-area">
+                <div class="result-card half">
+                  <p class="result-title">Datos del alumno</p>
+                  <p class="result-sub"><b>Nombre:</b> ${escapeHtml(name||"Sin nombre")}</p>
+                  <p class="result-sub"><b>Grado:</b> ${grade}°</p>
+                  <p class="result-sub"><b>Escuela:</b> ${escapeHtml(ESCUELA)}</p>
+                  <p class="result-sub"><b>Fecha:</b> ${escapeHtml(todayLong())}</p>
+                  <hr class="sep">
+                  <div class="row">
+                    <span class="badge ${unlocked?"good":"warn"}">${unlocked ? "✅ Grado completado" : "🔒 Falta completar actividades"}</span>
+                    ${unlocked ? `<span class="badge good">🎓 Diploma desbloqueado</span>` : ``}
+                  </div>
+                </div>
+
+                <div class="result-card half">
+                  <p class="result-title">Promedio final</p>
+                  <p class="result-sub">Contenido: <b>${escapeHtml(contenido)}</b></p>
+                  <div style="height:8px"></div>
+                  <div class="score-pill ${avgCls}" style="font-size:18px; width:fit-content;">${avg}</div>
+                  <hr class="sep">
+                  <p class="result-sub"><b>Insignias</b></p>
+                  <div class="row">${badgesHtml}</div>
+                </div>
+
+                <div class="result-card">
+                  <p class="result-title">Calificaciones por PDA</p>
+                  <div>${pdaLines}</div>
+                </div>
+
+                <div class="result-card">
+                  <p class="result-sub">
+                    ✍️ ODA creada por el <b>${escapeHtml(CREADOR)}</b><br>
+                    <span class="small">${escapeHtml(COPYRIGHT)}</span>
+                  </p>
+                </div>
+              </div>
+
+              ${unlocked ? "" : `
+                <div class="notice no-print" style="margin-top:12px">
+                  <b>Aún no se desbloquea el diploma.</b><br>
+                  Te falta completar (evaluar ambas actividades) en los PDAs: <b>${missing.length ? missing.join(", ") : "—"}</b>.
+                </div>
+              `}
+            </div>
+          </section>
+        </div>
+      `;
+    }
+
+    // ===== Diploma (por grado) =====
+    function viewDiploma(g){
+      const grade = Number(g);
+      const name = getStudentName();
+      const report = getGradeReport(grade);
+      const unlocked = report.allActivitiesDone;
+
+      headerSet({
+        kicker:`Lenguajes • Fase 5 • Diploma`,
+        title:`Diploma — ${grade}°`,
+        subtitle:`${ESCUELA}`,
+        back:`#/results/${grade}`,
+        speakText:`Diploma del grado ${grade}.`
+      });
+
+      if(!unlocked){
+        const missing = report.pdaScores.filter(x=>x.avg===null).map(x=>x.pda);
+        $("#app").innerHTML = `
+          <div class="grid">
+            <section class="card soft">
+              <div class="head">
+                <div>
+                  <h2>🎓 Diploma (bloqueado)</h2>
+                  <p>Se genera únicamente cuando se completan todas las actividades del grado.</p>
+                </div>
+                <div class="row no-print">
+                  <button class="btn ghost" onclick="openTab('#/grado/${grade}')">↗ Menú ${grade}°</button>
+                  <button class="btn ghost" onclick="openTab('#/results/${grade}')">📄 Resultados</button>
+                </div>
+              </div>
+              <div class="body">
+                <div class="notice">
+                  <b>Falta completar el grado ${grade}°.</b><br>
+                  PDAs pendientes (sin promedio): <b>${missing.length ? missing.join(", ") : "—"}</b>.
+                </div>
+              </div>
+            </section>
+          </div>
+        `;
+        return;
+      }
+
+      const avg = report.gradeAvg ?? 0;
+      const badgesHtml = report.badges.map(b=>`<span class="badge">${escapeHtml(b)}</span>`).join(" ");
+
+      $("#app").innerHTML = `
+        <div class="grid">
+          <section class="card soft">
+            <div class="head no-print">
+              <div>
+                <h2>🎓 Diploma moderno</h2>
+                <p>Listo para imprimir (incluye logos, escuela, calificación e insignias).</p>
+              </div>
+              <div class="row">
+                <button class="btn ghost" onclick="openTab('#/results/${grade}')">📄 Resultados</button>
+                <button class="btn primary" onclick="window.print()">🖨️ Imprimir diploma</button>
+              </div>
+            </div>
+
+            <div class="body">
+              <div class="diploma-wrap print-area">
+                <div class="diploma-top">
+                  <div class="logos">
+                    <img class="logo" src="img/sep_logo.png" alt="SEP" />
+                  </div>
+                  <div style="text-align:center; font-weight:950; letter-spacing:.02em;">
+                    ODA • Lenguajes • Fase 5
+                  </div>
+                  <div class="logos">
+                    <img class="logo" src="img/escudo_escuela.png" alt="Escuela" />
+                  </div>
+                </div>
+
+                <div class="diploma-body">
+                  <h1 class="diploma-h1">Diploma de Reconocimiento</h1>
+                  <div class="diploma-school">
+                    La <b>${escapeHtml(ESCUELA)}</b> otorga el presente reconocimiento a:
+                  </div>
+
+                  <div class="diploma-name">${escapeHtml(name||"Sin nombre")}</div>
+
+                  <p class="diploma-text">
+                    Por haber concluido satisfactoriamente la <b>ODA de Lenguajes – Fase 5</b>,
+                    con el contenido <b>“${escapeHtml(contenido)}”</b>, correspondiente a:
+                    <b>${grade}° grado</b>.
+                  </p>
+
+                  <div class="diploma-kpis">
+                    <div class="chip">📊 Calificación final: <b>${avg}%</b></div>
+                    <div class="chip">📅 Fecha: <b>${escapeHtml(todayLong())}</b></div>
+                    <div class="chip">📍 Lugar: <b>${escapeHtml(LUGAR)}</b></div>
+                  </div>
+
+                  <div class="diploma-badges" style="margin-top:10px;">
+                    ${badgesHtml}
+                  </div>
+
+                  <div class="sign">
+                    <div class="line">
+                      <b>${escapeHtml(CREADOR)}</b><br>
+                      ODA creada por el Maestro Martín Reta
+                    </div>
+                    <div class="line" style="text-align:right;">
+                      <b>Calificación</b><br>
+                      ${avg}% / 100
+                    </div>
+                  </div>
+
+                  <div class="diploma-footer">
+                    <div>
+                      <b>${escapeHtml(COPYRIGHT)}</b>
+                    </div>
+                    <div>
+                      Diseño y desarrollo pedagógico: <b>${escapeHtml(CREADOR)}</b>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="hint no-print" style="margin-top:12px;">
+                ✅ Diploma generado al concluir todas las actividades del grado <b>${grade}°</b>.
+              </div>
+            </div>
+          </section>
+        </div>
+      `;
+    }
+
+    // ===== Router =====
+    function route(){
+      const h = location.hash || "#/";
+      const parts = h.replace("#/","").split("/").filter(Boolean);
+
+      if(parts.length===0){ return viewPortada(); }
+      if(parts[0]==="grado" && parts[1]) return viewGrado(parts[1]);
+      if(parts[0]==="pda" && parts[1] && parts[2]) return viewPDA(parts[1], parts[2]);
+      if(parts[0]==="results" && parts[1]) return viewResults(parts[1]);
+      if(parts[0]==="diploma" && parts[1]) return viewDiploma(parts[1]);
+
+      location.hash = "#/";
+    }
+
+    window.addEventListener("hashchange", route);
+    route();
+  </script>
+</body>
+</html>
